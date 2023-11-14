@@ -19,7 +19,7 @@ const FBPostSchema = new Schema({
         required: true
     }],
     category: {
-        type: string,
+        type: String,
         enum: ["fb","qna","study","side-project","review"],
         required: true
     },
