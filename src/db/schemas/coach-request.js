@@ -2,20 +2,20 @@ const { Schema } = require('mongoose');
 
 const CoachSchema = new Schema({
     email: {
-        type: string,
+        type: String,
         required: true
     },
     name: {
-        type: string,
+        type: String,
         required: true
     },
     generation_type: {
-        type: string,
+        type: String,
         enum: ["SW 트랙", "AI트랙"],
         required: true
     },
     generation_number: {
-        type: number,
+        type: Number,
         required: true
     },
     req_status: {
