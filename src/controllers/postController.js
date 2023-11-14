@@ -82,12 +82,49 @@ const getPostByAuthor = async (req, res, next) => {
     }
 }
 
+const setPost = async (req, res, next) => {
+    try{
+        const { title, content, category } = req.body;
+        const { id } = req.params;
+
+        const updatedPost = await postService.setPost(
+            id, 
+            title, 
+            content, 
+            category
+        );
+
+        res.status(200).json({
+            message: "게시글을 수정했습니다",
+            data:updatedPost
+        });
+    } catch(err) {
+        next(err);
+    }
+}
+
+const deletePost = async (req, res, next) => {
+    try{
+        const { id } = req.params;
+
+        await postService.deletePost(id);
+
+        res.status(200).json({
+            message: "게시글을 삭제했습니다"
+        });
+    } catch(err) {
+        next(err);
+    }
+}
+
 const postController = {
     addPost,
     getPost,
+    setPost,
     getAllPost,
     getPostByCategory,
     getPostByAuthor,
+    deletePost,
 }
 
 module.exports = { postController };

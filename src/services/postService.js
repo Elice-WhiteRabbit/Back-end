@@ -39,7 +39,7 @@ const getPostById = async ( id ) => {
 
         return post;
     } catch(err) {
-        throw(err);
+        throw err;
     }
 }
 
@@ -51,21 +51,53 @@ const getPostByAuthor = async (author) => {
         //         message: "존재하지 않는 유저입니다",
         //     };
         // }
-        
+
         const list = await Post.find({ author });
 
         return list;
     } catch(err) {
-        throw(err);
+        throw err;
+    }
+}
+
+const setPost = async (id, title, content, category) => {
+    try{
+        const newPost = {
+            title,
+            content,
+            category
+        };
+
+        const updatedPost = await Post.findOneAndUpdate(
+            { _id:id },
+            newPost,
+            { new:true }
+        );
+
+        return updatedPost;
+    } catch(err) {
+        throw err;
+    }
+}
+
+const deletePost = async (id) => {
+    try{
+        await Post.findOneAndDelete({_id:id});
+
+        return;
+    } catch(err) {
+        throw err;
     }
 }
 
 const postService = {
     addPost,
+    setPost,
     getAllPost,
     getPostByCategory,
     getPostById,
     getPostByAuthor,
+    deletePost,
 }
 
 module.exports = { postService };
