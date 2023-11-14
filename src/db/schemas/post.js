@@ -13,12 +13,14 @@ const FBPostSchema = new Schema({
         type: Number,
         required: true
     },
-    like_count: {
-        type: Number,
+    like: {
+        type: Array[Schema.Types.ObjectId],
+        ref:'user',
         required: true
     },
     post_type: {
-        type: Number,
+        type: string,
+        enum: ["자유게시판", "취업후기"],
         required: true
     },
     author: {

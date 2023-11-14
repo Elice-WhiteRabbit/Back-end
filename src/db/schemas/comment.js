@@ -11,22 +11,10 @@ const FBCommentSchema = new Schema({
         ref: 'user',
         required: true
     },
-    parent_comment: {
-        type: Schema.Types.ObjectId,
-        ref: 'fb-comment'
-    },
     content: {
         type: String,
         required: true
     },
-    depth: {
-        type: Number,
-        default: 1
-    },
-    isDeleted: {
-        type: Boolean,
-        default: false
-    }
     },{timestamps: true,
 });
 
