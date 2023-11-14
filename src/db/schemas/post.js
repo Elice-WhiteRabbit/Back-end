@@ -18,9 +18,9 @@ const FBPostSchema = new Schema({
         ref:'user',
         required: true
     },
-    post_type: {
+    category: {
         type: string,
-        enum: ["자유게시판", "취업후기"],
+        enum: ["fb","qna","study","side-project","review"],
         required: true
     },
     author: {
