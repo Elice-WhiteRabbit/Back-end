@@ -13,11 +13,11 @@ const FBPostSchema = new Schema({
         type: Number,
         required: true
     },
-    like: {
-        type: Array[Schema.Types.ObjectId],
+    like: [{
+        type: Schema.Types.ObjectId,
         ref:'user',
         required: true
-    },
+    }],
     category: {
         type: string,
         enum: ["fb","qna","study","side-project","review"],
