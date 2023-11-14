@@ -1,12 +1,23 @@
-const { postService } = require('../services/postService');
+const { postService } = require('../services/post-service');
 
-const postType = ["fb","qna","study","side-project","review"];
+const postType = {
+    fb: "fb",
+    qna: "qna",
+    study: "study",
+    sideProject: "side-project",
+    review: "review"
+};
 
 const addPost = async (req, res, next) => {
     try{
         const { title, content, category, author } = req.body;
     
-        const createdPost = await postService.addPost(title, content, category, author);
+        const createdPost = await postService.addPost({
+            title,
+            content,
+            category,
+            author
+        });
 
         res.status(201).json({
             message: "post생성",
@@ -17,24 +28,11 @@ const addPost = async (req, res, next) => {
     }
 }
 
-const getPost = async (req, res, next) => {
-    try{
-        await postService.getPost();
-
-        res.status(200).json({
-            message: "post검색",
-            data:[]
-        })
-    } catch(err) {
-        next(err);
-    }
-}
-
 const getPostByCategory = async (req, res, next) => {
     try{
         const { category } = req.params;
 
-        if(!postType.includes(category)){
+        if(!postType[category]){
             throw {
                 status: 400,
                 message: "게시글 카테고리를 확인해주세요"
@@ -87,12 +85,12 @@ const setPost = async (req, res, next) => {
         const { title, content, category } = req.body;
         const { id } = req.params;
 
-        const updatedPost = await postService.setPost(
+        const updatedPost = await postService.setPost({
             id, 
             title, 
             content, 
             category
-        );
+        });
 
         res.status(200).json({
             message: "게시글을 수정했습니다",

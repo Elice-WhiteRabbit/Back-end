@@ -1,12 +1,8 @@
 const { Post } = require('../db');
 
-const addPost = async (title, content, category, author) => {
+const addPost = async (data) => {
     try{
-        const newPost = { title, content, category, author };
-
-        const addedPost = await Post.create(newPost);
-
-        return addedPost;
+        return await Post.create(data);
     } catch(err) {
         throw err;
     }
@@ -14,9 +10,7 @@ const addPost = async (title, content, category, author) => {
 
 const getPostByCategory = async (category) => {
     try{
-        const list = await Post.find({ category }).sort({updatedAt:-1})
-
-        return list;
+        return await Post.find({ category }).sort({updatedAt:-1})
     } catch(err) {
         throw err;
     }
@@ -24,9 +18,7 @@ const getPostByCategory = async (category) => {
 
 const getAllPost = async () => {
     try{
-        const list = await Post.find({}).sort({updatedAt:-1});
-
-        return list;
+        return await Post.find({}).sort({updatedAt:-1});
 
     } catch(err) {
         throw err;
@@ -35,9 +27,7 @@ const getAllPost = async () => {
 
 const getPostById = async ( id ) => {
     try{
-        const post = await Post.findById(id);
-
-        return post;
+        return await Post.findById(id);
     } catch(err) {
         throw err;
     }
@@ -52,29 +42,21 @@ const getPostByAuthor = async (author) => {
         //     };
         // }
 
-        const list = await Post.find({ author });
-
-        return list;
+        return await Post.find({ author });
     } catch(err) {
         throw err;
     }
 }
 
-const setPost = async (id, title, content, category) => {
+const setPost = async (data) => {
     try{
-        const newPost = {
-            title,
-            content,
-            category
-        };
+        const { title, content, category } = data;
 
-        const updatedPost = await Post.findOneAndUpdate(
-            { _id:id },
-            newPost,
+        return await Post.findOneAndUpdate(
+            { _id:data.id },
+            { title, content, category },
             { new:true }
         );
-
-        return updatedPost;
     } catch(err) {
         throw err;
     }
