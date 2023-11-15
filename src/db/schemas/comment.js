@@ -1,6 +1,6 @@
 const { Schema } = require('mongoose');
 
-const FBCommentSchema = new Schema({
+const CommentSchema = new Schema({
     post: {
         type: Schema.Types.ObjectId,
         ref: 'fb-post',
@@ -18,4 +18,4 @@ const FBCommentSchema = new Schema({
     },{timestamps: true,
 });
 
-module.exports = { FBCommentSchema };
+module.exports = { CommentSchema };
