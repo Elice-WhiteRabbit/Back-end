@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema } = require("mongoose");
 
-const userSchema = new Schema({
-  username: {
+const UserSchema = new Schema({
+  name: {
     type: String,
     required: true,
   },
@@ -15,12 +14,8 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-
-  //토큰??
-  refrechToken: String,
-
   //프로필 이미지 url
-  profileUrl: {
+  profile_url: {
     type: String,
     required: false,
   },
@@ -40,5 +35,4 @@ const userSchema = new Schema({
   },
 });
 
-//
-module.exports = mongoose.model("User", userSchema);
+module.exports = { UserSchema };
