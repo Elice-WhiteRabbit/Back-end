@@ -1,19 +1,20 @@
-const { Schema } = require('mongoose');
+const { Schema } = require("mongoose");
 
 const PostSchema = new Schema({
     title: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     content: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     view_count: {
         type: Number,
         dafault: 0
     },
-    like: [{
+    like: [
+      {
         type: Schema.Types.ObjectId,
         ref:'user',
         default: []
