@@ -1,78 +1,49 @@
 const { Post } = require('../db');
 
 const addPost = async (data) => {
-    try{
-        return await Post.create(data);
-    } catch(err) {
-        throw err;
-    }
-}
+    return Post.create(data);
+};
 
 const getPostByCategory = async (category) => {
-    try{
-        return await Post.find({ category }).sort({updatedAt:-1})
-    } catch(err) {
-        throw err;
-    }
-}
+    return Post.find({ category }).sort({updatedAt:-1});
+};
 
 const getAllPost = async () => {
-    try{
-        return await Post.find({}).sort({updatedAt:-1});
-
-    } catch(err) {
-        throw err;
-    }
-}
+    return Post.find({}).sort({updatedAt:-1});
+};
 
 const getPostById = async ( id ) => {
-    try{
-        return await Post.findById(id);
-    } catch(err) {
-        throw err;
-    }
-}
+    return Post.findById(id);
+};
 
 const getPostByAuthor = async (author) => {
-    try{
-        // const check = await User.findById({author});
-        // if(!check){
-        //     throw {
-        //         message: "존재하지 않는 유저입니다",
-        //     };
-        // }
+    // const check = await User.findById({author});
+    // if(!check){
+    //     throw {
+    //         message: "존재하지 않는 유저입니다",
+    //     };
+    // }
 
-        return await Post.find({ author });
-    } catch(err) {
-        throw err;
-    }
-}
+    return Post.find({ author });
+};
 
 const setPost = async (data) => {
-    try{
-        const { title, content, category } = data;
+    const { title, content, category } = data;
 
-        return await Post.findOneAndUpdate(
-            { _id:data.id },
-            { title, content, category },
-            { new:true }
-        );
-    } catch(err) {
-        throw err;
-    }
-}
+    return Post.findOneAndUpdate(
+        { _id:data.id },
+        { title, content, category },
+        { new:true }
+    );
+};
 
 const deletePost = async (id) => {
-    try{
-        await Post.findOneAndDelete({_id:id});
+    await Post.findOneAndDelete({_id:id});
 
-        return;
-    } catch(err) {
-        throw err;
-    }
-}
+    return;
+};
 
-const postService = {
+module.exports = {
     addPost,
     setPost,
     getAllPost,
@@ -80,6 +51,4 @@ const postService = {
     getPostById,
     getPostByAuthor,
     deletePost,
-}
-
-module.exports = { postService };
+};
