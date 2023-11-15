@@ -24,7 +24,7 @@ const addPost = async (req, res, next) => {
     });
 };
 
-const getPostByCategory = async (req, res, next) => {
+const findPostByCategory = async (req, res, next) => {
     const { category } = req.params;
 
     if(!postType[category]){
@@ -41,7 +41,7 @@ const getPostByCategory = async (req, res, next) => {
     })
 };
 
-const getAllPost = async (req, res, next) => {
+const findAllPost = async (req, res, next) => {
     const list = await postService.getAllPost();
 
     res.status(200).json({
@@ -50,7 +50,7 @@ const getAllPost = async (req, res, next) => {
     });
 };
 
-const getPostByAuthor = async (req, res, next) => {
+const findPostByAuthor = async (req, res, next) => {
     const { author } = req.params;
 
     const list = await postService.getPostByAuthor(author);
@@ -62,7 +62,7 @@ const getPostByAuthor = async (req, res, next) => {
     });
 };
 
-const setPost = async (req, res, next) => {
+const modifyPost = async (req, res, next) => {
     const { title, content, category } = req.body;
     const { id } = req.params;
 
@@ -79,7 +79,7 @@ const setPost = async (req, res, next) => {
     });
 };
 
-const deletePost = async (req, res, next) => {
+const removePost = async (req, res, next) => {
     const { id } = req.params;
 
     await postService.deletePost(id);
@@ -91,9 +91,9 @@ const deletePost = async (req, res, next) => {
 
 module.exports = {
     addPost,
-    setPost,
-    getAllPost,
-    getPostByCategory,
-    getPostByAuthor,
-    deletePost,
+    modifyPost,
+    findAllPost,
+    findPostByCategory,
+    findPostByAuthor,
+    removePost,
 }

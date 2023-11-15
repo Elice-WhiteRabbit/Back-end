@@ -4,19 +4,19 @@ const addPost = async (data) => {
     return Post.create(data);
 };
 
-const getPostByCategory = async (category) => {
+const findPostByCategory = async (category) => {
     return Post.find({ category }).sort({updatedAt:-1});
 };
 
-const getAllPost = async () => {
+const findAllPost = async () => {
     return Post.find({}).sort({updatedAt:-1});
 };
 
-const getPostById = async ( id ) => {
+const findPostById = async ( id ) => {
     return Post.findById(id);
 };
 
-const getPostByAuthor = async (author) => {
+const findPostByAuthor = async (author) => {
     // const check = await User.findById({author});
     // if(!check){
     //     throw {
@@ -27,7 +27,7 @@ const getPostByAuthor = async (author) => {
     return Post.find({ author });
 };
 
-const setPost = async (data) => {
+const modifyPost = async (data) => {
     const { title, content, category } = data;
 
     return Post.findOneAndUpdate(
@@ -37,7 +37,7 @@ const setPost = async (data) => {
     );
 };
 
-const deletePost = async (id) => {
+const removePost = async (id) => {
     await Post.findOneAndDelete({_id:id});
 
     return;
@@ -45,10 +45,10 @@ const deletePost = async (id) => {
 
 module.exports = {
     addPost,
-    setPost,
-    getAllPost,
-    getPostByCategory,
-    getPostById,
-    getPostByAuthor,
-    deletePost,
+    modifyPost,
+    findAllPost,
+    findPostByCategory,
+    findPostById,
+    findPostByAuthor,
+    removePost,
 };
