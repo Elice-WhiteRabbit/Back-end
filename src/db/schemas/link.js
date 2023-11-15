@@ -9,6 +9,6 @@ const linkSchema = new Schema({
   link: [String],
 });
 
-const Link = mongoose.model("Link", skillSchema);
+const Link = mongoose.model("Link", linkSchema);
 
 module.exports = { linkSchema };
