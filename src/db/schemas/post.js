@@ -1,7 +1,6 @@
 const { Schema } = require("mongoose");
 
-const FBPostSchema = new Schema(
-  {
+const PostSchema = new Schema({
     title: {
       type: String,
       required: true,
@@ -11,27 +10,26 @@ const FBPostSchema = new Schema(
       required: true,
     },
     view_count: {
-      type: Number,
-      required: true,
+        type: Number,
+        dafault: 0
     },
     like: [
       {
         type: Schema.Types.ObjectId,
-        ref: "user",
-        required: true,
-      },
-    ],
+        ref:'user',
+        default: []
+    }],
     category: {
-      type: String,
-      enum: ["fb", "qna", "study", "side-project", "review"],
-      required: true,
+        type: String,
+        enum: ["fb","qna","study","side-project","review"],
+        required: true
     },
     author: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
-  },
-  { timestamps: true }
-);
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required:true
+    }
+    },{timestamps: true,
+});
 
-module.exports = { FBPostSchema };
+module.exports = { PostSchema };
