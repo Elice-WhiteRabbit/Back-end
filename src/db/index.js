@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const { FBCommentSchema } = require('./schemas/comment');
-const { FBPostSchema } = require('./schemas/post');
+const { CommentSchema } = require('./schemas/comment');
+const { PostSchema } = require('./schemas/post');
 const { FollowSchema } = require('./schemas/follow');
 
-exports.FBComment = mongoose.model('FBComment', FBCommentSchema);
-exports.FBPost = mongoose.model('FBPost', FBPostSchema);
+exports.Comment = mongoose.model('Comment', CommentSchema);
+exports.Post = mongoose.model('Post', PostSchema);
 exports.Follow = mongoose.model('Follow', FollowSchema);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const postRouter = require('./postRouter');
+const postRouter = require('./post-router');
 
 router.use('/api/v1/posts', postRouter);
 
