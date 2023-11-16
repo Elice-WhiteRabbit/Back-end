@@ -26,6 +26,17 @@ const findCommentsByPost = async (req, res, next) => {
     });
 };
 
+const findCommentsByUser = async (req, res, next) => {
+    const { userId } = req.params;
+
+    const comments = await commentService.findCommentsByUser(userId);
+
+    res.status(200).json({
+        message: `유저(${userId})의 댓글 목록`,
+        data: comments,
+    });
+};
+
 const modifyComment = async (req, res, next) => {
     const { content } = req.body;
     const { id } = req.params;
@@ -54,6 +65,7 @@ const removeComment = async (req, res, next) => {
 module.exports = {
     addComment,
     findCommentsByPost,
+    findCommentsByUser,
     modifyComment,
     removeComment,
 };

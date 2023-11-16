@@ -8,8 +8,8 @@ const findCommentsByPost = async (postId) => {
     return Comment.find({ post: postId }).sort({ createdAt: -1 });
 };
 
-const findCommentsByAuthor = async (authorId) => {
-    return Comment.find({ author: authorId }).sort({ createdAt: -1 });
+const findCommentsByUser = async (userId) => {
+    return Comment.find({ author: userId }).sort({ createdAt: -1 });
 };
 
 const findCommentById = async (id) => {
@@ -36,7 +36,7 @@ module.exports = {
     addComment,
     findCommentsByPost,
     findCommentById,
-    findCommentsByAuthor, 
+    findCommentsByUser,
     modifyComment,
     removeComment,
 };

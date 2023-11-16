@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const postRouter = require('./post-router');
+const commentRouter = require('./comment-router');
 const userRouter = require('./user-router');
 
 router.use('/api/v1/posts', postRouter);
+router.use('/api/v1/comments', commentRouter);
 router.use('/api/v1/users', userRouter);
 
 /* GET home page. */
