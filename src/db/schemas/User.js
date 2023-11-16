@@ -14,21 +14,15 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  //프로필 이미지 url
   profile_url: {
     type: String,
     required: false,
   },
-  //사용자 타입
   roles: {
-    User: {
-      type: Number,
-      default: 0,
-    },
-    Coach: Number,
-    Admin: Number,
+    type: String,
+    enum: ['User', 'Coach', 'Admin'],
+    default: 'User',
   },
-  //코치 승인 여부
   isCoach: {
     type: Boolean,
     default: false,
