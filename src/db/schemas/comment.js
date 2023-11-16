@@ -3,7 +3,7 @@ const { Schema } = require('mongoose');
 const CommentSchema = new Schema({
     post: {
         type: Schema.Types.ObjectId,
-        ref: 'fb-post',
+        ref: 'post',
         required: true
     },
     author: {
