@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema } = require("mongoose");
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -19,24 +18,15 @@ const userSchema = new Schema({
   profileUrl: {
     type: String
   },
-  //사용자 타입
   roles: {
-    User: {
-      type: Number,
-      default: 0,
-    },
-    Coach: Number,
-    Admin: Number,
+    type: String,
+    enum: ['User', 'Coach', 'Admin'],
+    default: 'User',
   },
-  //코치 승인 여부
   isCoach: {
     type: Boolean,
     default: false,
   },
-  isAdmin: {
-    type: Boolean,
-    default: false
-  }
 });
 
-module.exports = { userSchema };
+module.exports = { UserSchema };

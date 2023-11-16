@@ -2,6 +2,22 @@ const { User } = require('../db');
 const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
 
+const addUser = async (userData) => {
+    return User.create(userData);
+};
+
+const findUserById = async (id) => {
+    return User.findById(id);
+};
+
+const modifyUser = async (id, userData) => {
+    return User.findByIdAndUpdate(id, userData, { new: true });
+};
+
+const removeUser = async (id) => {
+    await User.findByIdAndDelete(id);
+};
+
 const login = async (data) => {
     const { email, password } = data;
 
@@ -26,5 +42,9 @@ const login = async (data) => {
 }
 
 module.exports = {
+    addUser,
+    findUserById,
+    modifyUser,
+    removeUser,
     login
 };
