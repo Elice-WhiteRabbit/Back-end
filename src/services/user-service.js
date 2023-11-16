@@ -41,6 +41,12 @@ const modifyUser = async (id, userData) => {
 };
 
 const removeUser = async (id) => {
+    const user = await User.findById(id);
+
+    if(user.profile_url){
+        await deleteBeforeImage(user.profile_url);
+    }
+    
     await User.findByIdAndDelete(id);
 };
 
