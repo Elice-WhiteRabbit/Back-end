@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
 
 const addUser = async (userData) => {
+    userData.password = await bcrypt.hash(userData.password, 10);
+
     return User.create(userData);
 };
 
@@ -11,6 +13,10 @@ const findUserById = async (id) => {
 };
 
 const modifyUser = async (id, userData) => {
+    if(userData.password){
+        userData.password = await bcrypt.hash(userData.password, 10);
+    }
+
     return User.findByIdAndUpdate(id, userData, { new: true });
 };
 
@@ -21,7 +27,8 @@ const removeUser = async (id) => {
 const login = async (data) => {
     const { email, password } = data;
 
-    const user = await User.find({ email });
+    const user = await User.findOne({ email });
+
     if(!user){
         throw {
             status: 401,
@@ -35,7 +42,12 @@ const login = async (data) => {
                 message: "비밀번호가 틀렸습니다"
             }
         }
-        const token = createToken(user.email, user.isAdmin);
+
+        const token = createToken({
+            email: user.email,
+            id: user._id,
+            roles:user.roles
+        });
 
         return token;
     }

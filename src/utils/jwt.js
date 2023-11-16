@@ -3,16 +3,17 @@ require('dotenv').config();
 
 const secretKey = process.env.JWT_SECRET_KEY;
 
-const createToken = (email, isAdmin) => {
+const createToken = (payload) => {
     return jwt.sign(
-        { email, isAdmin },
+        payload,
         secretKey,
         { expiresIn: '12h' }
     );
 }
 
 const verifyToken = (token) => {
-    return jwt.verify(token, secretKey);
+    const data = jwt.verify(token, secretKey);
+    return data;
 }
 
 module.exports = {
