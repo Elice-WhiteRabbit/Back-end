@@ -3,6 +3,15 @@ const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
 
 const addUser = async (userData) => {
+    const check = await User.findOne({ email:userData.email });
+    
+    if(check !== null){
+        throw {
+            status: 409,
+            message: "이미 존재하는 이메일입니다"
+        }
+    }
+
     userData.password = await bcrypt.hash(userData.password, 10);
 
     return User.create(userData);
@@ -13,6 +22,8 @@ const findUserById = async (id) => {
 };
 
 const modifyUser = async (id, userData) => {
+
+
     if(userData.password){
         userData.password = await bcrypt.hash(userData.password, 10);
     }
@@ -53,10 +64,21 @@ const login = async (data) => {
     }
 }
 
+// 접근한 토큰과 접근하는 DB의 _id를 받아서 접근권한이 있는지 확인하는 함수
+const userCheck = async (tokenData, id) => {
+    if((tokenData.id !== id) && (tokenData.roles !== "Admin")){
+        throw {
+            status: 401,
+            message: "접근 권한이 없습니다"
+        }
+    }
+}
+
 module.exports = {
     addUser,
     findUserById,
     modifyUser,
     removeUser,
-    login
+    login,
+    userCheck
 };

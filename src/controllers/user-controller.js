@@ -20,8 +20,10 @@ const addUser = async (req, res, next) => {
 const findUserById = async (req, res, next) => {
     const { id } = req.params;
 
-    const user = await userService.findUserById(id);
+    await userService.userCheck(req.tokenData, id);
 
+    const user = await userService.findUserById(id);
+    console.log("check3");
     res.status(200).json({
         message: "User details",
         data: user,
@@ -31,6 +33,8 @@ const findUserById = async (req, res, next) => {
 const modifyUser = async (req, res, next) => {
     const { id } = req.params;
     const userData = req.body;
+
+    await userService.userCheck(req.tokenData, id);
 
     const updatedUser = await userService.modifyUser(id, userData);
 
@@ -42,6 +46,8 @@ const modifyUser = async (req, res, next) => {
 
 const removeUser = async (req, res, next) => {
     const { id } = req.params;
+
+    await userService.userCheck(req.tokenData, id);
 
     await userService.removeUser(id);
 

@@ -1,9 +1,10 @@
 const { verifyToken } = require('../utils/jwt');
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
     try{
         // 이후로 req.tokenData에서 payload 정보 접근 가능
         req.tokenData = verifyToken(req.headers.authorization.split(' ')[1]);
+
         return next();
     } catch(err) {
         if(err.name === "TokenExpiredError"){
@@ -22,12 +23,9 @@ const auth = (req, res, next) => {
     }
 }
 
-const checkUser = (req, res, next) => {
+const checkAdmin = async (req, res, next) => {
     try{
-        const { id } = req.params;
-        console.log(id);
-        // 본인이거나 관리자인 경우 접근 가능
-        if((id !== req.tokenData.id) && (req.tokenData.roles !== "Admin")){
+        if(req.tokenData.roles !== "Admin"){
             throw {
                 status:401,
                 message: "접근 권한이 없습니다"
@@ -42,5 +40,5 @@ const checkUser = (req, res, next) => {
 
 module.exports = {
     auth,
-    checkUser
+    checkAdmin
 }
