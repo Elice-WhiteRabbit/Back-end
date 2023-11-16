@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema } = require("mongoose");
 
-const userSchema = new Schema({
-  username: {
+const UserSchema = new Schema({
+  name: {
     type: String,
     required: true,
   },
@@ -15,30 +14,19 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-
-  //토큰??
-  refrechToken: String,
-
-  //프로필 이미지 url
-  profileUrl: {
+  profile_url: {
     type: String,
     required: false,
   },
-  //사용자 타입
   roles: {
-    User: {
-      type: Number,
-      default: 0,
-    },
-    Coach: Number,
-    Admin: Number,
+    type: String,
+    enum: ['User', 'Coach', 'Admin'],
+    default: 'User',
   },
-  //코치 승인 여부
   isCoach: {
     type: Boolean,
     default: false,
   },
 });
 
-//
-module.exports = mongoose.model("User", userSchema);
+module.exports = { UserSchema };
