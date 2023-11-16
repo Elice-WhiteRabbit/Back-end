@@ -30,15 +30,15 @@ const findPostByAuthor = async (author) => {
 const modifyPost = async (data) => {
     const { title, content, category } = data;
 
-    return Post.findOneAndUpdate(
-        { _id:data.id },
+    return Post.findByIdAndUpdate(
+        data.id,
         { title, content, category },
         { new:true }
     );
 };
 
 const removePost = async (id) => {
-    await Post.findOneAndDelete({_id:id});
+    await Post.findByIdAndDelete(id);
 
     return;
 };
