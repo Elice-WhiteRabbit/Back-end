@@ -4,7 +4,10 @@ const postService = require('../services/post-service');
 const userService = require('../services/user-service');
 
 module.exports = async () => {
+    // 사용 중인 파일 목록
     let fileNames = [];
+
+    // post, user 전체조회 후 리스트 추출
     const postList = await postService.findAllPost();
 
     if(postList.length>0){
