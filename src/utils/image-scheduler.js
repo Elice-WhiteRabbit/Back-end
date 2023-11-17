@@ -36,11 +36,9 @@ module.exports = async () => {
 
     // 전체 이미지 목록 가져오기
     const allImages = fs.readdirSync('public/images');
-    console.log("전체 이미지 목록 가져오기")
 
     // 연결되지 않은 이미지 식별
     const unlinkedImages = allImages.filter(image => !activeImagesMap[image]);
-    console.log("연결 이미지 식별")
 
     // 연결되지 않은 이미지 삭제
     unlinkedImages.forEach( async (image) => {
@@ -48,5 +46,4 @@ module.exports = async () => {
         await fs.unlinkSync(imagePath);
         console.log(`deleted : ${image}`);
     });
-    console.log("잉여 이미지 삭제")
 }
