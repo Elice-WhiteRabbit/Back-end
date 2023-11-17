@@ -1,6 +1,7 @@
 const { User } = require('../db');
 const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
+const { imageUpload, deleteBeforeImage } = require('../utils/image-upload');
 
 const addUser = async (userData) => {
     const check = await User.findOne({ email:userData.email });
@@ -22,7 +23,15 @@ const findUserById = async (id) => {
 };
 
 const modifyUser = async (id, userData) => {
+    const user = await User.findById(id);
 
+    if(userData.profile_url){
+        userData.profile_url = await imageUpload(userData.profile_url);
+    }
+
+    if(user.profile_url){
+        await deleteBeforeImage(user.profile_url);
+    }
 
     if(userData.password){
         userData.password = await bcrypt.hash(userData.password, 10);
@@ -32,6 +41,12 @@ const modifyUser = async (id, userData) => {
 };
 
 const removeUser = async (id) => {
+    const user = await User.findById(id);
+
+    if(user.profile_url){
+        await deleteBeforeImage(user.profile_url);
+    }
+    
     await User.findByIdAndDelete(id);
 };
 

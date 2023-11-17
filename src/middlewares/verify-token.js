@@ -2,6 +2,12 @@ const { verifyToken } = require('../utils/jwt');
 
 const auth = async (req, res, next) => {
     try{
+        if(!req.headers.authorization){
+            throw {
+                status:400,
+                message: "jwt 토큰이 필요합니다"
+            }
+        }
         // 이후로 req.tokenData에서 payload 정보 접근 가능
         req.tokenData = verifyToken(req.headers.authorization.split(' ')[1]);
 
