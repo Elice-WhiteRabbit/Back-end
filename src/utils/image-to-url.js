@@ -1,4 +1,5 @@
 const multer = require('multer');
+const fs = require('fs');
 const stringDate = require('./date-to-string');
 
 const storage = multer.diskStorage({
@@ -36,7 +37,7 @@ function imageToURL(req, res, next) {
     // 서버 주소. 배포시엔 도메인 주소로 바꿔야함
     const address = 'http://localhost:5000'
 
-    const imagePath = `${address}/temp/${req.file.filename}`;
+    const imagePath = `${address}/image/${req.file.filename}`;
     res.status(200).json({
         message: "이미지 url 생성",
         data: imagePath
@@ -44,4 +45,20 @@ function imageToURL(req, res, next) {
   });
 }
 
-module.exports = { imageToURL };
+const deleteImage = async (imageURL) => {
+  try{
+      const path = 'public/images' + imageURL.split('images')[1];
+      await fs.unlink(path, (err) => {
+          if(err){
+              throw err;
+          }
+      });
+  } catch(err) {
+      throw err;
+  }
+}
+
+module.exports = {
+  imageToURL,
+  deleteImage
+};

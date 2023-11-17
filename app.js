@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const cron = require('node-cron');
+const imageScheduler = require('./src/utils/image-scheduler');
 
 const DBConnection = require('./src/db/db-connection');
 const router = require('./src/routers');
@@ -37,6 +39,13 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500).json({
         message: `${err.message}`
     });
+});
+
+cron.schedule('* 30 * * * *', async () => {
+    console.log('==============================');
+    console.log('매 시각 30분마다 이미지폴더 정리')
+    await imageScheduler();
+    console.log('==============================');
 });
 
 app.listen(5000, () => {
