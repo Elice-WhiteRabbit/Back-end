@@ -1,13 +1,13 @@
 const {
   addSkill,
-  getSkill,
-  getAllSkills,
+  findSkill,
+  findAllSkills,
   modifySkill,
   removeSkill,
 } = require("../services/skill-service");
 
 const SkillController = {
-  async add(req, res) {
+  async addSkill(req, res) {
     try {
       const newSkill = await addSkill(req.body);
       res.status(201).json(newSkill);
@@ -16,18 +16,18 @@ const SkillController = {
     }
   },
 
-  async getAll(req, res) {
+  async findAllSkill(req, res) {
     try {
-      const skills = await getAllSkills();
+      const skills = await findAllSkills();
       res.status(200).json(skills);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   },
 
-  async get(req, res) {
+  async findSkill(req, res) {
     try {
-      const skill = await getSkill(req.params.id);
+      const skill = await findSkill(req.query.id);
       if (!skill) {
         return res.status(404).json({ error: "Skill not found" });
       }
@@ -37,11 +37,11 @@ const SkillController = {
     }
   },
 
-  async update(req, res) {
+  async updateSkill(req, res) {
     try {
       const updatedSkill = await modifySkill({
-        id: req.params.id,
-        skill: req.body.skill,
+        id: req.query.id,
+        skill: req.query.skill,
       });
       if (!updatedSkill) {
         return res.status(404).json({ error: "Skill not found" });
@@ -52,9 +52,12 @@ const SkillController = {
     }
   },
 
-  async delete(req, res) {
+  async deleteSkill(req, res) {
     try {
-      await removeSkill(req.params.id);
+      await removeSkill(req.query.id);
+      if (!skill) {
+        return res.status(404).json({ error: "Skill not found" });
+      }
       res.status(200).json({ message: "Skill successfully deleted" });
     } catch (error) {
       res.status(500).json({ error: error.message });

@@ -1,12 +1,12 @@
 const { Skill } = require("../db");
 
 //get 하나의 스킬
-const getSkill = async (id) => {
+const findSkill = async (id) => {
   return await Skill.findById(id);
 };
 
 //get 모든 스킬
-const getAllSkills = async () => {
+const findAllSkills = async () => {
   return await Skill.find({});
 };
 
@@ -33,6 +33,6 @@ module.exports = {
   addSkill,
   modifySkill,
   removeSkill,
-  getSkill,
-  getAllSkills,
+  findSkill,
+  findAllSkills,
 };

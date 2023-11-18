@@ -17,28 +17,37 @@ const UserSchema = new Schema({
   //프로필 이미지 url
   profile_url: {
     type: String,
-    default:"",
-    required: true
+    default: "",
+    required: true,
   },
+  //(note)프로필url 주석처리해야 유저 생성이 됨.
   generation_type: {
     type: String,
-    enum: ['SW 엔지니어 트랙', '풀스택 AI 트랙'],
-    required: true
+    enum: ["SW 엔지니어 트랙", "풀스택 AI 트랙"],
+    required: true,
   },
   generation_number: {
     type: Number,
-    required: true
+    required: true,
   },
   roles: {
     type: String,
-    enum: ['User', 'Coach', 'Admin'],
-    default: 'User',
-    required: true
+    enum: ["User", "Coach", "Admin"],
+    default: "User",
+    required: true,
   },
   is_coach: {
     type: Boolean,
     default: false,
   },
+
+  skills: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "skill",
+      default: [],
+    },
+  ],
 });
 
 module.exports = { UserSchema };
