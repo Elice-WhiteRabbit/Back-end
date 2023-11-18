@@ -42,7 +42,7 @@ const findPostByCategory = async (req, res, next) => {
 };
 
 const findAllPost = async (req, res, next) => {
-    const list = await postService.getAllPost();
+    const list = await postService.findAllPost();
 
     res.status(200).json({
         message: "전체 리스트",
