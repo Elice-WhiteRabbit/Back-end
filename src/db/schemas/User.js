@@ -18,7 +18,7 @@ const UserSchema = new Schema({
   profile_url: {
     type: String,
     default:"",
-    required: true
+    
   },
   generation_type: {
     type: String,
