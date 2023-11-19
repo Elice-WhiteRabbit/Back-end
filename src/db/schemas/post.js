@@ -28,6 +28,10 @@ const PostSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user',
         required:true
+    },
+    image_url: {
+        type: String,
+        default: ""
     }
     },{timestamps: true,
 });
