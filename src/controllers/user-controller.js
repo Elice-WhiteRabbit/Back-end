@@ -33,7 +33,7 @@ const findUserById = async (req, res, next) => {
     await userService.userCheck(req.tokenData, id);
 
     const user = await userService.findUserById(id);
-    console.log("check3");
+
     res.status(200).json({
         message: "User details",
         data: user,

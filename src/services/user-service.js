@@ -2,6 +2,7 @@ const { User } = require('../db');
 const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
 const { deleteImage } = require('../utils/image-to-url');
+const createCode = require('../utils/code-creater');
 
 const addUser = async (userData) => {
     const check = await User.findOne({ email:userData.email });
@@ -29,7 +30,7 @@ const findUserById = async (id) => {
 const modifyUser = async (id, userData) => {
     const user = await User.findById(id);
 
-    if(user.profile_url){
+    if(userData.profile_url && user.profile_url){
         await deleteImage(user.profile_url);
     }
 
@@ -87,6 +88,19 @@ const userCheck = async (tokenData, id) => {
             message: "접근 권한이 없습니다"
         }
     }
+}
+
+const sendCode = async (email) => {
+    const check = await User.findOne({ email });
+
+    if(!check){
+        throw {
+            status: 404,
+            message: "등록되지 않은 이메일입니다"
+        }
+    }
+
+    const VerificationCode = createCode();
 }
 
 module.exports = {
