@@ -34,7 +34,6 @@ const findLikeByUserAndPost = async (userId, postId) => {
     return Like.findOne({ user: userId, post: postId });
 };
 
-
 module.exports = {
     toggleLike,
     removeLike,
