@@ -6,7 +6,7 @@ const {
 
 const { findUserById } = require("../services/user-service");
 
-const UserSkillController = {
+const userSkillController = {
   //스킬 추가
   async add(req, res) {
     try {
@@ -50,12 +50,8 @@ const UserSkillController = {
       const id = req.params.id; //여기서 id는 스킬의 아이디
 
       const userList = await getUsersBySkill(id);
-      if (userList == "[]") {
-        return res
-          .status(404)
-          .json({ error: "이 스킬을 보유한 유저가 없습니다." });
-      }
-      //(질문! 해결못함!)위의 기능 200ok []를 리턴함................ 404에러가 나오게 하고싶음.
+
+      //위의 기능 200ok [](빈배열)를 리턴함. 프론트에서 검색 결과가 없다는 안내 문구를 띄워주셔야 함.
 
       res.status(200).json(userList);
     } catch (error) {
@@ -64,4 +60,4 @@ const UserSkillController = {
   },
 };
 
-module.exports = UserSkillController;
+module.exports = userSkillController;

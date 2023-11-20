@@ -12,7 +12,7 @@ router.delete("/:id", auth, asyncHandler(userController.removeUser));
 router.post("/login", asyncHandler(userController.login));
 //유저스킬 관련
 router.patch("/skill/add/:id", asyncHandler(userSkillController.add));
-router.patch("/skill/delete/:id", asyncHandler(userSkillController.delete));
+router.patch("/skill/remove/:id", asyncHandler(userSkillController.delete));
 //유저 내부 어레이에 적용하니까 patch로 구현
 
 //유저 테이블 전체에서 이 스킬이 [유저 스킬즈 배열]에 들어있는 유저 목록 가져오기

@@ -5,7 +5,7 @@ const auth = async (req, res, next) => {
     if (!req.headers.authorization) {
       throw {
         status: 401,
-        message: "Authorization header 이 없습니다",
+        message: "토큰이 없습니다",
       };
     }
     //헤더 없을 때 에러 핸들링 추가(11.18 - 수빈)

@@ -6,7 +6,7 @@ const {
   removeSkill,
 } = require("../services/skill-service");
 
-const SkillController = {
+const skillController = {
   async addSkill(req, res) {
     try {
       const newSkill = await addSkill(req.body);
@@ -65,4 +65,4 @@ const SkillController = {
   },
 };
 
-module.exports = SkillController;
+module.exports = skillController;
