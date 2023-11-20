@@ -1,16 +1,16 @@
 const { Like } = require('../db');
 const { Post } = require('../db');
 
-const addLike = async (data) => {
-    const existingLike = await Like.findOne({ post: data.post, user: data.user });
+const toggleLike = async (data) => {
+    const existingLike = await findLikeByUserAndPost(data.user, data.post);
 
     if (existingLike) {
         // 이미 좋아요를 눌렀다면 좋아요 취소
-        await Like.findOneAndDelete({ post: data.post, user: data.user });
-        await updatePostLikeCount(data.post, -1); 
-        return null; 
+        await removeLike(data.post, data.user);
+        await updatePostLikeCount(data.post, -1);
+        return null;
     }
-    await updatePostLikeCount(data.post, 1); 
+    await updatePostLikeCount(data.post, 1);
     return Like.create(data);
 };
 
@@ -36,7 +36,7 @@ const findLikeByUserAndPost = async (userId, postId) => {
 
 
 module.exports = {
-    addLike,
+    toggleLike,
     removeLike,
     getLikesByPost,
     findLikeByUserAndPost,
