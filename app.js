@@ -6,7 +6,8 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const DBConnection = require('./src/db/db-connection');
-const router = require('./src/routers');
+const indexRouter = require('./src/routers/index');
+const usersRouter = require('./src/routers/users');
 require('dotenv').config();
 
 const app = express();
@@ -17,7 +18,7 @@ DBConnection();
 // 애플리케이션 설정
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -25,7 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 // 라우팅 설정
-app.use(router);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -34,15 +36,13 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500).json({
-        message: `${err.message}`
-    });
-});
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-app.listen(5000, () => {
-    console.log("server start");
-}).on('error', (err) => {
-    console.log(err);
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;
