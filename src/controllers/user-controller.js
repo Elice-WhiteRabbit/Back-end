@@ -17,6 +17,16 @@ const addUser = async (req, res, next) => {
     });
 };
 
+const findUserByToken = async (req, res, next) => {
+    const id = req.tokenData.id;
+    const user = await userService.findUserById(id);
+
+    res.status(200).json({
+        message: "유저 정보 조회",
+        data: user
+    });
+}
+
 const findUserById = async (req, res, next) => {
     const { id } = req.params;
 
@@ -75,5 +85,6 @@ module.exports = {
     findUserById,
     modifyUser,
     removeUser,
+    findUserByToken,
     login
 };
