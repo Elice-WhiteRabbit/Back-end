@@ -13,16 +13,8 @@ const userSkillController = {
       const id = String(req.params.id);
       const skill = req.body.skill;
 
-      const currentUserSkill = await findUserById(id);
-
-      console.log(currentUserSkill);
-      // await userService.userCheck(req.tokenData, req.params.id);
-
       const newUserSkill = await addUserSkill({ userid: id, skill });
 
-      if (currentUserSkill.skills == newUserSkill.skills) {
-        return res.status(500).json("이미 보유한 스킬입니다.");
-      }
       res.status(201).json(newUserSkill);
     } catch (error) {
       res.status(500).json({ error: error.message });

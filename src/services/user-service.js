@@ -5,7 +5,7 @@ const { createToken } = require("../utils/jwt");
 const addUser = async (userData) => {
   const check = await User.findOne({ email: userData.email });
 
-  if (check !== null) {
+  if (check) {
     throw {
       status: 409,
       message: "이미 존재하는 이메일입니다",

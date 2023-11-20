@@ -12,6 +12,16 @@ const getUsersBySkill = async (skill) => {
 
 //관계 문서 추가 (ex:유저a - 스킬b를 추가할 때)
 const addUserSkill = async (data) => {
+  const user = await User.findById(data.userid);
+  const skill = String(user).includes(data.skill);
+
+  if (skill == true) {
+    throw {
+      status: 409,
+      message: "이미 존재하는 스킬입니다",
+    };
+  }
+
   return await User.findByIdAndUpdate(
     data.userid,
     { $push: { skills: data.skill } }
