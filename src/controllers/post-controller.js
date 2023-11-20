@@ -18,7 +18,7 @@ const addPost = async (req, res, next) => {
         author
     });
 
-    res.status(201).json({
+    return res.status(201).json({
         message: "post생성",
         data: createdPost
     });
@@ -35,7 +35,7 @@ const findPostByCategory = async (req, res, next) => {
     }
 
     const list = await postService.getPostByCategory(category);
-    res.status(200).json({
+    return res.status(200).json({
         message: `${category} 카테고리 요청 결과`,
         data: list
     })

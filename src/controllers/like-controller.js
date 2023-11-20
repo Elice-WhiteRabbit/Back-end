@@ -1,4 +1,5 @@
 const likeService = require('../services/like-service');
+const postService = require('../services/post-service');
 
 const toggleLike = async (req, res, next) => {
     const { postId } = req.params;
@@ -9,7 +10,7 @@ const toggleLike = async (req, res, next) => {
     if (existingLike) {
         // 이미 좋아요를 눌렀다면 좋아요 취소
         await likeService.removeLike(postId, userId);
-        res.status(200).json({
+        return res.status(200).json({
             message: "좋아요가 취소되었습니다",
             data: null,
         });
@@ -18,7 +19,7 @@ const toggleLike = async (req, res, next) => {
             post: postId,
             user: userId,
         });
-        res.status(201).json({
+        return res.status(201).json({
             message: "좋아요가 추가되었습니다",
             data: { like },
         });
@@ -29,10 +30,13 @@ const getLikesByPost = async (req, res, next) => {
     const { postId } = req.params;
 
     const likes = await likeService.getLikesByPost(postId);
-
-    res.status(200).json({
+    const post = await postService.findPostById(postId);
+    return res.status(200).json({
         message: `게시글(${postId})에 대한 좋아요 목록`,
-        data: likes,
+        data: {
+            likes,
+            post
+        },
     });
 };
 
