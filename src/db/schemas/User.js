@@ -17,8 +17,7 @@ const UserSchema = new Schema({
   //프로필 이미지 url
   profile_url: {
     type: String,
-    default:"",
-    
+    default:""
   },
   generation_type: {
     type: String,
@@ -32,8 +31,7 @@ const UserSchema = new Schema({
   roles: {
     type: String,
     enum: ['User', 'Coach', 'Admin'],
-    default: 'User',
-    required: true
+    default: 'User'
   },
   is_coach: {
     type: Boolean,

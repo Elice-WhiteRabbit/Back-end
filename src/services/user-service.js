@@ -1,7 +1,7 @@
 const { User } = require('../db');
 const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
-const { imageUpload, deleteBeforeImage } = require('../utils/image-upload');
+const { deleteImage } = require('../utils/image-to-url');
 
 const addUser = async (userData) => {
     const check = await User.findOne({ email:userData.email });
@@ -18,6 +18,10 @@ const addUser = async (userData) => {
     return User.create(userData);
 };
 
+const findAllUser = async () => {
+    return User.find({});
+}
+
 const findUserById = async (id) => {
     return User.findById(id);
 };
@@ -25,12 +29,8 @@ const findUserById = async (id) => {
 const modifyUser = async (id, userData) => {
     const user = await User.findById(id);
 
-    if(userData.profile_url){
-        userData.profile_url = await imageUpload(userData.profile_url);
-    }
-
     if(user.profile_url){
-        await deleteBeforeImage(user.profile_url);
+        await deleteImage(user.profile_url);
     }
 
     if(userData.password){
@@ -44,7 +44,7 @@ const removeUser = async (id) => {
     const user = await User.findById(id);
 
     if(user.profile_url){
-        await deleteBeforeImage(user.profile_url);
+        await deleteImage(user.profile_url);
     }
     
     await User.findByIdAndDelete(id);
@@ -91,6 +91,7 @@ const userCheck = async (tokenData, id) => {
 
 module.exports = {
     addUser,
+    findAllUser,
     findUserById,
     modifyUser,
     removeUser,
