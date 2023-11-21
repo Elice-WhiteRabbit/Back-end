@@ -1,14 +1,15 @@
 const commentService = require('../services/comment-service');
 
 const addComment = async (req, res, next) => {
-    const { post, author, content } = req.body;
-
+    const { post, content } = req.body;
+    const userId = req.tokenData.id;
+    
     const createdComment = await commentService.addComment({
         post,
-        author,
+        author: userId,
         content,
     });
-
+    
     res.status(201).json({
         message: "댓글이 생성되었습니다",
         data: createdComment,
@@ -17,7 +18,6 @@ const addComment = async (req, res, next) => {
 
 const findCommentsByPost = async (req, res, next) => {
     const { postId } = req.params;
-
     const comments = await commentService.findCommentsByPost(postId);
 
     res.status(200).json({
@@ -40,22 +40,32 @@ const findCommentsByUser = async (req, res, next) => {
 const modifyComment = async (req, res, next) => {
     const { content } = req.body;
     const { id } = req.params;
+    const userId = req.tokenData.id;
 
     const updatedComment = await commentService.modifyComment({
         id,
+        author: userId,
         content,
     });
+
+    if (!updatedComment) {
+        return res.status(404).json({
+            message: "댓글을 찾을 수 없습니다",
+            data: null, 
+        });
+    }
 
     res.status(200).json({
         message: "댓글을 수정했습니다",
         data: updatedComment,
     });
 };
-
+ 
 const removeComment = async (req, res, next) => {
     const { id } = req.params;
+    const userId = req.tokenData.id;
 
-    await commentService.removeComment(id);
+    await commentService.removeComment(id, userId);
 
     res.status(200).json({
         message: "댓글을 삭제했습니다",
