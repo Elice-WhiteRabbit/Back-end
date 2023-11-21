@@ -1,5 +1,4 @@
 const { User } = require('../db');
-const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
 const { deleteImage } = require('../utils/image-to-url');
 const createCode = require('../utils/code-creater');
@@ -15,8 +14,6 @@ const addUser = async (userData) => {
             message: "이미 존재하는 이메일입니다"
         }
     }
-
-    userData.password = await bcrypt.hash(userData.password, 10);
 
     return User.create(userData);
 };
@@ -34,10 +31,6 @@ const modifyUser = async (id, userData) => {
 
     if(userData.profile_url && user.profile_url){
         await deleteImage(user.profile_url);
-    }
-
-    if(userData.password){
-        userData.password = await bcrypt.hash(userData.password, 10);
     }
 
     return User.findByIdAndUpdate(id, userData, { new: true });
@@ -125,8 +118,6 @@ const resetPassword = async (data) => {
             message: "기간이 만료되었거나 잘못된 인증번호입니다"
         }
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.findOneAndUpdate(
         { email },
