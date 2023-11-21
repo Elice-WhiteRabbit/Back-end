@@ -27,7 +27,7 @@ const addPost = async (req, res, next) => {
         author
     });
 
-    res.status(201).json({
+    return res.status(201).json({
         message: "post생성",
         data: createdPost
     });

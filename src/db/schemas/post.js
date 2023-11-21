@@ -14,12 +14,10 @@ const PostSchema = new Schema({
         type: Number,
         dafault: 0
     },
-    like: [
-      {
-        type: Schema.Types.ObjectId,
-        ref:'user',
-        default: []
-    }],
+    like_count: {
+      type: Number,
+      default: 0,
+  },
     category: {
         type: String,
         enum: ["fb","qna","study","side-project","review"],
