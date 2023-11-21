@@ -12,22 +12,18 @@ const findCommentsByUser = async (userId) => {
     return Comment.find({ author: userId }).sort({ createdAt: -1 });
 };
 
-const findCommentById = async (id) => {
-    return Comment.findById(id);
-};
-
 const modifyComment = async (data) => {
     const { content } = data;
 
     return Comment.findOneAndUpdate(
-        { _id: data.id },
+        { _id: data.id, author: data.author },
         { content },
         { new: true }
     );
 };
 
-const removeComment = async (id) => {
-    await Comment.findOneAndDelete({ _id: id });
+const removeComment = async (id, author) => {
+    await Comment.findOneAndDelete({ _id: id, author });
 
     return;
 };
@@ -35,7 +31,6 @@ const removeComment = async (id) => {
 module.exports = {
     addComment,
     findCommentsByPost,
-    findCommentById,
     findCommentsByUser,
     modifyComment,
     removeComment,
