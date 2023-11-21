@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
 const { deleteImage } = require('../utils/image-to-url');
 const createCode = require('../utils/code-creater');
+const authCodeCache = require('../utils/node-cache');
+const mailer = require('../utils/mailer');
 
 const addUser = async (userData) => {
     const check = await User.findOne({ email:userData.email });
@@ -100,7 +102,40 @@ const sendCode = async (email) => {
         }
     }
 
-    const VerificationCode = createCode();
+    const prevCode = authCodeCache.get(email);
+    if(prevCode){
+        authCodeCache.del(email);
+    }
+
+    const authCode = createCode();
+
+    authCodeCache.set(email,authCode,60);
+    await mailer(email,authCode);
+
+    return;
+}
+
+const resetPassword = async (data) => {
+    const { email, authCode, password } = data;
+
+    const check = authCodeCache.get(email);
+    if(!check || authCode !== check){
+        throw {
+            status: 404,
+            message: "기간이 만료되었거나 잘못된 인증번호입니다"
+        }
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.findOneAndUpdate(
+        { email },
+        {password:hashedPassword}
+    );
+    
+    authCodeCache.del(email);
+
+    return;
 }
 
 module.exports = {
@@ -110,5 +145,7 @@ module.exports = {
     modifyUser,
     removeUser,
     login,
+    sendCode,
+    resetPassword,
     userCheck
 };

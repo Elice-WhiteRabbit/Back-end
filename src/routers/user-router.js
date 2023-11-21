@@ -10,5 +10,8 @@ router.get('/:id', auth, asyncHandler(userController.findUserById));
 router.patch('/:id', auth, asyncHandler(userController.modifyUser));
 router.delete('/:id', auth, asyncHandler(userController.removeUser));
 router.post('/login', asyncHandler(userController.login));
+router.post('/password', asyncHandler(userController.sendCode));
+router.post('/password/reset', asyncHandler(userController.resetPassword));
+
 
 module.exports = router;

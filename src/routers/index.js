@@ -10,7 +10,6 @@ router.use('/api/v1/posts', postRouter);
 router.use('/api/v1/comments', commentRouter);
 router.use('/api/v1/users', userRouter);
 router.post('/api/v1/image', imageToURL);
-router.post('/api/v1/email', mailer);
 
 /* GET home page. */
 router.get('/api', function(req, res, next) {
