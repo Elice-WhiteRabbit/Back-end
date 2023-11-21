@@ -1,4 +1,4 @@
-const { Skill } = require("../db");
+const { Skill } = require('../db');
 
 //get 하나의 스킬
 const findSkill = async (id) => {
@@ -24,9 +24,19 @@ const modifySkill = async (data) => {
 
 //스킬 삭제
 const removeSkill = async (id) => {
-  await Skill.findOneAndDelete({ _id: id });
+  return await Skill.findOneAndDelete({ _id: id });
+};
 
-  return;
+//스킬검색
+// const searchSkill = async (query) => {
+//   await Skill.find({ name: { $regex: query, $options: 'i' } });
+//   return skills;
+// };
+
+//스킬검색
+
+const searchSkill = async (query) => {
+  return Skill.find({ skill: { $regex: query, $options: 'i' } });
 };
 
 module.exports = {
@@ -35,4 +45,5 @@ module.exports = {
   removeSkill,
   findSkill,
   findAllSkills,
+  searchSkill,
 };
