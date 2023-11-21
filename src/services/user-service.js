@@ -121,7 +121,7 @@ const resetPassword = async (data) => {
 
     await User.findOneAndUpdate(
         { email },
-        {password:hashedPassword}
+        {password}
     );
     
     authCodeCache.del(email);
