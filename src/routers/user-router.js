@@ -4,7 +4,7 @@ const userController = require('../controllers/user-controller');
 const userSkillController = require('../controllers/user-skill-controller');
 const asyncHandler = require('../utils/async-handler');
 const { auth, checkAdmin } = require('../middlewares/verify-token');
-const skillController = require('../controllers/skill-controller');
+
 const linkController = require('../controllers/link-controller');
 
 router.post('/', asyncHandler(userController.addUser));
@@ -21,9 +21,9 @@ router.patch('/skill/remove/:id', asyncHandler(userSkillController.delete));
 router.get('/skill/:id', asyncHandler(userSkillController.getUsersBySkill));
 
 //유저 링크 관련 (프로필에 올라갈 깃허브 주소 등의 링크)
-router.put('/links/:id', asyncHandler(linkController.updateLinks));
-router.delete('/links/:id', asyncHandler(linkController.delete));
-router.patch('/links/:id', asyncHandler(linkController.modify));
+router.put('/links/:id', asyncHandler(linkController.updateLinks)); //링크 추가
+router.delete('/links/:id', asyncHandler(linkController.deleteLink)); // 링크 삭제
+router.get('/links/:id', asyncHandler(linkController.getLinks)); //특정 사용자의 모든 링크 조회
 
 //유저 기수 관련
 
