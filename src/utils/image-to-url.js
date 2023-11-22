@@ -4,7 +4,7 @@ const stringDate = require('./date-to-string');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'public/temp');
+      cb(null, 'public/images');
     },
     filename: (req, file, cb) => {
       cb(null, stringDate(new Date()) + '-' + file.originalname);
@@ -48,8 +48,12 @@ function imageToURL(req, res, next) {
 const deleteImage = async (imageURL) => {
   try{
       const path = 'public/images' + imageURL.split('images')[1];
+
       await fs.unlink(path, (err) => {
-          if(err){
+          if(err.code === 'ENOENT'){
+              console.log("파일이 이미 존재하지 않음");
+              return;
+          }else if(err){
               throw err;
           }
       });

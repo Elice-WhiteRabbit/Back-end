@@ -11,11 +11,21 @@ const addUser = async (req, res, next) => {
         generation_number
     });
 
-    res.status(201).json({
+    return res.status(201).json({
         message: "User created",
         data: createdUser,
     });
 };
+
+const findUserByToken = async (req, res, next) => {
+    const id = req.tokenData.id;
+    const user = await userService.findUserById(id);
+
+    return res.status(200).json({
+        message: "유저 정보 조회",
+        data: user
+    });
+}
 
 const findUserById = async (req, res, next) => {
     const { id } = req.params;
@@ -23,8 +33,8 @@ const findUserById = async (req, res, next) => {
     await userService.userCheck(req.tokenData, id);
 
     const user = await userService.findUserById(id);
-    console.log("check3");
-    res.status(200).json({
+
+    return res.status(200).json({
         message: "User details",
         data: user,
     });
@@ -38,7 +48,7 @@ const modifyUser = async (req, res, next) => {
 
     const updatedUser = await userService.modifyUser(id, userData);
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "User updated",
         data: updatedUser,
     });
@@ -51,7 +61,7 @@ const removeUser = async (req, res, next) => {
 
     await userService.removeUser(id);
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "User deleted",
     });
 };
@@ -64,16 +74,43 @@ const login = async (req, res, next) => {
         password
     });
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "로그인 성공",
         token:token
     });
 };
+
+const sendCode = async (req, res, next) => {
+    const { email } = req.body;
+
+    await userService.sendCode(email)
+
+    return res.status(200).json({
+        message: "인증 코드 발송됨"
+    })
+}
+
+const resetPassword = async (req, res, next) => {
+    const { email, authCode, password } = req.body;
+
+    await userService.resetPassword({
+        email,
+        authCode,
+        password
+    });
+
+    return res.status(200).json({
+        message: "비밀번호가 변경되었습니다."
+    });
+}
 
 module.exports = {
     addUser,
     findUserById,
     modifyUser,
     removeUser,
+    findUserByToken,
+    sendCode,
+    resetPassword,
     login
 };
