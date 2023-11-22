@@ -1,4 +1,5 @@
 const { Schema } = require("mongoose");
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const PostSchema = new Schema({
     title: {
@@ -19,7 +20,7 @@ const PostSchema = new Schema({
   },
     category: {
         type: String,
-        enum: ["fb","qna","study","side-project","review"],
+        enum: ["BOARD","QNA","STUDY","PROJECT","REVIEW"],
         required: true
     },
     author: {
@@ -34,4 +35,5 @@ const PostSchema = new Schema({
     },{timestamps: true,
 });
 
+PostSchema.plugin(mongoosePaginate);
 module.exports = { PostSchema };

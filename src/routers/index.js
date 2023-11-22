@@ -7,7 +7,7 @@ const userRouter = require('./user-router');
 const skillRouter = require('./skill-router');
 const mailer = require('../utils/mailer');
 
-router.use('/api/v1/posts', postRouter);
+router.use('/api/v1/boards', postRouter);
 router.use('/api/v1/comments', commentRouter);
 router.use('/api/v1/users', userRouter);
 router.post('/api/v1/image', imageToURL);
