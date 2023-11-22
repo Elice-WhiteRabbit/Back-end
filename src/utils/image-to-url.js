@@ -35,7 +35,7 @@ function imageToURL(req, res, next) {
       throw err;
     }
     // 서버 주소. 배포시엔 도메인 주소로 바꿔야함
-    const address = 'http://localhost:5000'
+    const address = 'http://kdt-sw-6-team07.elicecoding.com'
 
     const imagePath = `${address}/image/${req.file.filename}`;
     res.status(200).json({
