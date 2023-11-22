@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post('/', SkillController.addSkill);
 router.get('/find-all', SkillController.findAllSkill);
-router.get('/find', SkillController.findSkill);
+router.get('/find/:id', SkillController.findSkill);
 router.put('/', SkillController.updateSkill);
 router.delete('/:id', SkillController.deleteSkill);
 
