@@ -2,11 +2,11 @@ const postService = require('../services/post-service');
 const CommentService = require('../services/comment-service');
 
 const postType = {
-    fb: "fb",
-    qna: "qna",
-    study: "study",
-    sideProject: "side-project",
-    review: "review"
+    BOARD: "BOARD",
+    QNA: "QNA",
+    STUDY: "STUDY",
+    PROJECT: "PROJECT",
+    REVIEW: "REVIEW"
 };
 
 const getPaginationInfo = (result, page, pageSize) => {
