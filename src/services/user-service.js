@@ -1,7 +1,8 @@
-const { User } = require("../db");
-const bcrypt = require("bcrypt");
-const { createToken } = require("../utils/jwt");
-const { deleteImage } = require("../utils/image-to-url");
+const { User } = require('../db');
+const { Follow } = require('../db')
+const bcrypt = require('bcrypt');
+const { createToken } = require('../utils/jwt');
+const { deleteImage } = require('../utils/image-to-url');
 
 const addUser = async (userData) => {
   const check = await User.findOne({ email: userData.email });
@@ -89,6 +90,49 @@ const userCheck = async (tokenData, id) => {
   }
 };
 
+const addFollow = async (from, to) => {
+  return Follow.create({ from, to });
+}
+
+const findAllFollow = async (id) => {
+  const followingList = await Follow.find({ from: id });
+  const followerList = await Follow.find({ to: id });
+
+  return {
+    followingList,
+    followerList
+  }
+}
+
+const findAllFollowNumber = async (id) => {
+  const followingList = await Follow.find({ from: id });
+  const followerList = await Follow.find({ to: id });
+
+  const followingNumber = followingList.length;
+  const followerNumber = followerList.length;
+
+  return {
+    followingNumber,
+    followerNumber
+  }
+}
+
+const findFollowingList = async (id) => {
+  return Follow.find({ from: id });
+}
+
+const findFollowerList = async (id) => {
+  return Follow.find({ to: id });
+}
+
+const removeFollower = async (from, to) => {
+  return Follow.findOneAndDelete({from, to});
+}
+
+const unFollow = async (from, to) => {
+  return Follow.findOneAndDelete({from, to});
+}
+
 module.exports = {
   addUser,
   findAllUser,
@@ -97,4 +141,11 @@ module.exports = {
   removeUser,
   login,
   userCheck,
+  addFollow,
+  findAllFollow,
+  findAllFollowNumber,
+  findFollowingList,
+  findFollowerList,
+  removeFollower,
+  unFollow
 };

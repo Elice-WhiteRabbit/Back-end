@@ -1,15 +1,15 @@
 const { Schema } = require('mongoose');
 
 const FollowSchema = new Schema({
-    to: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-        required: true
-    },
     from: {
         type: Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'User',
         required: true 
+    },
+    to: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 });
 
