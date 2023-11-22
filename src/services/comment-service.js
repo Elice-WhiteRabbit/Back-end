@@ -1,7 +1,7 @@
 const { Comment } = require('../db');
 
-const getCommentCount = async (postId) => {
-    const commentCount = await Comment.countDocuments({ post: postId });
+const getCommentCount = async (boardId) => {
+    const commentCount = await Comment.countDocuments({ post: boardId });
     return commentCount;
 };
 
@@ -9,12 +9,16 @@ const addComment = async (data) => {
     return Comment.create(data);
 };
 
-const findCommentsByPost = async (postId) => {
-    return Comment.find({ post: postId }).sort({ createdAt: -1 });
+const findCommentsByPost = async (boardId) => {
+    return Comment.find({ post: boardId }).sort({ createdAt: -1 });
 };
 
 const findCommentsByUser = async (userId) => {
     return Comment.find({ author: userId }).sort({ createdAt: -1 });
+};
+
+const findCommentById = async (commentId) => {
+    return Comment.findById(commentId);
 };
 
 const modifyComment = async (data) => {
@@ -37,6 +41,7 @@ module.exports = {
     addComment,
     findCommentsByPost,
     findCommentsByUser,
+    findCommentById,
     modifyComment,
     removeComment,
     getCommentCount

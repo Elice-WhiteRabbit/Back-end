@@ -1,4 +1,5 @@
 const { User } = require('../db');
+const bcrypt = require("bcrypt");
 const { createToken } = require('../utils/jwt');
 const { deleteImage } = require('../utils/image-to-url');
 const createCode = require('../utils/code-creater');

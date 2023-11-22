@@ -19,8 +19,9 @@ const getPaginationInfo = (result, page, pageSize) => {
 };
 
 const addPost = async (req, res, next) => {
-    const { title, content, category, author } = req.body;
-
+    const { title, content, category } = req.body;
+    const author = req.tokenData.id;
+   
     const createdPost = await postService.addPost({
         title,
         content,
@@ -167,14 +168,16 @@ const findPostById = async (req, res, next) => {
     const { postId } = req.params;
 
     const post = await postService.findPostById(postId);
-    const commentCount = await CommentService.getCommentCount(postId);
-    const isPopular = post.like_count >= 1;
+    
 
     if (!post) {
         return res.status(404).json({
             message: "게시글을 찾을 수 없습니다.",
         });
     }
+
+    const commentCount = await CommentService.getCommentCount(postId);
+    const isPopular = post.like_count >= 1;
 
     res.status(200).json({
         message: "게시글 조회 성공",
@@ -189,7 +192,15 @@ const findPostById = async (req, res, next) => {
 const modifyPost = async (req, res, next) => {
     const { title, content, category } = req.body;
     const { id } = req.params;
+    const userId = req.tokenData.id;
+    const post = await postService.findPostById(id);
 
+    if (!post || post.author != userId) {
+        return res.status(403).json({
+            message: "게시물 수정 권한이 없습니다.",
+        });
+    }
+    
     const updatedPost = await postService.modifyPost({
         id, 
         title, 
@@ -197,7 +208,6 @@ const modifyPost = async (req, res, next) => {
         category
     });
 
-    // 수정된 게시물에 대해 댓글 개수를 가져옴
     const commentCount = await CommentService.getCommentCount(id);
     const isPopular = post.like_count >= 1;
 
@@ -210,8 +220,16 @@ const modifyPost = async (req, res, next) => {
 
 const removePost = async (req, res, next) => {
     const { id } = req.params;
+    const userId = req.tokenData.id;
+    const post = await postService.findPostById(id);
 
-    await postService.deletePost(id);
+    if (!post || post.author != userId) {
+        return res.status(403).json({
+            message: "게시물 삭제 권한이 없습니다.",
+        });
+    }
+
+    await postService.removePost(id);
 
     res.status(200).json({
         message: "게시글을 삭제했습니다"
