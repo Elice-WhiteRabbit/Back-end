@@ -20,7 +20,7 @@ const PostSchema = new Schema({
   },
     category: {
         type: String,
-        enum: ["fb","qna","study","side-project","review"],
+        enum: ["BOARD","QNA","STUDY","PROJECT","REVIEW"],
         required: true
     },
     author: {
