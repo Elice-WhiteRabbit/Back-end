@@ -31,14 +31,14 @@ app.use(router);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
+  next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500).json({
-        message: `${err.message}`
-    });
+  res.status(err.status || 500).json({
+    message: `${err.message}`,
+  });
 });
 
 // 미사용 이미지파일 정리 스케줄러. *은 순서대로 초/분/시/일/월/요일
@@ -50,10 +50,12 @@ cron.schedule('0 30 * * * *', async () => {
     console.log('==============================');
 });
 
-app.listen(5000, () => {
-    console.log("server start");
-}).on('error', (err) => {
+app
+  .listen(5000, () => {
+    console.log('server start');
+  })
+  .on('error', (err) => {
     console.log(err);
-});
+  });
 
 module.exports = app;
