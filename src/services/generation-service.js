@@ -30,7 +30,7 @@ const addGenerationNumber = async (userId, generationNumber) => {
   );
 };
 
-//generation_number 수정
+//기수 수정
 const updateGenerationNumber = async (userId, newGenerationNumber) => {
   return await User.findByIdAndUpdate(
     userId,
@@ -39,11 +39,38 @@ const updateGenerationNumber = async (userId, newGenerationNumber) => {
   );
 };
 
-//generation_number 삭제
+//기수 삭제
 const removeGenerationNumber = async (userId) => {
   return await User.findByIdAndUpdate(
     userId,
     { $unset: { generation_number: '' } },
+    { new: true }
+  );
+};
+
+//트랙 생성
+const addGenerationType = async (userId, generationType) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    { generation_type: generationType },
+    { new: true }
+  );
+};
+
+// 트랙 수정
+const updateGenerationType = async (userId, generationType) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    { generation_type: generationType },
+    { new: true }
+  );
+};
+
+// 트랙 삭제
+const removeGenerationType = async (userId) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    { $unset: { generation_type: '' } },
     { new: true }
   );
 };
@@ -54,4 +81,7 @@ module.exports = {
   updateGenerationNumber,
   removeGenerationNumber,
   addGenerationNumber,
+  addGenerationType,
+  updateGenerationType,
+  removeGenerationType,
 };

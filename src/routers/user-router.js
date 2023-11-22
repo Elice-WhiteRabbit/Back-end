@@ -59,4 +59,22 @@ router.delete(
   asyncHandler(generationController.deleteGenerationNumber)
 ); //특정 사용자의 기수 삭제
 
+// 트랙 생성 라우트
+router.put(
+  '/generation-type/:id',
+  asyncHandler(generationController.addGenerationType)
+);
+
+// 트랙 수정 라우트
+router.patch(
+  '/generation-type/:id',
+  asyncHandler(generationController.modifyGenerationType)
+);
+
+// 트랙 삭제 라우트
+router.delete(
+  '/generation-type/:id',
+  asyncHandler(generationController.deleteGenerationType)
+);
+
 module.exports = router;
