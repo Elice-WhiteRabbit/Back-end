@@ -1,5 +1,10 @@
 const { Comment } = require('../db');
 
+const getCommentCount = async (postId) => {
+    const commentCount = await Comment.countDocuments({ post: postId });
+    return commentCount;
+};
+
 const addComment = async (data) => {
     return Comment.create(data);
 };
@@ -34,4 +39,5 @@ module.exports = {
     findCommentsByUser,
     modifyComment,
     removeComment,
+    getCommentCount
 };

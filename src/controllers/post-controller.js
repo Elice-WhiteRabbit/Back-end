@@ -1,4 +1,5 @@
 const postService = require('../services/post-service');
+const CommentService = require('../services/comment-service');
 
 const postType = {
     fb: "fb",
@@ -47,9 +48,28 @@ const findPostByCategory = async (req, res, next) => {
     let result;
     if (!page && !pageSize) {
         // 쿼리값 없으면 전체 조회
-        result = await postService.findAll();
+        result = await postService.findAll(category);
+        const postsWithCommentCount = await Promise.all(
+            result.map(async (post) => {
+                const commentCount = await CommentService.getCommentCount(post._id);
+                const isPopular = post.like_count >= 1;
+                return { ...post._doc, isPopular, commentCount };
+            })
+        );
+
+        result = postsWithCommentCount;
+
     } else {
         result = await postService.findPostByCategory(category, page, pageSize);
+        const postsWithCommentCount = await Promise.all(
+            result.docs.map(async (post) => {
+                const commentCount = await CommentService.getCommentCount(post._id);
+                const isPopular = post.like_count >= 1;
+                return { ...post._doc, isPopular, commentCount };
+            })
+        );
+
+        result.docs = postsWithCommentCount;
     }
 
     res.status(200).json({
@@ -68,8 +88,27 @@ const findAllPost = async (req, res, next) => {
     if (!page && !pageSize) {
         // 쿼리값 없으면 전체 조회
         result = await postService.findAll();
+        const postsWithCommentCount = await Promise.all(
+            result.map(async (post) => {
+                const commentCount = await CommentService.getCommentCount(post._id);
+                const isPopular = post.like_count >= 1;
+                return { ...post._doc, isPopular, commentCount };
+            })
+        );
+
+        result = postsWithCommentCount;
+        
     } else {
         result = await postService.findAllPost(page, pageSize);
+        const postsWithCommentCount = await Promise.all(
+            result.docs.map(async (post) => {
+                const commentCount = await CommentService.getCommentCount(post._id);
+                const isPopular = post.like_count >= 1;
+                return { ...post._doc, isPopular, commentCount };
+            })
+        );
+
+        result.docs = postsWithCommentCount;
     }
 
     res.status(200).json({
@@ -81,15 +120,69 @@ const findAllPost = async (req, res, next) => {
     });
 };
 
+const getPopularPosts = async (req, res, next) => {     
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7); // 일주일 기준
+
+    let popularPosts = await postService.getPopularPosts(weekAgo);
+    const postsWithCommentCount = await Promise.all(
+        popularPosts.map(async (post) => {
+            const commentCount = await CommentService.getCommentCount(post._id);
+            return { ...post, isPopular: true, commentCount };
+        })
+    );
+
+    popularPosts = postsWithCommentCount;
+
+    res.status(200).json({
+        message: "인기 게시물 목록",
+        data: {
+            posts: popularPosts,
+        },
+    });
+};
+
 const findPostByAuthor = async (req, res, next) => {
     const { author } = req.params;
 
-    const list = await postService.getPostByAuthor(author);
+    let post = await postService.findPostByAuthor(author);
+    const postsWithCommentCount = await Promise.all(
+        post.map(async (post) => {
+            const commentCount = await CommentService.getCommentCount(post._id);
+            const isPopular = post.like_count >= 1;
+            return { post, isPopular, commentCount };
+        })
+    );
+
+    post = postsWithCommentCount;
 
     // author를 user name으로?
     res.status(200).json({
         message: `${author}가 작성한 글 목록`,
-        data: list
+        data: post
+    });
+};
+
+const findPostById = async (req, res, next) => {
+    const { postId } = req.params;
+
+    const post = await postService.findPostById(postId);
+    const commentCount = await CommentService.getCommentCount(postId);
+    const isPopular = post.like_count >= 1;
+
+    if (!post) {
+        return res.status(404).json({
+            message: "게시글을 찾을 수 없습니다.",
+        });
+    }
+
+    res.status(200).json({
+        message: "게시글 조회 성공",
+        data: {
+            post,
+            isPopular,
+            commentCount
+        }
     });
 };
 
@@ -97,18 +190,23 @@ const modifyPost = async (req, res, next) => {
     const { title, content, category } = req.body;
     const { id } = req.params;
 
-    const updatedPost = await postService.setPost({
+    const updatedPost = await postService.modifyPost({
         id, 
         title, 
         content, 
         category
     });
 
+    // 수정된 게시물에 대해 댓글 개수를 가져옴
+    const commentCount = await CommentService.getCommentCount(id);
+    const isPopular = post.like_count >= 1;
+
     res.status(200).json({
         message: "게시글을 수정했습니다",
-        data:updatedPost
+        data: { ...updatedPost._doc, isPopular, commentCount }, // 기존 데이터와 댓글 개수를 합침
     });
 };
+
 
 const removePost = async (req, res, next) => {
     const { id } = req.params;
@@ -124,7 +222,9 @@ module.exports = {
     addPost,
     modifyPost,
     findAllPost,
+    findPostById,
     findPostByCategory,
     findPostByAuthor,
     removePost,
+    getPopularPosts,
 }

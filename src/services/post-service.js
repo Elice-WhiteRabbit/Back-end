@@ -13,6 +13,11 @@ const addPost = async (data) => {
     return Post.create(data);
 }; 
 
+const getPostWithCommentCount = async (post) => {
+    const commentCount = await CommentService.getCommentCount(post._id);
+    return { ...post.toObject(), commentCount };
+};
+
 const findPostByCategory = async (category, page = 1, pageSize = 5) => {
     const options = {
         page: page,
@@ -25,8 +30,9 @@ const findPostByCategory = async (category, page = 1, pageSize = 5) => {
     return result;
 };
 
-const findAll = async () => {
-    return Post.find({}).sort({updatedAt:-1});
+const findAll = async (category) => {
+    const query = category ? { category } : {};
+    return Post.find(query).sort({ updatedAt: -1 });
 };
 
 // 페이지네이션
@@ -63,6 +69,33 @@ const removePost = async (id) => {
     return;
 };
 
+const getPopularPosts = async (weekAgo) => {
+    const pipeline = [
+        {
+            $match: { 
+                createdAt: { $gte: weekAgo }, 
+                like_count: { $gte: 1 }
+            },
+        },
+        {
+            $sort: { like_count: -1 },
+        },
+        {
+            $project: {
+                title: 1,
+                content: 1,
+                like_count: 1,
+                author: 1,
+                createdAt: 1,
+                isPopular: true,
+            },
+        },
+    ];
+
+    const popularPosts = await Post.aggregate(pipeline).exec();
+    return popularPosts;
+};
+
 module.exports = {
     addPost,
     modifyPost,
@@ -72,4 +105,5 @@ module.exports = {
     findPostById,
     findPostByAuthor,
     removePost,
+    getPopularPosts,
 };

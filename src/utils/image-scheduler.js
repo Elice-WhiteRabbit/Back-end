@@ -26,7 +26,6 @@ module.exports = async () => {
         if(user.profile_url){
             const url = user.profile_url;
             const arr = url.split("/");
-            console.log(arr[arr.length - 1]);
             fileNames.push(arr[arr.length - 1]);
         }
     })
@@ -37,16 +36,23 @@ module.exports = async () => {
         activeImagesMap[filename] = true;
     });
 
+    let unlinkedImages = [];
+    let allImages = [];
+
     // 전체 이미지 목록 가져오기
-    const allImages = fs.readdirSync('public/images');
+    allImages = fs.readdirSync('public/images');
 
     // 연결되지 않은 이미지 식별
-    const unlinkedImages = allImages.filter(image => !activeImagesMap[image]);
+    if(allImages.length > 0){
+        unlinkedImages = allImages.filter(image => !activeImagesMap[image]);
+    }
 
     // 연결되지 않은 이미지 삭제
-    unlinkedImages.forEach( async (image) => {
-        const imagePath = path.join('public/images', image);
-        await fs.unlinkSync(imagePath);
-        console.log(`deleted : ${image}`);
-    });
+    if(unlinkedImages.length > 0){
+        unlinkedImages.forEach( async (image) => {
+            const imagePath = path.join('public/images', image);
+            await fs.unlinkSync(imagePath);
+            console.log(`deleted : ${image}`);
+        });
+    }
 }
