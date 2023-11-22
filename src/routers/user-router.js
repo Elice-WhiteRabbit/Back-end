@@ -6,6 +6,7 @@ const asyncHandler = require('../utils/async-handler');
 const { auth, checkAdmin } = require('../middlewares/verify-token');
 
 const linkController = require('../controllers/link-controller');
+const generationController = require('../controllers/generation-controller');
 
 router.post('/', asyncHandler(userController.addUser));
 router.get('/', auth, asyncHandler(userController.findUserByToken));
@@ -33,5 +34,47 @@ router.delete('/links/:id', asyncHandler(linkController.deleteLink)); // 링크 
 router.get('/links/:id', asyncHandler(linkController.getLinks)); //특정 사용자의 모든 링크 조회
 
 //유저 기수 관련
+router.get(
+  '/generation/:id',
+  asyncHandler(generationController.getGenerationInfo)
+); //특정 사용자의 트랙,기수 조회
+
+router.get(
+  '/generation/:generationType/:generationNumber',
+  asyncHandler(generationController.findUsersByGeneration)
+); //특정 트랙,기수의 사용자 전체조회
+
+// 기수 추가 라우트
+router.put(
+  '/generation-number/:id',
+  asyncHandler(generationController.addGenerationNumber)
+);
+
+router.patch(
+  '/generation-number/:id',
+  asyncHandler(generationController.modifyGenerationNumber)
+); //특정 사용자의 기수 수정
+router.delete(
+  '/generation-number/:id',
+  asyncHandler(generationController.deleteGenerationNumber)
+); //특정 사용자의 기수 삭제
+
+// 트랙 생성 라우트
+router.put(
+  '/generation-type/:id',
+  asyncHandler(generationController.addGenerationType)
+);
+
+// 트랙 수정 라우트
+router.patch(
+  '/generation-type/:id',
+  asyncHandler(generationController.modifyGenerationType)
+);
+
+// 트랙 삭제 라우트
+router.delete(
+  '/generation-type/:id',
+  asyncHandler(generationController.deleteGenerationType)
+);
 
 module.exports = router;
