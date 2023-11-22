@@ -87,7 +87,7 @@ const sendCode = async (req, res, next) => {
 
     return res.status(200).json({
         message: "인증 코드 발송됨"
-    })
+    });
 }
 
 const resetPassword = async (req, res, next) => {
@@ -104,6 +104,62 @@ const resetPassword = async (req, res, next) => {
     });
 }
 
+const addFollow = async (req, res, next) => {
+    const { id } = req.params;
+    const { to } = req.body;
+
+    await userService.userCheck(req.tokenData, id);
+
+    await userService.addFollow(id, to);
+
+    return res.status(201).json({
+        message: "팔로우 목록에 추가되었습니다"
+    });
+}
+
+const findAllFollowList = async (req, res, next) => {
+    const { id } = req.params;
+
+    const list = await userService.findAllFollow(id);
+
+    return res.status(200).json({
+        message: "전체 팔로우 목록 조회입니다",
+        data: list
+    });
+}
+
+const findAllFollowNumber = async (req, res, next) => {
+    const { id } = req.params;
+
+    const numbers = await userService.findAllFollowNumber(id);
+
+    return res.status(200).json({
+        message: "전체 팔로우 수 조회입니다",
+        data: numbers
+    });
+}
+
+const removeFollower = async (req, res, next) => {
+    const { id } = req.params;
+    const { from, to } = req.query;
+
+    await userService.userCheck(req.tokenData, id);
+
+    if(from){
+        await userService.removeFollower(from, id);
+
+        return res.status(200).json({
+            message: "팔로우가 취소되었습니다"
+        });
+    }else if(to){
+        await userService.removeFollower(id, to);
+    
+        return res.status(200).json({
+            message: "팔로우가 취소되었습니다"
+        });
+    }
+}
+
 module.exports = {
     addUser,
     findUserById,
@@ -112,5 +168,9 @@ module.exports = {
     findUserByToken,
     sendCode,
     resetPassword,
-    login
+    login,
+    addFollow,
+    findAllFollowList,
+    findAllFollowNumber,
+    removeFollower,
 };

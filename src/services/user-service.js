@@ -1,5 +1,6 @@
 const { User } = require("../db");
 const { Follow } = require('../db')
+const bcrypt = require('bcrypt');
 const { createToken } = require("../utils/jwt");
 const { deleteImage } = require("../utils/image-to-url");
 const createCode = require('../utils/code-creater');
@@ -169,10 +170,6 @@ const removeFollower = async (from, to) => {
   return Follow.findOneAndDelete({from, to});
 }
 
-const unFollow = async (from, to) => {
-  return Follow.findOneAndDelete({from, to});
-}
-
 module.exports = {
   addUser,
   findAllUser,
@@ -189,5 +186,4 @@ module.exports = {
   findFollowingList,
   findFollowerList,
   removeFollower,
-  unFollow
 };
