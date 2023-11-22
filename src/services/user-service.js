@@ -28,6 +28,18 @@ const findUserById = async (id) => {
   return User.findById(id);
 };
 
+const findPublicUserInfoById = async (id) => {
+  const user = await User.findById(id);
+  return {
+    name: user.name,
+    email: user.email,
+    profile_url: user.profile_url,
+    generation_type: user.generation_type,
+    generation_number: user.generation_number,
+    roles: user.roles,
+  }
+}
+
 const modifyUser = async (id, userData) => {
   const user = await User.findById(id);
 
@@ -136,12 +148,31 @@ const addFollow = async (from, to) => {
 }
 
 const findAllFollow = async (id) => {
-  const followingList = await Follow.find({ from: id });
-  const followerList = await Follow.find({ to: id });
+  const followingList = await Follow.find({ from: id })
+  .populate({
+    path:'to',
+    select: 'name profile_url generation_type generation_number roles'
+  });
+  const followerList = await Follow.find({ to: id })
+  .populate({
+    path:'from',
+    select: 'name profile_url generation_type generation_number roles'
+  });
+
+  const followingUserList = [];
+  const followerUserList = [];
+
+  followingList.forEach((obj) => {
+    followingUserList.push(obj.to);
+  });
+
+  followerList.forEach((obj) => {
+    followerUserList.push(obj.from);
+  });
 
   return {
-    followingList,
-    followerList
+    followingUserList,
+    followerUserList
   }
 }
 
@@ -174,6 +205,7 @@ module.exports = {
   addUser,
   findAllUser,
   findUserById,
+  findPublicUserInfoById,
   modifyUser,
   removeUser,
   login,

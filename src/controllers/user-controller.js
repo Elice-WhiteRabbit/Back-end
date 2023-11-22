@@ -40,6 +40,17 @@ const findUserById = async (req, res, next) => {
     });
 };
 
+const findPublicUserInfoById = async (req, res, next) => {
+    const { id } = req.params;
+
+    const user = await userService.findPublicUserInfoById(id);
+
+    return res.status(200).json({
+        message: "유저 기본정보 조회",
+        data: user
+    });
+}
+
 const modifyUser = async (req, res, next) => {
     const { id } = req.params;
     const userData = req.body;
@@ -120,11 +131,12 @@ const addFollow = async (req, res, next) => {
 const findAllFollowList = async (req, res, next) => {
     const { id } = req.params;
 
-    const list = await userService.findAllFollow(id);
+    const { followingUserList, followerUserList } = await userService.findAllFollow(id);
 
     return res.status(200).json({
         message: "전체 팔로우 목록 조회입니다",
-        data: list
+        following: followingUserList,
+        follower: followerUserList
     });
 }
 
@@ -166,6 +178,7 @@ module.exports = {
     modifyUser,
     removeUser,
     findUserByToken,
+    findPublicUserInfoById,
     sendCode,
     resetPassword,
     login,

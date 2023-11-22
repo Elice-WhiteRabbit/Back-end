@@ -11,6 +11,7 @@ router.post('/', asyncHandler(userController.addUser));
 router.get('/', auth, asyncHandler(userController.findUserByToken));
 
 router.get('/:id', auth, asyncHandler(userController.findUserById));
+router.get('/:id/public', asyncHandler(userController.findPublicUserInfoById));
 router.patch('/:id', auth, asyncHandler(userController.modifyUser));
 router.delete('/:id', auth, asyncHandler(userController.removeUser));
 router.post('/login', asyncHandler(userController.login));
