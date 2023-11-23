@@ -1,4 +1,4 @@
-const { Post } = require('../db');
+const { Post, User } = require('../db');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
 Post.schema.plugin(mongoosePaginate);
