@@ -1,5 +1,4 @@
 const { User } = require("../db");
-const { skills } = require('../db');
 const { Follow } = require('../db');
 const bcrypt = require('bcrypt');
 const { createToken } = require("../utils/jwt");
