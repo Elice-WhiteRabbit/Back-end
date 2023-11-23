@@ -44,10 +44,13 @@ const findPublicUserInfoById = async (req, res, next) => {
     const { id } = req.params;
 
     const user = await userService.findPublicUserInfoById(id);
+    const userFollow = await userService.findAllFollowNumber(id);
 
     return res.status(200).json({
         message: "유저 기본정보 조회",
-        data: user
+        user,
+        following: userFollow.followingNumber,
+        follower: userFollow.followerNumber
     });
 }
 
