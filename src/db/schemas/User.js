@@ -29,8 +29,6 @@ const UserSchema = new Schema({
   generation_number: {
     type: Number,
     required: true,
-    enum: [1, 2, 3, 4, 5, 6, 7],
-    message: '트랙 기수는 1부터 7 사이의 숫자만 가능합니다.',
   },
   roles: {
     type: String,
