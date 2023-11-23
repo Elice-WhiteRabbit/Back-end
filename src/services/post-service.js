@@ -1,33 +1,35 @@
 const { Post } = require('../db');
-const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
+const CommentService = require('../services/comment-service');
 
 Post.schema.plugin(mongoosePaginate);
 
 const paginatePosts = async (query, options) => {
+    
     const result = await Post.paginate(query, options);
     return result;
 };
 
 const addPost = async (data) => {
     return Post.create(data);
-}; 
+};
 
 const getPostWithCommentCount = async (post) => {
     const commentCount = await CommentService.getCommentCount(post._id);
     return { ...post.toObject(), commentCount };
 };
 
-const findPostByCategory = async (category, page = 1, pageSize = 5) => {
+const findPostByCategory = async (category, page = 1, pageSize = 5, sortBy = 'new') => {
     const options = {
         page: page,
         limit: pageSize,
-        sort: { updatedAt: -1 },
+        sort: { updatedAt: -1 }, 
     };
 
     const query = { category: category };
     const result = await paginatePosts(query, options);
     return result;
+
 };
 
 const findAll = async (category) => {
@@ -43,11 +45,12 @@ const findAllPost = async (page = 1, pageSize = 5) => {
         sort: { updatedAt: -1 },
     };
     const result = await Post.paginate({}, options);
+
     return result;
 };
 
 const findPostById = async (id) => {
-    return Post.findById(id); 
+    return Post.findById(id);
 };
 
 const findPostByAuthor = async (author) => {
@@ -72,9 +75,9 @@ const removePost = async (id) => {
 const getPopularPosts = async (weekAgo) => {
     const pipeline = [
         {
-            $match: { 
-                createdAt: { $gte: weekAgo }, 
-                like_count: { $gte: 1 }
+            $match: {
+                createdAt: { $gte: weekAgo },
+                like_count: { $gte: 1 },
             },
         },
         {
@@ -95,6 +98,8 @@ const getPopularPosts = async (weekAgo) => {
     const popularPosts = await Post.aggregate(pipeline).exec();
     return popularPosts;
 };
+
+
 
 module.exports = {
     addPost,

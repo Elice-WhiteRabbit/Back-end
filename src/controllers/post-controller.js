@@ -40,7 +40,7 @@ const addPost = async (req, res, next) => {
 
 const findPostByCategory = async (req, res, next) => {
     const { category } = req.params;
-    const { page, pageSize } = req.query;
+    const { page, pageSize, sortBy } = req.query;
     const currentUserId = req.tokenData.id;
 
     if (!postType[category]) {
@@ -68,8 +68,12 @@ const findPostByCategory = async (req, res, next) => {
                 };
             })
         );
-
-        result = postsWithCommentCount;
+        if(sortBy === 'new'){
+            result = postsWithCommentCount;
+        }else if(sortBy === 'comment'){
+            const sortedPostsWithCommentCount = postsWithCommentCount.sort((a, b) => b.commentCount - a.commentCount);
+            result = sortedPostsWithCommentCount;
+        }
 
     } else {
         result = await postService.findPostByCategory(category, page, pageSize);
@@ -87,8 +91,12 @@ const findPostByCategory = async (req, res, next) => {
                 };
             })
         );
-
-        result.docs = postsWithCommentCount;
+        if(sortBy === 'new'){
+            result.docs = postsWithCommentCount;
+        }else if(sortBy === 'comment'){
+            const sortedPostsWithCommentCount = postsWithCommentCount.sort((a, b) => b.commentCount - a.commentCount);
+            result.docs = sortedPostsWithCommentCount;
+        }
     }
 
     res.status(200).json({
