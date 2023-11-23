@@ -12,12 +12,20 @@ router.post('/', asyncHandler(userController.addUser));
 router.get('/', auth, asyncHandler(userController.findUserByToken));
 
 router.get('/:id', auth, asyncHandler(userController.findUserById));
+router.get('/:id/public', asyncHandler(userController.findPublicUserInfoById));
 router.patch('/:id', auth, asyncHandler(userController.modifyUser));
 router.delete('/:id', auth, asyncHandler(userController.removeUser));
 router.post('/login', asyncHandler(userController.login));
 
 router.post('/password', asyncHandler(userController.sendCode));
 router.post('/password/reset', asyncHandler(userController.resetPassword));
+
+// 팔로우 관련
+router.get('/:id/follow', asyncHandler(userController.findAllFollowList));
+router.post('/:id/follow', auth, asyncHandler(userController.addFollow));
+router.delete('/:id/follow', auth, asyncHandler(userController.removeFollower));
+router.get('/:id/follow/number', asyncHandler(userController.findAllFollowNumber));
+
 
 //유저스킬 관련
 router.patch('/skill/add/:id', asyncHandler(userSkillController.add));
