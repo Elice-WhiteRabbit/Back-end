@@ -18,6 +18,7 @@ router.delete('/:id', auth, asyncHandler(userController.removeUser));
 router.post('/login', asyncHandler(userController.login));
 
 router.post('/password', asyncHandler(userController.sendCode));
+router.post('/password/code', asyncHandler(userController.checkCode));
 router.post('/password/reset', asyncHandler(userController.resetPassword));
 
 // 팔로우 관련
