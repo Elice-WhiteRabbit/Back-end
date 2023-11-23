@@ -275,7 +275,6 @@ const modifyPost = async (req, res, next) => {
     });
 };
 
-
 const removePost = async (req, res, next) => {
     const { id } = req.params;
     const userId = req.tokenData.id;

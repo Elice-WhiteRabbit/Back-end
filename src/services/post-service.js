@@ -1,22 +1,15 @@
 const { Post } = require('../db');
 const mongoosePaginate = require('mongoose-paginate-v2');
-const CommentService = require('../services/comment-service');
 
 Post.schema.plugin(mongoosePaginate);
 
 const paginatePosts = async (query, options) => {
-    
     const result = await Post.paginate(query, options);
     return result;
 };
 
 const addPost = async (data) => {
     return Post.create(data);
-};
-
-const getPostWithCommentCount = async (post) => {
-    const commentCount = await CommentService.getCommentCount(post._id);
-    return { ...post.toObject(), commentCount };
 };
 
 const findPostByCategory = async (category, page = 1, pageSize = 5, sortBy = 'new') => {
@@ -98,8 +91,6 @@ const getPopularPosts = async (weekAgo) => {
     const popularPosts = await Post.aggregate(pipeline).exec();
     return popularPosts;
 };
-
-
 
 module.exports = {
     addPost,
