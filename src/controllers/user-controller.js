@@ -100,9 +100,9 @@ const login = async (req, res, next) => {
 };
 
 const sendCode = async (req, res, next) => {
-    const { email } = req.body;
+    const { name, email } = req.body;
 
-    await userService.sendCode(email)
+    await userService.sendCode({name, email})
 
     return res.status(200).json({
         message: "인증 코드 발송됨"

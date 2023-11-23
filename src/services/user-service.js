@@ -102,13 +102,14 @@ const userCheck = async (tokenData, id) => {
 }
 }
 
-const sendCode = async (email) => {
-  const check = await User.findOne({ email });
+const sendCode = async (data) => {
+  const { name, email } = data;
+  const check = await User.findOne({ name, email });
 
   if(!check){
       throw {
           status: 404,
-          message: "등록되지 않은 이메일입니다"
+          message: "등록되지 않은 사용자입니다"
       }
   }
 
