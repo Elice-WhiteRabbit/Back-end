@@ -100,26 +100,36 @@ const login = async (req, res, next) => {
 };
 
 const sendCode = async (req, res, next) => {
-    const { email } = req.body;
+    const { name, email } = req.body;
 
-    await userService.sendCode(email)
+    await userService.sendCode({name, email})
 
     return res.status(200).json({
         message: "인증 코드 발송됨"
     });
 }
 
+const checkCode = async (req, res, next) => {
+    const { email, code } = req.body;
+
+    await userService.checkCode(email, code);
+
+    return res.status(200).json({
+        message: "인증이 완료되었습니다"
+    })
+}
+
 const resetPassword = async (req, res, next) => {
-    const { email, authCode, password } = req.body;
+    const { email, code, password } = req.body;
 
     await userService.resetPassword({
         email,
-        authCode,
+        code,
         password
     });
 
     return res.status(200).json({
-        message: "비밀번호가 변경되었습니다."
+        message: "비밀번호가 변경되었습니다"
     });
 }
 
@@ -188,6 +198,7 @@ module.exports = {
     findUserByToken,
     findPublicUserInfoById,
     sendCode,
+    checkCode,
     resetPassword,
     login,
     addFollow,

@@ -8,14 +8,17 @@ const authCodeCache = require('../utils/node-cache');
 const mailer = require('../utils/mailer');
 
 const addUser = async (userData) => {
-    const check = await User.findOne({ email:userData.email });
-    
-    if(check){
-        throw {
-            status: 409,
-            message: "이미 존재하는 이메일입니다"
-        }
-    }
+  const check = await User.findOne({ email:userData.email });
+  
+  if(check){
+      throw {
+          status: 409,
+          message: "이미 존재하는 이메일입니다"
+      }
+  }
+
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+  userData.password = hashedPassword;
 
   return User.create(userData);
 };
@@ -46,9 +49,14 @@ const findPublicUserInfoById = async (id) => {
 const modifyUser = async (id, userData) => {
   const user = await User.findById(id);
 
-    if(userData.profile_url && user.profile_url){
-        await deleteImage(user.profile_url);
-    }
+  if(userData.profile_url && user.profile_url){
+      await deleteImage(user.profile_url);
+  }
+
+  if(userData.password){
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    userData.password = hashedPassword;
+  }
 
   return User.findByIdAndUpdate(id, userData, { new: true });
 };
@@ -102,13 +110,14 @@ const userCheck = async (tokenData, id) => {
 }
 }
 
-const sendCode = async (email) => {
-  const check = await User.findOne({ email });
+const sendCode = async (data) => {
+  const { name, email } = data;
+  const check = await User.findOne({ name, email });
 
   if(!check){
       throw {
           status: 404,
-          message: "등록되지 않은 이메일입니다"
+          message: "등록되지 않은 사용자입니다"
       }
   }
 
@@ -119,29 +128,45 @@ const sendCode = async (email) => {
 
   const authCode = createCode();
 
-  authCodeCache.set(email,authCode,60);
+  authCodeCache.set(email,authCode,600);
   await mailer(email,authCode);
 
   return;
 }
 
-const resetPassword = async (data) => {
-  const { email, authCode, password } = data;
-
+const checkCode = async (email, code) => {
   const check = authCodeCache.get(email);
-  if(!check || authCode !== check){
+  if(!check || code !== check){
       throw {
           status: 404,
           message: "기간이 만료되었거나 잘못된 인증번호입니다"
       }
   }
 
+  authCodeCache.set(code,true,60*60);
+
+  return;
+}
+
+const resetPassword = async (data) => {
+  const { email, code, password } = data;
+
+  const check = authCodeCache.get(code);
+  if(!check){
+      throw {
+        message: "기간이 만료되었습니다"
+      }
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   await User.findOneAndUpdate(
       { email },
-      {password}
+      {password:hashedPassword}
   );
   
   authCodeCache.del(email);
+  authCodeCache.del(code);
 
   return;
 }
@@ -214,6 +239,7 @@ module.exports = {
   login,
   userCheck,
   sendCode,
+  checkCode,
   resetPassword,
   addFollow,
   findAllFollow,
