@@ -88,6 +88,11 @@ const login = async (req, res, next) => {
         password
     });
 
+    res.cookie('jwtToken', token, {
+        httpOnly: true,
+        maxAge: 12*60*60*1000
+    });
+
     return res.status(200).json({
         message: "로그인 성공",
         token:token
