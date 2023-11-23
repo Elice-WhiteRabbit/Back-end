@@ -8,14 +8,17 @@ const authCodeCache = require('../utils/node-cache');
 const mailer = require('../utils/mailer');
 
 const addUser = async (userData) => {
-    const check = await User.findOne({ email:userData.email });
-    
-    if(check){
-        throw {
-            status: 409,
-            message: "이미 존재하는 이메일입니다"
-        }
-    }
+  const check = await User.findOne({ email:userData.email });
+  
+  if(check){
+      throw {
+          status: 409,
+          message: "이미 존재하는 이메일입니다"
+      }
+  }
+
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+  userData.password = hashedPassword;
 
   return User.create(userData);
 };
@@ -48,6 +51,11 @@ const modifyUser = async (id, userData) => {
 
   if(userData.profile_url && user.profile_url){
       await deleteImage(user.profile_url);
+  }
+
+  if(userData.password){
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    userData.password = hashedPassword;
   }
 
   return User.findByIdAndUpdate(id, userData, { new: true });
@@ -150,9 +158,11 @@ const resetPassword = async (data) => {
       }
   }
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   await User.findOneAndUpdate(
       { email },
-      {password}
+      {password:hashedPassword}
   );
   
   authCodeCache.del(email);
