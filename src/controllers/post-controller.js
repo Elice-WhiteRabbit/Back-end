@@ -293,6 +293,28 @@ const removePost = async (req, res, next) => {
     });
 };
 
+const searchPost = async (req, res, next) => {
+    try {
+      const { keyword } = req.query;
+      const result = await postService.searchPost(keyword);
+      const postsWithAuthor = await Promise.all(
+        result.map(async (post) => {
+            const populatedPost = await Post.findById(post._id).populate('author', '_id name profile_url roles');
+            return populatedPost;
+        })
+    );
+      res.status(200).json({
+        message: `검색어(${keyword})로 게시글 검색 결과`,
+        data: postsWithAuthor,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: "서버 오류",
+      });
+    }
+  };
+
 module.exports = {
     addPost,
     modifyPost,
@@ -302,4 +324,5 @@ module.exports = {
     findPostByAuthor,
     removePost,
     getPopularPosts,
+    searchPost,
 }

@@ -1,4 +1,4 @@
-const { Post } = require('../db');
+const { Post, User } = require('../db');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
 Post.schema.plugin(mongoosePaginate);
@@ -92,6 +92,29 @@ const getPopularPosts = async (weekAgo) => {
     return popularPosts;
 };
 
+const searchPost = async (keyword) => {
+    const lowercaseQuery = keyword.toLowerCase();
+    const postsByTitleOrContent = await Post.find({
+      $or: [
+        { title: { $regex: lowercaseQuery, $options: 'i' } },
+        { content: { $regex: lowercaseQuery, $options: 'i' } },
+      ],
+    }).populate('author', '_id name profile_url roles');
+    const user = await User.findOne({ name: { $regex: lowercaseQuery, $options: 'i' } });
+  
+    if (user) {
+      const postsByAuthor = await Post.find({ author: user._id })
+        .populate('author', '_id name profile_url roles'); 
+      const allPosts = [...postsByTitleOrContent, ...postsByAuthor];
+      const uniquePosts = Array.from(new Set(allPosts.map((post) => post._id))).map(
+        (id) => allPosts.find((post) => post._id === id)
+      );
+      return uniquePosts;
+    } else {
+      return postsByTitleOrContent;
+    }
+  };
+  
 module.exports = {
     addPost,
     modifyPost,
@@ -102,4 +125,5 @@ module.exports = {
     findPostByAuthor,
     removePost,
     getPopularPosts,
+    searchPost,
 };

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const { CommentSchema } = require('./schemas/comment');
 const { PostSchema } = require('./schemas/post');
 const { FollowSchema } = require('./schemas/follow');
