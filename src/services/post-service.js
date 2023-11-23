@@ -1,4 +1,4 @@
-const { Post } = require('../db');
+const { Post, User } = require('../db');
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
@@ -96,16 +96,29 @@ const getPopularPosts = async (weekAgo) => {
     return popularPosts;
 };
 
-const searchPost = async (query) => {
-    return Post.find({
+const searchPost = async (keyword) => {
+    const lowercaseQuery = keyword.toLowerCase();
+    const postsByTitleOrContent = await Post.find({
       $or: [
-        { title: { $regex: query, $options: 'i' } },
-        { content: { $regex: query, $options: 'i' } }, // 내용 검색 (대소문자 무시)
-        { 'author.name': { $regex: query, $options: 'i' } }, // 작성자 이름 검색 (대소문자 무시)
+        { title: { $regex: lowercaseQuery, $options: 'i' } },
+        { content: { $regex: lowercaseQuery, $options: 'i' } },
       ],
-    }).populate('author', '_id name profile_url roles'); // 작성자 정보 중 _id, name, profile_url, roles만 불러오기
+    }).populate('author', '_id name profile_url roles');
+    const user = await User.findOne({ name: { $regex: lowercaseQuery, $options: 'i' } });
+  
+    if (user) {
+      const postsByAuthor = await Post.find({ author: user._id })
+        .populate('author', '_id name profile_url roles'); 
+      const allPosts = [...postsByTitleOrContent, ...postsByAuthor];
+      const uniquePosts = Array.from(new Set(allPosts.map((post) => post._id))).map(
+        (id) => allPosts.find((post) => post._id === id)
+      );
+      return uniquePosts;
+    } else {
+      return postsByTitleOrContent;
+    }
   };
-
+  
 module.exports = {
     addPost,
     modifyPost,
