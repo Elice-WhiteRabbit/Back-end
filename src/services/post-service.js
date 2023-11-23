@@ -96,6 +96,16 @@ const getPopularPosts = async (weekAgo) => {
     return popularPosts;
 };
 
+const searchPost = async (query) => {
+    return Post.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { content: { $regex: query, $options: 'i' } }, // 내용 검색 (대소문자 무시)
+        { 'author.name': { $regex: query, $options: 'i' } }, // 작성자 이름 검색 (대소문자 무시)
+      ],
+    }).populate('author', '_id name profile_url roles'); // 작성자 정보 중 _id, name, profile_url, roles만 불러오기
+  };
+
 module.exports = {
     addPost,
     modifyPost,
@@ -106,4 +116,5 @@ module.exports = {
     findPostByAuthor,
     removePost,
     getPopularPosts,
+    searchPost,
 };
