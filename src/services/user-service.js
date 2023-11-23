@@ -1,5 +1,6 @@
 const { User } = require("../db");
-const { Follow } = require('../db')
+const { skills } = require('../db');
+const { Follow } = require('../db');
 const bcrypt = require('bcrypt');
 const { createToken } = require("../utils/jwt");
 const { deleteImage } = require("../utils/image-to-url");
@@ -29,7 +30,8 @@ const findUserById = async (id) => {
 };
 
 const findPublicUserInfoById = async (id) => {
-  const user = await User.findById(id);
+  const user = await User.findById(id)
+  .populate('skills');
   return {
     name: user.name,
     email: user.email,
@@ -37,6 +39,8 @@ const findPublicUserInfoById = async (id) => {
     generation_type: user.generation_type,
     generation_number: user.generation_number,
     roles: user.roles,
+    links: user.links,
+    skills: user.skills
   }
 }
 

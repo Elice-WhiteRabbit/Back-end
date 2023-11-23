@@ -50,7 +50,7 @@ const UserSchema = new Schema({
   skills: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'skill',
+      ref: 'Skill',
       default: [],
     },
   ],
