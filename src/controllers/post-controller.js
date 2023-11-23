@@ -1,5 +1,6 @@
 const postService = require('../services/post-service');
 const CommentService = require('../services/comment-service');
+const { Post, Follow } = require('../db');
 
 const postType = {
     BOARD: "BOARD",
@@ -29,15 +30,18 @@ const addPost = async (req, res, next) => {
         author
     });
 
+    const populatedPost = await Post.findById(createdPost._id).populate('author', '_id name profile_url roles');
+
     return res.status(201).json({
-        message: "post생성",
-        data: createdPost
+        message: "게시글이 등록되었습니다",
+        data: populatedPost,
     });
 };
 
 const findPostByCategory = async (req, res, next) => {
     const { category } = req.params;
     const { page, pageSize } = req.query;
+    const currentUserId = req.tokenData.id;
 
     if (!postType[category]) {
         throw {
@@ -52,9 +56,16 @@ const findPostByCategory = async (req, res, next) => {
         result = await postService.findAll(category);
         const postsWithCommentCount = await Promise.all(
             result.map(async (post) => {
+                post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
                 const isPopular = post.like_count >= 1;
-                return { ...post._doc, isPopular, commentCount };
+                const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
+                return { 
+                    ...post._doc, 
+                    isPopular, 
+                    commentCount, 
+                    isFollowing: isFollowing? true : false 
+                };
             })
         );
 
@@ -64,9 +75,16 @@ const findPostByCategory = async (req, res, next) => {
         result = await postService.findPostByCategory(category, page, pageSize);
         const postsWithCommentCount = await Promise.all(
             result.docs.map(async (post) => {
+                post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
                 const isPopular = post.like_count >= 1;
-                return { ...post._doc, isPopular, commentCount };
+                const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
+                return { 
+                    ...post._doc, 
+                    isPopular, 
+                    commentCount, 
+                    isFollowing: isFollowing? true : false 
+                };
             })
         );
 
@@ -84,6 +102,7 @@ const findPostByCategory = async (req, res, next) => {
 
 const findAllPost = async (req, res, next) => {
     let { page, pageSize } = req.query;
+    const currentUserId = req.tokenData.id;
 
     let result;
     if (!page && !pageSize) {
@@ -91,9 +110,16 @@ const findAllPost = async (req, res, next) => {
         result = await postService.findAll();
         const postsWithCommentCount = await Promise.all(
             result.map(async (post) => {
+                post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
                 const isPopular = post.like_count >= 1;
-                return { ...post._doc, isPopular, commentCount };
+                const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
+                return { 
+                    ...post._doc, 
+                    isPopular, 
+                    commentCount, 
+                    isFollowing: isFollowing? true : false 
+                };
             })
         );
 
@@ -103,9 +129,16 @@ const findAllPost = async (req, res, next) => {
         result = await postService.findAllPost(page, pageSize);
         const postsWithCommentCount = await Promise.all(
             result.docs.map(async (post) => {
+                post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
                 const isPopular = post.like_count >= 1;
-                return { ...post._doc, isPopular, commentCount };
+                const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
+                return { 
+                    ...post._doc, 
+                    isPopular, 
+                    commentCount, 
+                    isFollowing: isFollowing? true : false 
+                };
             })
         );
 
@@ -124,19 +157,27 @@ const findAllPost = async (req, res, next) => {
 const getPopularPosts = async (req, res, next) => {     
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7); // 일주일 기준
+    const currentUserId = req.tokenData.id;
 
     let popularPosts = await postService.getPopularPosts(weekAgo);
     const postsWithCommentCount = await Promise.all(
         popularPosts.map(async (post) => {
+            post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
             const commentCount = await CommentService.getCommentCount(post._id);
-            return { ...post, isPopular: true, commentCount };
+            const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
+            return { 
+                ...post, 
+                isPopular: true, 
+                commentCount, 
+                isFollowing: isFollowing? true : false 
+            };
         })
     );
 
     popularPosts = postsWithCommentCount;
 
     res.status(200).json({
-        message: "인기 게시물 목록",
+        message: "인기 게시글 목록",
         data: {
             posts: popularPosts,
         },
@@ -145,13 +186,21 @@ const getPopularPosts = async (req, res, next) => {
 
 const findPostByAuthor = async (req, res, next) => {
     const { author } = req.params;
+    const currentUserId = req.tokenData.id;
 
     let post = await postService.findPostByAuthor(author);
     const postsWithCommentCount = await Promise.all(
         post.map(async (post) => {
+            post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
             const commentCount = await CommentService.getCommentCount(post._id);
             const isPopular = post.like_count >= 1;
-            return { post, isPopular, commentCount };
+            const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
+            return { 
+                post, 
+                isPopular, 
+                commentCount, 
+                isFollowing: isFollowing? true : false 
+            };
         })
     );
 
@@ -166,25 +215,26 @@ const findPostByAuthor = async (req, res, next) => {
 
 const findPostById = async (req, res, next) => {
     const { postId } = req.params;
-
-    const post = await postService.findPostById(postId);
-    
+    const currentUserId = req.tokenData.id;
+    let post = await postService.findPostById(postId);
 
     if (!post) {
         return res.status(404).json({
-            message: "게시글을 찾을 수 없습니다.",
+            message: "게시글을 찾을 수 없습니다",
         });
     }
-
+    post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
     const commentCount = await CommentService.getCommentCount(postId);
     const isPopular = post.like_count >= 1;
-
+    const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
+    
     res.status(200).json({
         message: "게시글 조회 성공",
         data: {
             post,
             isPopular,
-            commentCount
+            commentCount,
+            isFollowing: isFollowing? true : false,
         }
     });
 };
@@ -197,7 +247,7 @@ const modifyPost = async (req, res, next) => {
 
     if (!post || post.author != userId) {
         return res.status(403).json({
-            message: "게시물 수정 권한이 없습니다.",
+            message: "게시글 수정 권한이 없습니다",
         });
     }
     
@@ -207,13 +257,13 @@ const modifyPost = async (req, res, next) => {
         content, 
         category
     });
-
+    const populatedPost = await Post.findById(updatedPost._id).populate('author', '_id name profile_url roles');
     const commentCount = await CommentService.getCommentCount(id);
     const isPopular = post.like_count >= 1;
-
+    
     res.status(200).json({
         message: "게시글을 수정했습니다",
-        data: { ...updatedPost._doc, isPopular, commentCount }, // 기존 데이터와 댓글 개수를 합침
+        data: { ...populatedPost._doc, isPopular, commentCount },
     });
 };
 
@@ -225,7 +275,7 @@ const removePost = async (req, res, next) => {
 
     if (!post || post.author != userId) {
         return res.status(403).json({
-            message: "게시물 삭제 권한이 없습니다.",
+            message: "게시글 삭제 권한이 없습니다",
         });
     }
 
