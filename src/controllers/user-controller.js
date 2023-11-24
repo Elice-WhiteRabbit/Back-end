@@ -151,12 +151,22 @@ const resetPassword = async (req, res, next) => {
 }
 
 const addFollow = async (req, res, next) => {
+    if(!req.tokenData.id){
+        throw {
+            message: "로그인이 필요합니다"
+        }
+    }
+
+    const myId = req.tokenData.id;
     const { id } = req.params;
-    const { to } = req.body;
 
-    await userService.userCheck(req.tokenData, id);
+    console.log(myId);
+    console.log(id);
 
-    await userService.addFollow(id, to);
+    await userService.addFollow({
+        from: myId,
+        to: id
+    });
 
     return res.status(201).json({
         message: "팔로우 목록에 추가되었습니다"
@@ -188,23 +198,12 @@ const findAllFollowNumber = async (req, res, next) => {
 
 const removeFollower = async (req, res, next) => {
     const { id } = req.params;
-    const { from, to } = req.query;
 
-    await userService.userCheck(req.tokenData, id);
+    await userService.removeFollowerById(id);
 
-    if(from){
-        await userService.removeFollower(from, id);
-
-        return res.status(200).json({
-            message: "팔로우가 취소되었습니다"
-        });
-    }else if(to){
-        await userService.removeFollower(id, to);
-    
-        return res.status(200).json({
-            message: "팔로우가 취소되었습니다"
-        });
-    }
+    return res.status(200).json({
+        message: "팔로우가 삭제되었습니다"
+    });
 }
 
 module.exports = {
