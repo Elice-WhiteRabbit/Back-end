@@ -316,9 +316,7 @@ const removePost = async (req, res, next) => {
             message: "게시글 삭제 권한이 없습니다",
         });
     }
-
     await postService.removePost(id);
-
     res.status(200).json({
         message: "게시글을 삭제했습니다"
     });
