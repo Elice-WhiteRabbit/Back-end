@@ -11,6 +11,8 @@ const generationController = require('../controllers/generation-controller');
 router.post('/', asyncHandler(userController.addUser));
 router.get('/', auth, asyncHandler(userController.findUserByToken));
 
+router.get('/admin/userlist', auth, checkAdmin, asyncHandler(userController.findAllUser));
+
 router.get('/:id', auth, asyncHandler(userController.findUserById));
 router.get('/:id/public', asyncHandler(userController.findPublicUserInfoById));
 router.patch('/:id', auth, asyncHandler(userController.modifyUser));

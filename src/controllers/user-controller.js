@@ -17,6 +17,15 @@ const addUser = async (req, res, next) => {
     });
 };
 
+const findAllUser = async (req, res, next) => {
+    const list = await userService.findAllUser();
+
+    return res.status(200).json({
+        message: "유저 전체 조회",
+        data: list
+    })
+}
+
 const findUserByToken = async (req, res, next) => {
     const id = req.tokenData.id;
     const user = await userService.findUserById(id);
@@ -201,6 +210,7 @@ const removeFollower = async (req, res, next) => {
 module.exports = {
     addUser,
     findUserById,
+    findAllUser,
     modifyUser,
     removeUser,
     findUserByToken,
