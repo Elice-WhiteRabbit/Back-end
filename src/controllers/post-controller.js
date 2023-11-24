@@ -66,7 +66,7 @@ const findPostByCategory = async (req, res, next) => {
             result.map(async (post) => {
                 post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
-                const isPopular = post.like_count >= 1;
+                const isPopular = post.like_count >= 5;
                 const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
                 const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
                 return { 
@@ -94,7 +94,7 @@ const findPostByCategory = async (req, res, next) => {
             result.docs.map(async (post) => {
                 post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
-                const isPopular = post.like_count >= 1;
+                const isPopular = post.like_count >= 5;
                 const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
                 const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
                 return { 
@@ -136,7 +136,7 @@ const findAllPost = async (req, res, next) => {
             result.map(async (post) => {
                 post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
-                const isPopular = post.like_count >= 1;
+                const isPopular = post.like_count >= 5;
                 const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
                 const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
                 return { 
@@ -159,7 +159,7 @@ const findAllPost = async (req, res, next) => {
             result.docs.map(async (post) => {
                 post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
-                const isPopular = post.like_count >= 1;
+                const isPopular = post.like_count >= 5;
                 const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
                 const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
                 return { 
@@ -227,7 +227,7 @@ const findPostByAuthor = async (req, res, next) => {
         post.map(async (post) => {
             post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
             const commentCount = await CommentService.getCommentCount(post._id);
-            const isPopular = post.like_count >= 1;
+            const isPopular = post.like_count >= 5;
             const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
             const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
             return { 
@@ -262,7 +262,7 @@ const findPostById = async (req, res, next) => {
     }
     post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
     const commentCount = await CommentService.getCommentCount(postId);
-    const isPopular = post.like_count >= 1;
+    const isPopular = post.like_count >= 5;
     const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
     const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
     res.status(200).json({
@@ -298,7 +298,7 @@ const modifyPost = async (req, res, next) => {
     });
     const populatedPost = await Post.findById(updatedPost._id).populate('author', '_id name profile_url roles');
     const commentCount = await CommentService.getCommentCount(id);
-    const isPopular = post.like_count >= 1;
+    const isPopular = post.like_count >= 5;
     
     res.status(200).json({
         message: "게시글을 수정했습니다",

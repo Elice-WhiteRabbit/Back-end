@@ -79,7 +79,7 @@ const getPopularPosts = async (weekAgo) => {
     {
       $match: {
         createdAt: { $gte: weekAgo },
-        like_count: { $gte: 1 },
+        like_count: { $gte: 5 },
       },
     },
     {
