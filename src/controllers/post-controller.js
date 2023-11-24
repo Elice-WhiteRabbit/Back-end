@@ -1,6 +1,7 @@
 const postService = require('../services/post-service');
 const CommentService = require('../services/comment-service');
 const LikeService = require('../services/like-service');
+const userService = require('../services/user-service');
 const { Post, Follow } = require('../db');
 
 const postType = {
@@ -10,7 +11,7 @@ const postType = {
     PROJECT: "PROJECT",
     REVIEW: "REVIEW"
 };
-
+  
 const getPaginationInfo = (result, page, pageSize) => {
     return {
         page: page ? parseInt(page) : result.page,
@@ -276,7 +277,7 @@ const modifyPost = async (req, res, next) => {
     const userId = req.tokenData.id;
     const post = await postService.findPostById(id);
 
-    if (!post || post.author != userId) {
+    if ((post.author != userId) && (req.tokenData.roles !== "Admin")) {
         return res.status(403).json({
             message: "게시글 수정 권한이 없습니다",
         });
@@ -303,7 +304,7 @@ const removePost = async (req, res, next) => {
     const userId = req.tokenData.id;
     const post = await postService.findPostById(id);
 
-    if (!post || post.author != userId) {
+    if (!post || (post.author != userId) && (req.tokenData.roles !== "Admin")) {
         return res.status(403).json({
             message: "게시글 삭제 권한이 없습니다",
         });
