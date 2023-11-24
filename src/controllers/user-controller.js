@@ -99,6 +99,14 @@ const login = async (req, res, next) => {
     });
 };
 
+const logout = async (req, res, next) => {
+    res.clearCookie('jwtToken');
+    
+    res.status(200).json({
+        message: "로그아웃되었습니다"
+    });
+}
+
 const sendCode = async (req, res, next) => {
     const { name, email } = req.body;
 
@@ -201,6 +209,7 @@ module.exports = {
     checkCode,
     resetPassword,
     login,
+    logout,
     addFollow,
     findAllFollowList,
     findAllFollowNumber,

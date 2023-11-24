@@ -34,10 +34,8 @@ function imageToURL(req, res, next) {
     if (err) {
       throw err;
     }
-    // 서버 주소. 배포시엔 도메인 주소로 바꿔야함
-    const address = 'http://kdt-sw-6-team07.elicecoding.com'
 
-    const imagePath = `${address}/image/${req.file.filename}`;
+    const imagePath = `/image/${req.file.filename}`;
     res.status(200).json({
         message: "이미지 url 생성",
         data: imagePath

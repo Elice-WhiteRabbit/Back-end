@@ -16,6 +16,7 @@ router.get('/:id/public', asyncHandler(userController.findPublicUserInfoById));
 router.patch('/:id', auth, asyncHandler(userController.modifyUser));
 router.delete('/:id', auth, asyncHandler(userController.removeUser));
 router.post('/login', asyncHandler(userController.login));
+router.get('/account/logout', asyncHandler(userController.logout));
 
 router.post('/password', asyncHandler(userController.sendCode));
 router.post('/password/code', asyncHandler(userController.checkCode));
