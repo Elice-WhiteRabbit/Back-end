@@ -74,6 +74,7 @@ const findPostByCategory = async (req, res, next) => {
                     isPopular, 
                     commentCount, 
                     isFollowing: isFollowing? true : false,
+                    followList: isFollowing,
                     isLiked: isLiked? true : false,
                 };
             })
@@ -101,6 +102,7 @@ const findPostByCategory = async (req, res, next) => {
                     isPopular, 
                     commentCount, 
                     isFollowing: isFollowing? true : false,
+                    followList: isFollowing,
                     isLiked: isLiked? true : false,
                 };
             })
@@ -142,6 +144,7 @@ const findAllPost = async (req, res, next) => {
                     isPopular, 
                     commentCount, 
                     isFollowing: isFollowing? true : false,
+                    followList: isFollowing,
                     isLiked: isLiked? true : false,
 
                 };
@@ -164,6 +167,7 @@ const findAllPost = async (req, res, next) => {
                     isPopular, 
                     commentCount, 
                     isFollowing: isFollowing? true : false,
+                    followList: isFollowing,
                     isLiked: isLiked? true : false,
                 };
             })
@@ -198,6 +202,7 @@ const getPopularPosts = async (req, res, next) => {
                 isPopular: true, 
                 commentCount, 
                 isFollowing: isFollowing? true : false,
+                followList: isFollowing,
                 isLiked: isLiked? true : false,
             };
         })
@@ -230,6 +235,7 @@ const findPostByAuthor = async (req, res, next) => {
                 isPopular, 
                 commentCount, 
                 isFollowing: isFollowing? true : false,
+                followList: isFollowing,
                 isLiked: isLiked? true : false,
             };
         })
@@ -266,6 +272,7 @@ const findPostById = async (req, res, next) => {
             isPopular,
             commentCount,
             isFollowing: isFollowing? true : false,
+            followList: isFollowing,
             isLiked: isLiked? true : false,
         }
     });
@@ -309,9 +316,7 @@ const removePost = async (req, res, next) => {
             message: "게시글 삭제 권한이 없습니다",
         });
     }
-
     await postService.removePost(id);
-
     res.status(200).json({
         message: "게시글을 삭제했습니다"
     });
