@@ -20,15 +20,22 @@ const getPaginationInfo = (result, page, pageSize) => {
 };
 
 const addPost = async (req, res, next) => {
-    const { title, content, category } = req.body;
+    const { title, content, category, image_url } = req.body;
     const author = req.tokenData.id;
    
-    const createdPost = await postService.addPost({
+    const postParams = {
         title,
         content,
         category,
         author
-    });
+    };
+
+    // 이미지 URL이 존재하는 경우 이미지 추가
+    if (image_url) {
+        postParams.image_url = image_url;
+    }
+
+    const createdPost = await postService.addPost(postParams);
 
     const populatedPost = await Post.findById(createdPost._id).populate('author', '_id name profile_url roles');
 
