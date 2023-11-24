@@ -42,8 +42,8 @@ const UserSchema = new Schema({
 
   links: [
     {
-      type: String,
-      default: [],
+      title: { type: String },
+      url: { type: String },
     },
   ],
 
