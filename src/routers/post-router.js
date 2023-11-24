@@ -5,7 +5,7 @@ const likeController = require('../controllers/like-controller');
 const asyncHandler = require('../utils/async-handler');
 const { auth } = require('../middlewares/verify-token');
 
-router.get('/popular',postController.getPopularPosts);
+router.get('/popular',auth, asyncHandler(postController.getPopularPosts));
 router.get('/search', postController.searchPost);
 router.get('/', auth, asyncHandler(postController.findAllPost));
 router.get('/:postId', auth, asyncHandler(postController.findPostById));

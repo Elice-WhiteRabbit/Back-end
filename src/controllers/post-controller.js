@@ -181,7 +181,7 @@ const getPopularPosts = async (req, res, next) => {
             const commentCount = await CommentService.getCommentCount(post._id);
             const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
             return { 
-                ...post, 
+                ...post._doc,
                 isPopular: true, 
                 commentCount, 
                 isFollowing: isFollowing? true : false 
