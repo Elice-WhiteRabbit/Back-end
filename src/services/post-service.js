@@ -16,7 +16,7 @@ const findPostByCategory = async (
   category,
   page = 1,
   pageSize = 5,
-  sortBy = 'new'
+  sortBy = 'new',
 ) => {
   const options = {
     page: page,
