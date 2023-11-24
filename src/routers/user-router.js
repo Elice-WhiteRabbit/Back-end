@@ -8,10 +8,20 @@ const { auth, checkAdmin } = require('../middlewares/verify-token');
 const linkController = require('../controllers/link-controller');
 const generationController = require('../controllers/generation-controller');
 
+//유저 트랙,기수. /:id 라우터 보다 아래에 있으면 오류나서 위로 올림.
+router.get('/generations', generationController.getAllUniqueGenerations);
+router.delete('/generation', generationController.deleteGeneration); // 트랙 및 기수 삭제
+router.put('/generation', generationController.updateGeneration); // 트랙 및 기수 수정
+
 router.post('/', asyncHandler(userController.addUser));
 router.get('/', auth, asyncHandler(userController.findUserByToken));
 
-router.get('/admin/userlist', auth, checkAdmin, asyncHandler(userController.findAllUser));
+router.get(
+  '/admin/userlist',
+  auth,
+  checkAdmin,
+  asyncHandler(userController.findAllUser)
+);
 
 router.get('/:id', auth, asyncHandler(userController.findUserById));
 router.get('/:id/public', asyncHandler(userController.findPublicUserInfoById));
@@ -28,8 +38,10 @@ router.post('/password/reset', asyncHandler(userController.resetPassword));
 router.get('/:id/follow', asyncHandler(userController.findAllFollowList));
 router.post('/:id/follow', auth, asyncHandler(userController.addFollow));
 router.delete('/:id/follow', auth, asyncHandler(userController.removeFollower));
-router.get('/:id/follow/number', asyncHandler(userController.findAllFollowNumber));
-
+router.get(
+  '/:id/follow/number',
+  asyncHandler(userController.findAllFollowNumber)
+);
 
 //유저스킬 관련
 router.patch('/skill/add/:id', asyncHandler(userSkillController.add));
@@ -46,6 +58,14 @@ router.delete('/links/:id', asyncHandler(linkController.deleteLink)); // 링크 
 router.get('/links/:id', asyncHandler(linkController.getLinks)); //특정 사용자의 모든 링크 조회
 
 //유저 기수 관련
+
+//트랙+기수 같이
+router.post('/:id/generation', generationController.setGenerationInfo); // generation_type과 generation_number 설정
+router.delete('/:id/generation', generationController.removeGenerationInfo); // generation_type과 generation_number 삭제
+router.get('/users/generation', generationController.getAllGenerationInfo); // 전체 사용자의 generation_type과 generation_number 조회
+
+//관리자 트랙 기수
+
 router.get(
   '/generation/:id',
   asyncHandler(generationController.getGenerationInfo)
