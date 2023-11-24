@@ -21,7 +21,7 @@ const findPostByCategory = async (
   const options = {
     page: page,
     limit: pageSize,
-    sort: { updatedAt: -1 },
+    sort: { createdAt: -1 },
   };
 
   const query = { category: category };
