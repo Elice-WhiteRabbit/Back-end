@@ -206,8 +206,17 @@ const findAllFollow = async (id) => {
   });
 
   followerList.forEach((obj) => {
-    obj.from.followId = obj._id;
-    followerUserList.push(obj.from);
+    const { _id, name, profile_url, generation_type, generation_number, roles } = obj.from;
+    const newObj = {
+      _id,
+      name,
+      profile_url,
+      generation_type,
+      generation_number,
+      roles,
+      followId: obj._id
+    };
+    followerUserList.push(newObj);
   });
 
   return {
