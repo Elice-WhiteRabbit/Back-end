@@ -1,6 +1,12 @@
 const {
   getUserGenerationInfo,
   getUsersByGeneration,
+  setGenerationInfo,
+  removeGenerationInfo,
+  getAllGenerationInfo,
+  getAllUniqueGenerations,
+  updateGeneration,
+  deleteGeneration,
   updateGenerationNumber,
   removeGenerationNumber,
   addGenerationNumber,
@@ -8,6 +14,113 @@ const {
   updateGenerationType,
   removeGenerationType,
 } = require('../services/generation-service');
+
+//관리자 트랙 삭제
+exports.deleteGeneration = async (req, res) => {
+  try {
+    const { generationType, generationNumber } = req.body;
+
+    // 직접 가져온 deleteGeneration 함수 사용
+    await deleteGeneration(generationType, generationNumber);
+    res.status(200).json({ message: 'Generation deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//관리자 트랙 생성
+exports.updateGeneration = async (req, res) => {
+  try {
+    const {
+      oldGenerationType,
+      oldGenerationNumber,
+      newGenerationType,
+      newGenerationNumber,
+    } = req.body;
+
+    // 직접 가져온 updateGeneration 함수 사용
+    await updateGeneration(
+      oldGenerationType,
+      oldGenerationNumber,
+      newGenerationType,
+      newGenerationNumber
+    );
+    res.status(200).json({ message: 'Generation updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+//관리자 트랙 전체보기
+exports.getAllUniqueGenerations = async (req, res) => {
+  try {
+    const generations = await getAllUniqueGenerations();
+    res.status(200).json({
+      message: 'Unique generations retrieved successfully',
+      data: generations,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.setGenerationInfo = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { generationType, generationNumber } = req.body;
+
+    // 여기서 직접 setGenerationInfo 함수를 호출
+    const updatedUser = await setGenerationInfo(
+      userId,
+      generationType,
+      generationNumber
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      message: 'Generation info updated successfully',
+      data: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.removeGenerationInfo = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // 여기서 직접 removeGenerationInfo 함수를 호출
+    const updatedUser = await removeGenerationInfo(userId);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      message: 'Generation info removed successfully',
+      data: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getAllGenerationInfo = async (req, res) => {
+  try {
+    // 여기서 직접 getAllGenerationInfo 함수를 호출
+    const users = await getAllGenerationInfo();
+
+    res.status(200).json({
+      message: 'All generation info retrieved successfully',
+      data: users,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 //유저가 가진 트랙,기수 불러오기
 exports.getGenerationInfo = async (req, res) => {

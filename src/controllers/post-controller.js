@@ -1,6 +1,7 @@
 const postService = require('../services/post-service');
 const CommentService = require('../services/comment-service');
 const LikeService = require('../services/like-service');
+const userService = require('../services/user-service');
 const { Post, Follow } = require('../db');
 
 const postType = {
@@ -10,7 +11,7 @@ const postType = {
     PROJECT: "PROJECT",
     REVIEW: "REVIEW"
 };
-
+  
 const getPaginationInfo = (result, page, pageSize) => {
     return {
         page: page ? parseInt(page) : result.page,
@@ -65,7 +66,7 @@ const findPostByCategory = async (req, res, next) => {
             result.map(async (post) => {
                 post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
-                const isPopular = post.like_count >= 1;
+                const isPopular = post.like_count >= 5;
                 const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
                 const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
                 return { 
@@ -73,6 +74,7 @@ const findPostByCategory = async (req, res, next) => {
                     isPopular, 
                     commentCount, 
                     isFollowing: isFollowing? true : false,
+                    followList: isFollowing,
                     isLiked: isLiked? true : false,
                 };
             })
@@ -92,7 +94,7 @@ const findPostByCategory = async (req, res, next) => {
             result.docs.map(async (post) => {
                 post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
-                const isPopular = post.like_count >= 1;
+                const isPopular = post.like_count >= 5;
                 const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
                 const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
                 return { 
@@ -100,6 +102,7 @@ const findPostByCategory = async (req, res, next) => {
                     isPopular, 
                     commentCount, 
                     isFollowing: isFollowing? true : false,
+                    followList: isFollowing,
                     isLiked: isLiked? true : false,
                 };
             })
@@ -133,7 +136,7 @@ const findAllPost = async (req, res, next) => {
             result.map(async (post) => {
                 post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
-                const isPopular = post.like_count >= 1;
+                const isPopular = post.like_count >= 5;
                 const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
                 const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
                 return { 
@@ -141,6 +144,7 @@ const findAllPost = async (req, res, next) => {
                     isPopular, 
                     commentCount, 
                     isFollowing: isFollowing? true : false,
+                    followList: isFollowing,
                     isLiked: isLiked? true : false,
 
                 };
@@ -155,7 +159,7 @@ const findAllPost = async (req, res, next) => {
             result.docs.map(async (post) => {
                 post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
                 const commentCount = await CommentService.getCommentCount(post._id);
-                const isPopular = post.like_count >= 1;
+                const isPopular = post.like_count >= 5;
                 const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
                 const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
                 return { 
@@ -163,6 +167,7 @@ const findAllPost = async (req, res, next) => {
                     isPopular, 
                     commentCount, 
                     isFollowing: isFollowing? true : false,
+                    followList: isFollowing,
                     isLiked: isLiked? true : false,
                 };
             })
@@ -197,6 +202,7 @@ const getPopularPosts = async (req, res, next) => {
                 isPopular: true, 
                 commentCount, 
                 isFollowing: isFollowing? true : false,
+                followList: isFollowing,
                 isLiked: isLiked? true : false,
             };
         })
@@ -221,7 +227,7 @@ const findPostByAuthor = async (req, res, next) => {
         post.map(async (post) => {
             post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
             const commentCount = await CommentService.getCommentCount(post._id);
-            const isPopular = post.like_count >= 1;
+            const isPopular = post.like_count >= 5;
             const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
             const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
             return { 
@@ -229,6 +235,7 @@ const findPostByAuthor = async (req, res, next) => {
                 isPopular, 
                 commentCount, 
                 isFollowing: isFollowing? true : false,
+                followList: isFollowing,
                 isLiked: isLiked? true : false,
             };
         })
@@ -255,7 +262,7 @@ const findPostById = async (req, res, next) => {
     }
     post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
     const commentCount = await CommentService.getCommentCount(postId);
-    const isPopular = post.like_count >= 1;
+    const isPopular = post.like_count >= 5;
     const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
     const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
     res.status(200).json({
@@ -265,6 +272,7 @@ const findPostById = async (req, res, next) => {
             isPopular,
             commentCount,
             isFollowing: isFollowing? true : false,
+            followList: isFollowing,
             isLiked: isLiked? true : false,
         }
     });
@@ -276,7 +284,7 @@ const modifyPost = async (req, res, next) => {
     const userId = req.tokenData.id;
     const post = await postService.findPostById(id);
 
-    if (!post || post.author != userId) {
+    if ((post.author != userId) && (req.tokenData.roles !== "Admin")) {
         return res.status(403).json({
             message: "게시글 수정 권한이 없습니다",
         });
@@ -290,7 +298,7 @@ const modifyPost = async (req, res, next) => {
     });
     const populatedPost = await Post.findById(updatedPost._id).populate('author', '_id name profile_url roles');
     const commentCount = await CommentService.getCommentCount(id);
-    const isPopular = post.like_count >= 1;
+    const isPopular = post.like_count >= 5;
     
     res.status(200).json({
         message: "게시글을 수정했습니다",
@@ -303,14 +311,12 @@ const removePost = async (req, res, next) => {
     const userId = req.tokenData.id;
     const post = await postService.findPostById(id);
 
-    if (!post || post.author != userId) {
+    if (!post || (post.author != userId) && (req.tokenData.roles !== "Admin")) {
         return res.status(403).json({
             message: "게시글 삭제 권한이 없습니다",
         });
     }
-
     await postService.removePost(id);
-
     res.status(200).json({
         message: "게시글을 삭제했습니다"
     });

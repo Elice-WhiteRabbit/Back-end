@@ -60,7 +60,7 @@ const findCommentById = async (req, res, next) => {
     comment = await Comment.populate(comment, { path: 'author', select: '_id name profile_url roles' });
     if (!comment) {
         return res.status(404).json({
-            message: "댓글을 찾을 수 없습니다.",
+            message: "댓글을 찾을 수 없습니다",
         });
     }
 
@@ -76,14 +76,14 @@ const modifyComment = async (req, res, next) => {
     const userId = req.tokenData.id;
     const comment = await commentService.findCommentById(id);
 
-    if (comment.author.toString() !== userId) {
+    if ((comment.author != userId) && (req.tokenData.roles !== "Admin")) {
         return res.status(403).json({
             message: "댓글 수정 권한이 없습니다",
         });
     }
     const updatedComment = await commentService.modifyComment({
         id,
-        author: userId,
+        author: comment.author,
         content,
     });
 
@@ -106,12 +106,12 @@ const removeComment = async (req, res, next) => {
     const userId = req.tokenData.id;
     const comment = await commentService.findCommentById(id);
 
-    if (!comment || comment.author != userId) {
+    if ((comment.author != userId) && (req.tokenData.roles !== "Admin")) {
         return res.status(403).json({
             message: "댓글 삭제 권한이 없습니다",
         });
     }
-    await commentService.removeComment(id, userId);
+    await commentService.removeComment(id);
 
     res.status(200).json({
         message: "댓글을 삭제했습니다",
