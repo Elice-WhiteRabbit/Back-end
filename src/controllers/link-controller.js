@@ -2,21 +2,25 @@ const {
   updateUserLinks,
   deleteUserLink,
   getUserLinks,
+  addLink,
 } = require('../services/link-service');
 
 exports.updateLinks = async (req, res) => {
   try {
-    const userId = req.params.id; // 라우트에서 :id를 사용하므로 req.params.id를 사용해야 합니다.
-    const links = req.body.links;
-    const updatedUser = await updateUserLinks(userId, links);
+    const userId = req.params.id;
+    const { linkId, title, url } = req.body;
+
+    const updatedUser = await updateUserLinks(userId, linkId, title, url);
 
     if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
+      return res
+        .status(404)
+        .json({ message: 'User not found or link not found' });
     }
 
     res
       .status(200)
-      .json({ message: 'Links updated successfully', data: updatedUser });
+      .json({ message: 'Link updated successfully', data: updatedUser });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -25,9 +29,9 @@ exports.updateLinks = async (req, res) => {
 exports.deleteLink = async (req, res) => {
   try {
     const userId = req.params.id;
-    const linkToDelete = req.body.links; // 삭제할 링크
+    const { title, url } = req.body;
 
-    const updatedUser = await deleteUserLink(userId, linkToDelete);
+    const updatedUser = await deleteUserLink(userId, title, url);
 
     if (!updatedUser) {
       return res
@@ -54,6 +58,25 @@ exports.getLinks = async (req, res) => {
     }
 
     res.status(200).json({ data: links });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.addLink = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { title, url } = req.body;
+
+    const updatedUser = await addLink(userId, title, url);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res
+      .status(200)
+      .json({ message: 'Link added successfully', data: updatedUser });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

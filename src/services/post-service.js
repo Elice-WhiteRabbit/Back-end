@@ -21,7 +21,7 @@ const findPostByCategory = async (
   const options = {
     page: page,
     limit: pageSize,
-    sort: { updatedAt: -1 },
+    sort: { createdAt: -1 },
   };
 
   const query = { category: category };
@@ -31,7 +31,7 @@ const findPostByCategory = async (
 
 const findAll = async (category) => {
   const query = category ? { category } : {};
-  return Post.find(query).sort({ updatedAt: -1 });
+  return Post.find(query).sort({ createdAt: -1 });
 };
 
 // 페이지네이션
@@ -39,7 +39,7 @@ const findAllPost = async (page = 1, pageSize = 5) => {
   const options = {
     page: page,
     limit: pageSize,
-    sort: { updatedAt: -1 },
+    sort: { createdAt: -1 },
   };
   const result = await Post.paginate({}, options);
 
@@ -79,7 +79,7 @@ const getPopularPosts = async (weekAgo) => {
     {
       $match: {
         createdAt: { $gte: weekAgo },
-        like_count: { $gte: 1 },
+        like_count: { $gte: 5 },
       },
     },
     {

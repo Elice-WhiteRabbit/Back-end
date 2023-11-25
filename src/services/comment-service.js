@@ -31,9 +31,8 @@ const modifyComment = async (data) => {
     );
 };
 
-const removeComment = async (id, author) => {
-    await Comment.findOneAndDelete({ _id: id, author });
-
+const removeComment = async (id) => {
+    await Comment.findOneAndDelete(id);
     return;
 };
 
