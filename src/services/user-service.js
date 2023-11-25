@@ -171,7 +171,8 @@ const resetPassword = async (data) => {
   return;
 }
 
-const addFollow = async (from, to) => {
+const addFollow = async (data) => {
+  const { from, to } = data;
   return Follow.create({ from, to });
 }
 
@@ -191,11 +192,31 @@ const findAllFollow = async (id) => {
   const followerUserList = [];
 
   followingList.forEach((obj) => {
-    followingUserList.push(obj.to);
+    const { _id, name, profile_url, generation_type, generation_number, roles } = obj.to;
+    const newObj = {
+      _id,
+      name,
+      profile_url,
+      generation_type,
+      generation_number,
+      roles,
+      followId: obj._id
+    };
+    followingUserList.push(newObj);
   });
 
   followerList.forEach((obj) => {
-    followerUserList.push(obj.from);
+    const { _id, name, profile_url, generation_type, generation_number, roles } = obj.from;
+    const newObj = {
+      _id,
+      name,
+      profile_url,
+      generation_type,
+      generation_number,
+      roles,
+      followId: obj._id
+    };
+    followerUserList.push(newObj);
   });
 
   return {
@@ -217,12 +238,20 @@ const findAllFollowNumber = async (id) => {
   }
 }
 
+const findFollowById = async (id) => {
+  return Follow.findById(id);
+}
+
 const findFollowingList = async (id) => {
   return Follow.find({ from: id });
 }
 
 const findFollowerList = async (id) => {
   return Follow.find({ to: id });
+}
+
+const removeFollowerById = async (id) => {
+  return Follow.findByIdAndDelete(id);
 }
 
 const removeFollower = async (from, to) => {
@@ -244,7 +273,9 @@ module.exports = {
   addFollow,
   findAllFollow,
   findAllFollowNumber,
+  findFollowById,
   findFollowingList,
   findFollowerList,
   removeFollower,
+  removeFollowerById,
 };

@@ -41,13 +41,10 @@ router.post('/password/code', asyncHandler(userController.checkCode));
 router.post('/password/reset', asyncHandler(userController.resetPassword));
 
 // 팔로우 관련
-router.get('/:id/follow', asyncHandler(userController.findAllFollowList));
-router.post('/:id/follow', auth, asyncHandler(userController.addFollow));
-router.delete('/:id/follow', auth, asyncHandler(userController.removeFollower));
-router.get(
-  '/:id/follow/number',
-  asyncHandler(userController.findAllFollowNumber)
-);
+router.get('/follow/:id', asyncHandler(userController.findAllFollowList));
+router.post('/follow/:id', auth, asyncHandler(userController.addFollow));
+router.delete('/follow/:id', asyncHandler(userController.removeFollower));
+router.get('/follow/number/:id', asyncHandler(userController.findAllFollowNumber));
 
 //유저스킬 관련
 router.patch('/skill/add/:id', asyncHandler(userSkillController.add));
