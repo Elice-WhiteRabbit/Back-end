@@ -4,6 +4,7 @@ const userController = require('../controllers/user-controller');
 const userSkillController = require('../controllers/user-skill-controller');
 const asyncHandler = require('../utils/async-handler');
 const { auth, checkAdmin } = require('../middlewares/verify-token');
+const { userValidation } = require('../middlewares/validation');
 
 const linkController = require('../controllers/link-controller');
 const generationController = require('../controllers/generation-controller');
@@ -22,7 +23,7 @@ router.delete('/links/:id', auth, asyncHandler(linkController.deleteLink)); // �
 router.get('/links/:id', auth, asyncHandler(linkController.getLinks)); // 특정 사용자의 모든 링크 조회
 router.post('/links/:id', auth, asyncHandler(linkController.addLink)); // 링크 추가
 
-router.post('/', asyncHandler(userController.addUser));
+router.post('/', userValidation.signup, asyncHandler(userController.addUser));
 router.get('/', auth, asyncHandler(userController.findUserByToken));
 
 router.get(
@@ -34,21 +35,38 @@ router.get(
 
 router.get('/:id', auth, asyncHandler(userController.findUserById));
 router.get('/:id/public', asyncHandler(userController.findPublicUserInfoById));
-router.patch('/:id', auth, asyncHandler(userController.modifyUser));
+router.patch(
+  '/:id',
+  userValidation.patchUser,
+  auth,
+  asyncHandler(userController.modifyUser)
+);
 router.delete('/:id', auth, asyncHandler(userController.removeUser));
-router.post('/login', asyncHandler(userController.login));
+router.post('/login', userValidation.login, asyncHandler(userController.login));
 router.get('/account/logout', asyncHandler(userController.logout));
 
-router.post('/password', asyncHandler(userController.sendCode));
-router.post('/password/code', asyncHandler(userController.checkCode));
-router.post('/password/reset', asyncHandler(userController.resetPassword));
+router.post(
+  '/password',
+  userValidation.checkUser,
+  asyncHandler(userController.sendCode)
+);
+router.post(
+  '/password/code',
+  userValidation.checkCode,
+  asyncHandler(userController.checkCode)
+);
+router.post(
+  '/password/reset',
+  userValidation.passwordReset,
+  asyncHandler(userController.resetPassword)
+);
 
 // 팔로우 관련
-router.get('/follow/:id', asyncHandler(userController.findAllFollowList));
-router.post('/follow/:id', auth, asyncHandler(userController.addFollow));
-router.delete('/follow/:id', asyncHandler(userController.removeFollower));
+router.get('/followings/:id', asyncHandler(userController.findAllFollowList));
+router.post('/followings/:id', auth, asyncHandler(userController.addFollow));
+router.delete('/followings/:id', asyncHandler(userController.removeFollower));
 router.get(
-  '/follow/number/:id',
+  '/followings/number/:id',
   asyncHandler(userController.findAllFollowNumber)
 );
 

@@ -28,9 +28,7 @@ const findAllUser = async () => {
 };
 
 const findUserById = async (id) => {
-  return User.findById(id)
-    .populate('skills') // 'skills' 필드를 populate
-    .exec();
+  return User.findById(id).populate('skills');
 };
 
 const findPublicUserInfoById = async (id) => {
@@ -188,6 +186,9 @@ const findAllFollow = async (id) => {
   const followerUserList = [];
 
   followingList.forEach((obj) => {
+    if (!obj.to) {
+      return;
+    }
     const {
       _id,
       name,
@@ -209,6 +210,9 @@ const findAllFollow = async (id) => {
   });
 
   followerList.forEach((obj) => {
+    if (!obj.from) {
+      return;
+    }
     const {
       _id,
       name,
