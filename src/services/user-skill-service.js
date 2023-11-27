@@ -10,21 +10,19 @@ const getUsersBySkill = async (skill) => {
   );
 };
 
-//관계 문서 추가 (ex:유저a - 스킬b를 추가할 때)
-const addUserSkill = async (data) => {
-  const user = await User.findById(data.userid);
-  const skillExists = user.skills.includes(data.skill);
-
-  if (skillExists) {
-    throw {
-      status: 409,
-      message: '이미 존재하는 스킬입니다',
-    };
+const updateUserSkills = async ({ userId, skills }) => {
+  // 사용자 존재 여부 확인
+  console.log('Requested User ID:', userId);
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error('User not found');
   }
 
-  await User.findByIdAndUpdate(data.userid, { $push: { skills: data.skill } });
+  // 사용자의 스킬 업데이트
+  user.skills = skills;
+  await user.save();
 
-  return await User.findById(data.userid).populate('skills', 'skill');
+  return await User.findById(userId).populate('skills', 'skill');
 };
 
 //관계 문서 수정은 필요 없을 것 같음. (추가 or 삭제 뿐이니까..)
@@ -40,6 +38,6 @@ const removeUserSkill = async (data) => {
 
 module.exports = {
   getUsersBySkill,
-  addUserSkill,
+  updateUserSkills,
   removeUserSkill,
 };
