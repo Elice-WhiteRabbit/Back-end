@@ -1,9 +1,12 @@
-const { Post, User } = require('../db');
+const { Post } = require('../db');
+const userService = require('../services/user-service');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
 Post.schema.plugin(mongoosePaginate);
 
-const paginatePosts = async (query, options) => {
+const paginatePosts = async (array, options) => {
+  const query = Array.isArray(array) && array.length > 0 ? { _id: { $in: array.map(item => item._id) } } : {};
+
   const result = await Post.paginate(query, options);
   return result;
 };
@@ -16,7 +19,6 @@ const findPostByCategory = async (
   category,
   page = 1,
   pageSize = 5,
-  sortBy = 'new',
 ) => {
   const options = {
     page: page,
@@ -32,18 +34,6 @@ const findPostByCategory = async (
 const findAll = async (category) => {
   const query = category ? { category } : {};
   return Post.find(query).sort({ createdAt: -1 });
-};
-
-// 페이지네이션
-const findAllPost = async (page = 1, pageSize = 5) => {
-  const options = {
-    page: page,
-    limit: pageSize,
-    sort: { createdAt: -1 },
-  };
-  const result = await Post.paginate({}, options);
-
-  return result;
 };
 
 const findPostById = async (id) => {
@@ -102,41 +92,29 @@ const getPopularPosts = async (weekAgo) => {
 };
 
 const searchPost = async (keyword) => {
-  const lowercaseQuery = keyword.toLowerCase();
-  const postsByTitleOrContent = await Post.find({
-    $or: [
-      { title: { $regex: lowercaseQuery, $options: 'i' } },
-      { content: { $regex: lowercaseQuery, $options: 'i' } },
-    ],
-  }).populate('author', '_id name profile_url roles');
-  const user = await User.findOne({
-    name: { $regex: lowercaseQuery, $options: 'i' },
-  });
+    const allPosts = await findAll(); 
+    const searchResult = await Promise.all(allPosts.map(async (post) => {
+        const titleMatch = post.title.includes(keyword);
+        const contentMatch = post.content.includes(keyword);
 
-  if (user) {
-    const postsByAuthor = await Post.find({ author: user._id }).populate(
-      'author',
-      '_id name profile_url roles'
-    );
-    const allPosts = [...postsByTitleOrContent, ...postsByAuthor];
-    const uniquePosts = Array.from(
-      new Set(allPosts.map((post) => post._id))
-    ).map((id) => allPosts.find((post) => post._id === id));
-    return uniquePosts;
-  } else {
-    return postsByTitleOrContent;
-  }
+        const author = await userService.findUserById(post.author);
+        const authorNameMatch = author.name.includes(keyword);
+
+        return titleMatch || contentMatch || authorNameMatch;
+    }));
+
+    return allPosts.filter((_, index) => searchResult[index]);
 };
 
 module.exports = {
   addPost,
   modifyPost,
   findAll,
-  findAllPost,
   findPostByCategory,
   findPostById,
   findPostByAuthor,
   removePost,
   getPopularPosts,
   searchPost,
+  paginatePosts,
 };
