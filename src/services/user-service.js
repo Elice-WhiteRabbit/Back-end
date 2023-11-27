@@ -28,9 +28,7 @@ const findAllUser = async () => {
 };
 
 const findUserById = async (id) => {
-  return User.findById(id)
-    .populate('skills') // 'skills' 필드를 populate
-    .exec();
+  return User.findById(id).populate('skills');
 };
 
 const findPublicUserInfoById = async (id) => {
@@ -188,14 +186,10 @@ const findAllFollow = async (id) => {
   const followerUserList = [];
 
   followingList.forEach((obj) => {
-    const {
-      _id,
-      name,
-      profile_url,
-      generation_type,
-      generation_number,
-      roles,
-    } = obj.to;
+    if(!obj.to){ 
+      return; 
+    }
+    const { _id, name, profile_url, generation_type, generation_number, roles } = obj.to;
     const newObj = {
       _id,
       name,
@@ -209,14 +203,10 @@ const findAllFollow = async (id) => {
   });
 
   followerList.forEach((obj) => {
-    const {
-      _id,
-      name,
-      profile_url,
-      generation_type,
-      generation_number,
-      roles,
-    } = obj.from;
+    if(!obj.from){ 
+      return; 
+    }
+    const { _id, name, profile_url, generation_type, generation_number, roles } = obj.from;
     const newObj = {
       _id,
       name,

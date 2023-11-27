@@ -35,7 +35,7 @@ function imageToURL(req, res, next) {
       throw err;
     }
 
-    const imagePath = `/image/${req.file.filename}`;
+    const imagePath = `/images/${req.file.filename}`;
     res.status(200).json({
         message: "이미지 url 생성",
         data: imagePath
