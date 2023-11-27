@@ -102,7 +102,7 @@ const login = async (data) => {
 
 // 접근한 토큰과 접근하는 DB의 _id를 받아서 접근권한이 있는지 확인하는 함수
 const userCheck = async (tokenData, id) => {
-  if((tokenData.id !== id) && (tokenData.roles !== "Admin")){
+  if((tokenData.id !== id) && (tokenData.roles !== "ADMIN")){
     throw {
         status: 401,
         message: "접근 권한이 없습니다"

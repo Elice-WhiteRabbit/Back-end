@@ -32,8 +32,8 @@ const UserSchema = new Schema({
   },
   roles: {
     type: String,
-    enum: ['User', 'Coach', 'Admin'],
-    default: 'User',
+    enum: ['USER', 'COACH', 'ADMIN'],
+    default: 'USER',
   },
   is_coach: {
     type: Boolean,
