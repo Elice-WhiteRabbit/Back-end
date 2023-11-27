@@ -28,7 +28,7 @@ const findAllUser = async () => {
 };
 
 const findUserById = async (id) => {
-  return User.findById(id);
+  return User.findById(id).populate('skills');
 };
 
 const findPublicUserInfoById = async (id) => {
