@@ -15,12 +15,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  //프로필 이미지 url
   profile_url: {
     type: String,
     default: '',
   },
-  //(note)프로필url 주석처리해야 유저 생성이 됨.
   generation_type: {
     type: String,
     enum: ['SW 엔지니어 트랙', '풀스택 AI 트랙'],
