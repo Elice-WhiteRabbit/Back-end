@@ -15,7 +15,7 @@ const userValidation = {
         }); 
 
         await schema.validateAsync(req.body); 
-        next();
+        return next();
     }),
 
     login : asyncHandler( async (req, res, next) => {
@@ -25,7 +25,7 @@ const userValidation = {
         })
 
         await schema.validateAsync(req.body);
-        next();
+        return next();
     }),
 
     patchUser : asyncHandler( async (req, res, next) => {
@@ -42,7 +42,7 @@ const userValidation = {
         })
 
         await schema.validateAsync(req.body);
-        next();
+        return next();
     }),
 
     checkUser : asyncHandler( async (req, res, next) => {
@@ -52,7 +52,7 @@ const userValidation = {
         })
 
         await schema.validateAsync(req.body);
-        next();
+        return next();
     }),
 
     checkCode : asyncHandler( async (req, res, next) => {
@@ -62,7 +62,7 @@ const userValidation = {
         })
 
         await schema.validateAsync(req.body);
-        next();
+        return next();
     }),
 
     passwordReset : asyncHandler( async (req, res, next) => {
@@ -73,7 +73,7 @@ const userValidation = {
         })
 
         await schema.validateAsync(req.body);
-        next();
+        return next();
     })
 }; 
     
