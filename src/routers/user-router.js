@@ -13,6 +13,9 @@ router.get('/generations', generationController.getAllUniqueGenerations);
 router.delete('/generation', generationController.deleteGeneration); // 트랙 및 기수 삭제
 router.put('/generation', generationController.updateGeneration); // 트랙 및 기수 수정
 
+//유저 스킬 업데이트
+router.patch('/skills/:id', asyncHandler(userSkillController.update));
+
 //유저 링크 관련 (프로필에 올라갈 깃허브 주소 등의 링크)
 router.put('/links/:id', auth, asyncHandler(linkController.updateLinks)); // 링크 수정
 router.delete('/links/:id', auth, asyncHandler(linkController.deleteLink)); // 링크 삭제
@@ -44,11 +47,15 @@ router.post('/password/reset', asyncHandler(userController.resetPassword));
 router.get('/follow/:id', asyncHandler(userController.findAllFollowList));
 router.post('/follow/:id', auth, asyncHandler(userController.addFollow));
 router.delete('/follow/:id', asyncHandler(userController.removeFollower));
-router.get('/follow/number/:id', asyncHandler(userController.findAllFollowNumber));
+router.get(
+  '/follow/number/:id',
+  asyncHandler(userController.findAllFollowNumber)
+);
 
 //유저스킬 관련
-router.patch('/skill/add/:id', asyncHandler(userSkillController.add));
+
 router.patch('/skill/remove/:id', asyncHandler(userSkillController.delete));
+
 //유저 내부 어레이에 적용하니까 patch로 구현
 
 //유저 테이블 전체에서 이 스킬이 [유저 스킬즈 배열]에 들어있는 유저 목록 가져오기
