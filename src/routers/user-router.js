@@ -25,6 +25,7 @@ router.post('/links/:id', auth, asyncHandler(linkController.addLink)); // 링크
 
 router.post('/', userValidation.signup, asyncHandler(userController.addUser));
 router.get('/', auth, asyncHandler(userController.findUserByToken));
+router.patch('/', userValidation.patchUser, auth, asyncHandler(userController.modifyUser));
 
 router.get(
   '/admin/userlist',
