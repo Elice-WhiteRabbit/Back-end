@@ -8,7 +8,7 @@ module.exports = async () => {
     let fileNames = [];
 
     // post, user 전체조회 후 리스트 추출
-    const postList = await postService.findAllPost();
+    const postList = await postService.findAll();
 
     if(postList.length>0){
         postList.forEach((post) => {

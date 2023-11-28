@@ -20,8 +20,8 @@ const UserSchema = new Schema({
     default: '',
   },
   generation_type: {
-    type: String,
-    enum: ['SW 엔지니어 트랙', '풀스택 AI 트랙'],
+    type: Schema.Types.ObjectId,
+    ref: 'Generation',
     required: true,
   },
   generation_number: {

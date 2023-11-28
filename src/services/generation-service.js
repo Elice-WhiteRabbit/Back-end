@@ -54,7 +54,6 @@ const getAllUniqueGenerations = async () => {
           generationType: '$generation_type',
           generationNumber: '$generation_number',
         },
-        count: { $sum: 1 },
       },
     },
     {
@@ -62,7 +61,6 @@ const getAllUniqueGenerations = async () => {
         _id: 0,
         generationType: '$_id.generationType',
         generationNumber: '$_id.generationNumber',
-        count: 1,
       },
     },
     { $sort: { generationType: 1, generationNumber: 1 } },

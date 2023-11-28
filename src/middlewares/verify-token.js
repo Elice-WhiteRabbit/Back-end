@@ -32,7 +32,7 @@ const auth = async (req, res, next) => {
 
 const checkAdmin = async (req, res, next) => {
   try {
-    if (req.tokenData.roles !== "Admin") {
+    if (req.tokenData.roles !== "ADMIN") {
       throw {
         status: 401,
         message: "접근 권한이 없습니다",
