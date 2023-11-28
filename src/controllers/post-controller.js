@@ -52,7 +52,6 @@ const findAllPost = async (req, res, next) => {
     let result;
 
     if (keyword) {
-        // 검색 키워드가 있는 경우
         const searchResult = await postService.searchPost(keyword);
         
         // 페이지네이션
@@ -63,7 +62,6 @@ const findAllPost = async (req, res, next) => {
             result = searchResult;
         }
     } else {
-        // 검색 키워드가 없는 경우 
         if (page && pageSize) {
             result = await postService.paginatePosts({}, { page, limit: pageSize, sort: { createdAt: -1 } });
             result = result.docs;
@@ -114,10 +112,7 @@ const findPostByCategory = async (req, res, next) => {
     let result; 
     let paginatedResult;
     if (keyword) {
-        // 검색 키워드가 있는 경우
         const searchResult = await postService.searchPost(keyword);
-       
-        // 해당 카테고리의 글만 조회
         const categoryResult = searchResult.filter(post => post.category === category);
         
         // 페이지네이션
@@ -128,7 +123,6 @@ const findPostByCategory = async (req, res, next) => {
             result = categoryResult;
         }
     } else {
-        // 검색 키워드가 없는 경우 
         if (page && pageSize) {
             result = await postService.findPostByCategory(category, page, pageSize);
             result = result.docs;
