@@ -35,7 +35,7 @@ const userValidation = {
             password: Joi.string().min(1).max(30),
             generation_type: Joi.string().valid(...tracks),
             generation_number: Joi.number().min(1).max(2),
-            profile_url: Joi.string(),
+            profile_url: Joi.string().allow(""),
             roles: Joi.string().valid(...userRoles),
             links: Joi.string().forbidden().empty(''),
             skills: Joi.string().email().forbidden().empty('')

@@ -64,10 +64,14 @@ const findPublicUserInfoById = async (req, res, next) => {
 }
 
 const modifyUser = async (req, res, next) => {
-    const { id } = req.params;
+    let id = "";
+    if(req.params.id){
+        id = req.params.id;
+        await userService.userCheck(req.tokenData, id);
+    }else{
+        id = req.tokenData.id;
+    }
     const userData = req.body;
-
-    await userService.userCheck(req.tokenData, id);
 
     const updatedUser = await userService.modifyUser(id, userData);
 

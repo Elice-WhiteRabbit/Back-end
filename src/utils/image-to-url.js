@@ -47,16 +47,13 @@ const deleteImage = async (imageURL) => {
   try{
       const path = 'public/images' + imageURL.split('images')[1];
 
-      await fs.unlink(path, (err) => {
-          if(err.code === 'ENOENT'){
-              console.log("파일이 이미 존재하지 않음");
-              return;
-          }else if(err){
-              throw err;
-          }
-      });
+      await fs.promises.unlink(path);
   } catch(err) {
-      throw err;
+      if(err.code === 'ENOENT'){
+        console.log("파일이 이미 존재하지 않음");
+      }else{
+        throw err;
+      }
   }
 }
 
