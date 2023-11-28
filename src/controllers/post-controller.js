@@ -110,25 +110,15 @@ const findPostByCategory = async (req, res, next) => {
     }
 
     let result; 
-    let paginatedResult;
+    
     if (keyword) {
         const searchResult = await postService.searchPost(keyword);
         const categoryResult = searchResult.filter(post => post.category === category);
         
-        // 페이지네이션
-        if (page && pageSize) {
-            paginatedResult = await postService.paginatePosts(categoryResult, { page, limit: pageSize });
-            result = paginatedResult.docs;
-        } else {
-            result = categoryResult;
-        }
+        result = categoryResult;
+
     } else {
-        if (page && pageSize) {
-            result = await postService.findPostByCategory(category, page, pageSize);
-            result = result.docs;
-        } else {
-            result = await postService.findAll( category );
-        }
+        result = await postService.findAll( category );
     }
 
     const postsWithCommentCount = await Promise.all(
@@ -149,13 +139,25 @@ const findPostByCategory = async (req, res, next) => {
         })
     );
 
-    if(sortBy === 'new'){
-        result = postsWithCommentCount;
-    }else if(sortBy === 'comment'){
-        const sortedPostsWithCommentCount = postsWithCommentCount.sort((a, b) => b.commentCount - a.commentCount);
+    let sortedPostsWithCommentCount;
+
+    if (sortBy === 'new') {
+        sortedPostsWithCommentCount = postsWithCommentCount;
+    } else if (sortBy === 'comment') {
+        sortedPostsWithCommentCount = postsWithCommentCount.sort((a, b) => b.commentCount - a.commentCount);
+    }else{
+        sortedPostsWithCommentCount = postsWithCommentCount;
+    }
+
+    let paginatedResult;
+    if (page && pageSize) {
+
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + parseInt(pageSize, 10);
+        paginatedResult = sortedPostsWithCommentCount.slice(startIndex, endIndex);
+        result = paginatedResult;
+    } else {
         result = sortedPostsWithCommentCount;
-    }else {
-        result = postsWithCommentCount;
     }
 
     res.status(200).json({
@@ -165,7 +167,7 @@ const findPostByCategory = async (req, res, next) => {
             pageInfo: getPaginationInfo(result, page, pageSize),
         },
     });
-};
+}
 
 const getPopularPosts = async (req, res, next) => {     
     const weekAgo = new Date();

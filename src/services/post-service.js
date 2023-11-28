@@ -5,11 +5,11 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 Post.schema.plugin(mongoosePaginate);
 
 const paginatePosts = async (array, options) => {
-  const query = Array.isArray(array) && array.length > 0 ? { _id: { $in: array.map(item => item._id) } } : {};
-
-  const result = await Post.paginate(query, options);
-  return result;
-};
+    const ids = array.map(item => item._id);
+    const query = ids.length > 0 ? { _id: { $in: ids } } : {};
+    const result = await Post.paginate(query, options);
+    return result;
+  };  
 
 const addPost = async (data) => {
   return Post.create(data);
@@ -25,7 +25,7 @@ const findPostByCategory = async (category, page, pageSize) => {
     const query = { category: category };
     const result = await Post.paginate(query, options);
     return result;
-  };
+};
   
 
 const findAll = async (category) => {
