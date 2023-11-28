@@ -95,6 +95,7 @@ const postValidation = {
       title: Joi.string(),
       content: Joi.string(),
       category: Joi.string().valid('BOARD', 'QNA', 'STUDY', 'PROJECT', 'REVIEW'),
+      image_url: Joi.string(),
     });
 
     await schema.validateAsync(req.body);

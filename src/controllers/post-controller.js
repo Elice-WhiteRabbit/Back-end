@@ -262,7 +262,7 @@ const findPostById = async (req, res, next) => {
 };
 
 const modifyPost = async (req, res, next) => {
-    const { title, content, category } = req.body;
+    const { title, content, category, image_url } = req.body;
     const { id } = req.params;
     const userId = req.tokenData.id;
     const post = await postService.findPostById(id);
@@ -277,7 +277,8 @@ const modifyPost = async (req, res, next) => {
         id, 
         title, 
         content, 
-        category
+        category,
+        image_url
     });
     const populatedPost = await Post.findById(updatedPost._id).populate('author', '_id name profile_url roles');
     const commentCount = await CommentService.getCommentCount(id);
