@@ -32,7 +32,7 @@ const modifyComment = async (data) => {
 };
 
 const removeComment = async (id) => {
-    await Comment.findOneAndDelete(id);
+    await Comment.findByIdAndDelete(id);
     return;
 };
 
