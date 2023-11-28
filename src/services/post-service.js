@@ -15,21 +15,18 @@ const addPost = async (data) => {
   return Post.create(data);
 };
 
-const findPostByCategory = async (
-  category,
-  page = 1,
-  pageSize = 5,
-) => {
-  const options = {
-    page: page,
-    limit: pageSize,
-    sort: { createdAt: -1 },
+const findPostByCategory = async (category, page, pageSize) => {
+    const options = {
+      page: page,
+      limit: pageSize,
+      sort: { createdAt: -1 },
+    };
+  
+    const query = { category: category };
+    const result = await Post.paginate(query, options);
+    return result;
   };
-
-  const query = { category: category };
-  const result = await paginatePosts(query, options);
-  return result;
-};
+  
 
 const findAll = async (category) => {
   const query = category ? { category } : {};

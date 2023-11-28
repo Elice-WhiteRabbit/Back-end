@@ -112,25 +112,28 @@ const findPostByCategory = async (req, res, next) => {
     }
 
     let result; 
-
+    let paginatedResult;
     if (keyword) {
         // 검색 키워드가 있는 경우
         const searchResult = await postService.searchPost(keyword);
+       
+        // 해당 카테고리의 글만 조회
+        const categoryResult = searchResult.filter(post => post.category === category);
         
         // 페이지네이션
         if (page && pageSize) {
-            result = await postService.paginatePosts(searchResult, { page, limit: pageSize, sort: { createdAt: -1 } });
-            result = result.docs;
+            paginatedResult = await postService.paginatePosts(categoryResult, { page, limit: pageSize });
+            result = paginatedResult.docs;
         } else {
-            result = searchResult;
+            result = categoryResult;
         }
     } else {
         // 검색 키워드가 없는 경우 
         if (page && pageSize) {
-            result = await postService.paginatePosts({}, { page, limit: pageSize, sort: { createdAt: -1 } });
+            result = await postService.findPostByCategory(category, page, pageSize);
             result = result.docs;
         } else {
-            result = await postService.findAll();
+            result = await postService.findAll( category );
         }
     }
 
@@ -155,7 +158,7 @@ const findPostByCategory = async (req, res, next) => {
     if(sortBy === 'new'){
         result = postsWithCommentCount;
     }else if(sortBy === 'comment'){
-        const sortedPostsWithCommentCount = postsWithCommentCount.sort((a, b) => b.commentCount - a.commentCount);
+        const sortedPostsWithCommentCount = result.sort((a, b) => b.commentCount - a.commentCount);
         result = sortedPostsWithCommentCount;
     }else {
         result = postsWithCommentCount;
@@ -306,28 +309,6 @@ const removePost = async (req, res, next) => {
     });
 };
 
-const searchPost = async (req, res, next) => {
-    try {
-      const { keyword } = req.query;
-      const result = await postService.searchPost(keyword);
-      const postsWithAuthor = await Promise.all(
-        result.map(async (post) => {
-            const populatedPost = await Post.findById(post._id).populate('author', '_id name profile_url roles');
-            return populatedPost;
-        })
-    );
-      res.status(200).json({
-        message: `검색어(${keyword})로 게시글 검색 결과`,
-        data: postsWithAuthor,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        message: "서버 오류",
-      });
-    }
-  };
-
 module.exports = {
     addPost,
     modifyPost,
@@ -337,5 +318,4 @@ module.exports = {
     findPostByAuthor,
     removePost,
     getPopularPosts,
-    searchPost,
 }
