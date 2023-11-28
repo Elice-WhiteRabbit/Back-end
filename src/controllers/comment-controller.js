@@ -9,9 +9,9 @@ const addComment = async (req, res, next) => {
     if (targetPost.category === 'QNA') {
         const user = await User.findById(userId);
 
-        if (!user || user.roles != 'Coach') {
+        if (!user || user.roles != 'COACH') {
             return res.status(403).json({
-                message: "QNA 게시판은 코치님만 답변을 달 수 있어요",
+                message: "QNA 게시판은 코치님만 답변할 수 있습니다",
             });
         }
     }
@@ -76,7 +76,7 @@ const modifyComment = async (req, res, next) => {
     const userId = req.tokenData.id;
     const comment = await commentService.findCommentById(id);
 
-    if ((comment.author != userId) && (req.tokenData.roles !== "Admin")) {
+    if ((comment.author != userId) && (req.tokenData.roles !== "ADMIN")) {
         return res.status(403).json({
             message: "댓글 수정 권한이 없습니다",
         });
@@ -106,7 +106,7 @@ const removeComment = async (req, res, next) => {
     const userId = req.tokenData.id;
     const comment = await commentService.findCommentById(id);
 
-    if ((comment.author != userId) && (req.tokenData.roles !== "Admin")) {
+    if ((comment.author != userId) && (req.tokenData.roles !== "ADMIN")) {
         return res.status(403).json({
             message: "댓글 삭제 권한이 없습니다",
         });
