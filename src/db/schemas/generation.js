@@ -1,25 +1,17 @@
 const { Schema } = require("mongoose");
 
-const generationSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-
-  //트랙명(ex:SW)
+const GenerationSchema = new Schema({
+  // 트랙 이름
   generation_type: {
     type: String,
     required: true,
   },
 
-  //기수(ex:6기)
+  // 최대 기수
   generation: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
 
-const Generation = mongoose.model("Generation", generationSchema);
-
-module.exports = { generationSchema };
+module.exports = { GenerationSchema };
