@@ -14,8 +14,8 @@ const generationSchema = new Schema({
   },
 
   //기수(ex:6기)
-  generation: {
-    type: String,
+  max_generation: {
+    type: Number,
     required: true,
   },
 });

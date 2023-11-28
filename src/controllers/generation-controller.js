@@ -15,6 +15,35 @@ const {
   removeGenerationType,
 } = require('../services/generation-service');
 
+const generationService = require('../services/generation-service');
+
+const addGeneration = async (req, res, next) => {
+  const { name, maxGeneration } = req.body;
+  const createdGeneration = await generationService.addGeneration({
+    name,
+    number:maxGeneration
+  });
+
+  res.status(201).json({
+    message: "새 트랙이 생성되었습니다",
+    data: createdGeneration
+  })
+}
+
+const findAllGeneration = async (req, res, next) => {
+  const list = await generationService.findAllGeneration();
+
+  res.status(200).json({
+    message: "트랙 목록 조회",
+    data: list
+  })
+}
+
+const modifyGeneration = async (req, res, next) => {
+  const { id } = req.params;
+  const { name, number }
+}
+
 //관리자 트랙 삭제
 exports.deleteGeneration = async (req, res) => {
   try {
