@@ -158,7 +158,7 @@ const findPostByCategory = async (req, res, next) => {
     if(sortBy === 'new'){
         result = postsWithCommentCount;
     }else if(sortBy === 'comment'){
-        const sortedPostsWithCommentCount = result.sort((a, b) => b.commentCount - a.commentCount);
+        const sortedPostsWithCommentCount = postsWithCommentCount.sort((a, b) => b.commentCount - a.commentCount);
         result = sortedPostsWithCommentCount;
     }else {
         result = postsWithCommentCount;
