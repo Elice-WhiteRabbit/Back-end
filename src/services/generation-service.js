@@ -1,4 +1,35 @@
 const { User } = require('../db');
+const { Generation } = require('../db');
+
+const addGeneration = async (data) => {
+  const { name, max_generation } = data;
+
+  return Generation.create({
+    generation_type: name,
+    max_generation
+  });
+}
+
+const findAllGeneration = async () => {
+  return Generation.find({});
+}
+
+const modifyGeneration = async (data) => {
+  const { id, name, max_generation } = data;
+
+  return Generation.findByIdAndUpdate(
+    id,
+    {
+      generation_type: name,
+      max_generation
+    },
+    { new: true }
+  );
+}
+
+const removeGeneration = async (id) => {
+  return Generation.findByIdAndDelete(id);
+}
 
 //특정 유저의 기수 조회
 const getUserGenerationInfo = async (userId) => {
@@ -152,6 +183,11 @@ const updateGeneration = async (
 // };
 
 module.exports = {
+  addGeneration,
+  findAllGeneration,
+  modifyGeneration,
+  removeGeneration,
+
   getUserGenerationInfo,
   getUsersByGeneration,
   // setGenerationInfo,

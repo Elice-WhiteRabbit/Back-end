@@ -9,7 +9,7 @@ const { userValidation } = require('../middlewares/validation');
 const linkController = require('../controllers/link-controller');
 const generationController = require('../controllers/generation-controller');
 
-//유저 트랙,기수. /:id 라우터 보다 아래에 있으면 오류나서 위로 올림.
+// 유저 트랙,기수. /:id 라우터 보다 아래에 있으면 오류나서 위로 올림.
 router.get('/generations', generationController.getAllUniqueGenerations);
 router.delete('/generation', generationController.deleteGeneration); // 트랙 및 기수 삭제
 router.put('/generation', generationController.updateGeneration); // 트랙 및 기수 수정
