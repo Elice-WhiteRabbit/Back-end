@@ -57,26 +57,37 @@
 
 <img src="">
 
-## 👩🏻‍💻 팀 구성
+## 👩🏻‍💻 팀 구성
 
-이름 & 역할
+  
+| FRONTEND | BACKEND |
+ | ----  | --------|
+ | 이준영, 최윤지, 하지원  | 김보경, 유수빈, 장보근 |
 
-## 🔨 주요 기술
+  
+
+## 🔨 주요 기술
+
+  **Frontend**
+
+<img src="https://img.shields.io/badge/REACT-61DAFB?style=flat-square&logo=REACT&logoColor=black"/> 
+
+**Backend**
+
+<img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/> <img src="https://img.shields.io/badge/express-000000?style=flat-square&logo=express&logoColor=white"/> 
+
+
+
+**Frontend - React 18.2.0**
+- 동적인 사용자 인터페이스를 위해 React를 사용.
 
 **Backend - Node.js, Express.js**
-
 - Node.js 및 Express.js를 활용한 RESTful API 개발.
 
 **Database - MongoDB**
-
 - MongoDB를 사용하여 유연한 데이터 스토리지와 관리 기능 제공.
 
-**Frontend - React 18.2.0**
-
-- 동적인 사용자 인터페이스를 위해 React를 사용.
-
 **Validation - Joi**
-
 - 데이터 유효성 검사를 위해 Joi 라이브러리 사용.
 
 ## 📝 요구사항정의서
