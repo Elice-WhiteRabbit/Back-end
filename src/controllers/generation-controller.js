@@ -41,7 +41,6 @@ const findAllGeneration = async (req, res, next) => {
 
 const modifyGeneration = async (req, res, next) => {
   const { id } = req.params;
-  const { name, number }
 }
 
 //관리자 트랙 삭제
