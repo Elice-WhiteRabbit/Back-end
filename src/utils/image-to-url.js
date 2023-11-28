@@ -30,6 +30,12 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter, limits: { fileSize: 3 * 1024 * 1024 }, });
 
 function imageToURL(req, res, next) {
+  const uploadDir = './public/images';
+
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+  }
+
   upload.single('image')(req, res, (err) => {
     if (err) {
       throw err;
