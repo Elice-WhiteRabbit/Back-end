@@ -76,7 +76,55 @@ const userValidation = {
         return next();
     })
 }; 
+
+const postValidation = {
+  addPost: asyncHandler(async (req, res, next) => {
+    const schema = Joi.object().keys({
+      title: Joi.string().required(),
+      content: Joi.string().required(),
+      category: Joi.string().valid('BOARD', 'QNA', 'STUDY', 'PROJECT', 'REVIEW').required(),
+      image_url: Joi.string(),
+    });
+
+    await schema.validateAsync(req.body);
+    next();
+  }),
+
+  modifyPost: asyncHandler(async (req, res, next) => {
+    const schema = Joi.object().keys({
+      title: Joi.string(),
+      content: Joi.string(),
+      category: Joi.string().valid('BOARD', 'QNA', 'STUDY', 'PROJECT', 'REVIEW'),
+    });
+
+    await schema.validateAsync(req.body);
+    next();
+  }),
+};
+
+const commentValidation = {
+  addComment: asyncHandler(async (req, res, next) => {
+    const schema = Joi.object().keys({
+      post: Joi.string().required(),
+      content: Joi.string().required(),
+    });
+
+    await schema.validateAsync(req.body);
+    next();
+  }),
+
+  modifyComment: asyncHandler(async (req, res, next) => {
+    const schema = Joi.object().keys({
+      content: Joi.string().required(),
+    });
+
+    await schema.validateAsync(req.body);
+    next();
+  }),
+};
     
 module.exports = { 
-    userValidation
+    userValidation,
+    postValidation,
+    commentValidation
 };
