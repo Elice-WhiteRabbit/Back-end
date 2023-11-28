@@ -47,11 +47,11 @@ const findPostByAuthor = async (author) => {
 };
 
 const modifyPost = async (data) => {
-  const { title, content, category } = data;
+  const { title, content, category, image_url } = data;
 
   return Post.findByIdAndUpdate(
     data.id,
-    { title, content, category },
+    { title, content, category, image_url },
     { new: true }
   );
 };
