@@ -27,14 +27,6 @@ const removeSkill = async (id) => {
   return await Skill.findOneAndDelete({ _id: id });
 };
 
-//스킬검색
-// const searchSkill = async (query) => {
-//   await Skill.find({ name: { $regex: query, $options: 'i' } });
-//   return skills;
-// };
-
-//스킬검색
-
 const searchSkill = async (query) => {
   return Skill.find({ skill: { $regex: query, $options: 'i' } });
 };

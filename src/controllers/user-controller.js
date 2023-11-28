@@ -160,16 +160,14 @@ const addFollow = async (req, res, next) => {
     const myId = req.tokenData.id;
     const { id } = req.params;
 
-    console.log(myId);
-    console.log(id);
-
-    await userService.addFollow({
+    const follow = await userService.addFollow({
         from: myId,
         to: id
     });
 
     return res.status(201).json({
-        message: "팔로우 목록에 추가되었습니다"
+        message: "팔로우 목록에 추가되었습니다",
+        followId: follow._id
     });
 }
 
