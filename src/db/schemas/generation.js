@@ -1,6 +1,6 @@
 const { Schema } = require("mongoose");
 
-const generationSchema = new Schema({
+const GenerationSchema = new Schema({
   generation_type: {
     type: String,
     required: true,
@@ -12,4 +12,4 @@ const generationSchema = new Schema({
   },
 });
 
-module.exports = { generationSchema };
+module.exports = { GenerationSchema };
