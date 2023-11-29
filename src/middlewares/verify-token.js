@@ -1,5 +1,19 @@
 const { verifyToken } = require("../utils/jwt");
 
+const setToken = async (req, res, next) => {
+  try{
+    if (!req.cookies.jwtToken) {
+      req.tokenData = null;
+      return next()
+    } else {
+      req.tokenData = verifyToken(req.cookies.jwtToken);
+      return next()
+    }
+  } catch(err) {
+    next(err);
+  }
+}
+
 const auth = async (req, res, next) => {
   try {
     if (!req.cookies.jwtToken) {
@@ -48,4 +62,5 @@ const checkAdmin = async (req, res, next) => {
 module.exports = {
   auth,
   checkAdmin,
+  setToken,
 };
