@@ -155,11 +155,7 @@
 │  readme.md
 │
 ├─public
-│  ├─images
-│  │      20231129000754-b01.png
-│  │      20231129000930-b02.png
-│  │      20231129001050-b03.png
-│  │
+│  ├─images      
 │  └─stylesheets
 │          style.css
 │
