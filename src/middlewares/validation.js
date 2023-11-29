@@ -7,11 +7,11 @@ const userRoles = ['USER','COACH','ADMIN'];
 const userValidation = { 
 	signup : asyncHandler( async (req, res, next) => { 
     	const schema = Joi.object().keys({ 
-    		name: Joi.string().min(1).max(30).required(),
-        	email: Joi.string().email().required(),
+    		    name: Joi.string().min(1).max(30).required(),
+        	  email: Joi.string().email().required(),
             password: Joi.string().min(1).max(30).required(),
-            generation_type: Joi.string().valid(...tracks).required(),
-            generation_number: Joi.number().min(1).max(2).required(),
+            generation_type: Joi.string().required(),
+            generation_number: Joi.number().required(),
         }); 
 
         await schema.validateAsync(req.body); 
@@ -31,14 +31,15 @@ const userValidation = {
     patchUser : asyncHandler( async (req, res, next) => {
         const schema = Joi.object().keys({
             email: Joi.string().email().forbidden().empty(''),
-    		name: Joi.string().min(1).max(30),
+    		    name: Joi.string().min(1).max(30),
             password: Joi.string().min(1).max(30),
             generation_type: Joi.string().valid(...tracks),
-            generation_number: Joi.number().min(1).max(2),
+            generation_number: Joi.number(),
             profile_url: Joi.string().allow(""),
             roles: Joi.string().valid(...userRoles),
             links: Joi.string().forbidden().empty(''),
-            skills: Joi.string().email().forbidden().empty('')
+            skills: Joi.string().email().forbidden().empty(''),
+            is_coach:Joi.boolean()
         })
 
         await schema.validateAsync(req.body);
@@ -47,7 +48,7 @@ const userValidation = {
 
     checkUser : asyncHandler( async (req, res, next) => {
         const schema = Joi.object().keys({
-    		name: Joi.string().min(1).max(30).required(),
+    		    name: Joi.string().min(1).max(30).required(),
             email: Joi.string().email().required()
         })
 
