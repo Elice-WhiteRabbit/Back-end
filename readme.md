@@ -135,9 +135,97 @@
 
 ## ⚙️ 프로젝트 파일 구조
 
-**Back-end**
-
 **Front-end**
+
+
+
+
+**Back-end**
+<details> <summary>📁</summary>
+
+
+
+```
+.
+│  .gitignore
+│  app.js
+│  gitmessage.txt
+│  package-lock.json
+│  package.json
+│  readme.md
+│
+├─public
+│  ├─images
+│  │      20231129000754-b01.png
+│  │      20231129000930-b02.png
+│  │      20231129001050-b03.png
+│  │
+│  └─stylesheets
+│          style.css
+│
+└─src
+    ├─controllers
+    │      comment-controller.js
+    │      generation-controller.js
+    │      like-controller.js
+    │      link-controller.js
+    │      post-controller.js
+    │      skill-controller.js
+    │      user-controller.js
+    │      user-skill-controller.js
+    │
+    ├─db
+    │  │  db-connection.js
+    │  │  index.js
+    │  │
+    │  └─schemas
+    │          comment.js
+    │          follow.js
+    │          generation.js
+    │          like.js
+    │          link.js
+    │          post.js
+    │          skill.js
+    │          user-skill.js
+    │          User.js
+    │
+    ├─middlewares
+    │      validation.js
+    │      verify-token.js
+    │
+    ├─routers
+    │      comment-router.js
+    │      generation-router.js
+    │      index.js
+    │      post-router.js
+    │      skill-router.js
+    │      user-router.js
+    │
+    ├─services
+    │      comment-service.js
+    │      generation-service.js
+    │      like-service.js
+    │      link-service.js
+    │      post-service.js
+    │      skill-service.js
+    │      user-service.js
+    │      user-skill-service.js
+    │
+    └─utils
+            async-handler.js
+            code-creater.js
+            date-to-string.js
+            image-scheduler.js
+            image-to-url.js
+            jwt.js
+            mailer.js
+            node-cache.js
+```
+</details>
+
+
+
+
 
 ## 🗣 협업 환경
 
