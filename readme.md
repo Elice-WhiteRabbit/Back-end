@@ -2,11 +2,11 @@
 
 아래와 같은 형식으로 작성하시면 됩니다!
 
-# 프로젝트명
+# 🐰 신입 개발자가 되고싶은 레이서들의 커뮤니티 White Rabbit 🐰
 
 ## 📅 프로젝트 기간
 
-2023년 월 일 요일 - 2023년 월 일 요일 (총 기간 : 주)
+2023년 11월 13일 월요일 - 2023년 12월 1일 금요일 (총 기간 : 3주)
 
 ## 🌟 프로젝트 개요
 
@@ -68,15 +68,28 @@
 
 ## 🔨 주요 기술
 
-  **Frontend**
+
+**Frontend**
 
 <img src="https://img.shields.io/badge/REACT-61DAFB?style=flat-square&logo=REACT&logoColor=black"/> 
+<br/>
 
 **Backend**
 
-<img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/> <img src="https://img.shields.io/badge/express-000000?style=flat-square&logo=express&logoColor=white"/> 
+<img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/> 
+<img src="https://img.shields.io/badge/express-000000?style=flat-square&logo=express&logoColor=white"/> 
+<img src="https://img.shields.io/badge/mongoDB-47A248?style=flat-square&logo=MongoDB&logoColor=white">
 
+<br/>
+<br/>
+<br/>
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/NginX-009639?style=flat-square&logo=nginx&logoColor=white">
+<img src="https://img.shields.io/badge/PM2-2B037A?style=flat-square&logo=PM2&logoColor=white">
+<img src="https://img.shields.io/badge/GCP-4285F4?style=flat-square&logo=googlecloud&logoColor=white">
 
+<br/>
+<br/>
 
 **Frontend - React 18.2.0**
 - 동적인 사용자 인터페이스를 위해 React를 사용.
