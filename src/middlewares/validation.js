@@ -84,7 +84,7 @@ const postValidation = {
       title: Joi.string().required(),
       content: Joi.string().required(),
       category: Joi.string().valid('BOARD', 'QNA', 'STUDY', 'PROJECT', 'REVIEW').required(),
-      image_url: Joi.string(),
+      image_url: Joi.string().allow(""),
     });
 
     await schema.validateAsync(req.body);
@@ -96,7 +96,7 @@ const postValidation = {
       title: Joi.string(),
       content: Joi.string(),
       category: Joi.string().valid('BOARD', 'QNA', 'STUDY', 'PROJECT', 'REVIEW'),
-      image_url: Joi.string(),
+      image_url: Joi.string().allow(""),
     });
 
     await schema.validateAsync(req.body);

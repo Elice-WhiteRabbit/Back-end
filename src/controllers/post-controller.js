@@ -47,7 +47,7 @@ const addPost = async (req, res, next) => {
         author
     };
 
-    // 이미지 URL이 존재하는 경우 이미지 추가
+    // 이미지 URL이 존재하는 경우에만 추가
     if (image_url) {
         postParams.image_url = image_url;
     }
