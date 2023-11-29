@@ -187,10 +187,16 @@ const addFollow = async (data) => {
 const findAllFollow = async (id) => {
   const followingList = await Follow.find({ from: id }).populate({
     path: 'to',
+    populate: {
+      path: 'generation_type'
+    },
     select: 'name profile_url generation_type generation_number roles',
   });
   const followerList = await Follow.find({ to: id }).populate({
     path: 'from',
+    populate: {
+      path: 'generation_type'
+    },
     select: 'name profile_url generation_type generation_number roles',
   });
 
@@ -213,7 +219,7 @@ const findAllFollow = async (id) => {
       _id,
       name,
       profile_url,
-      generation_type,
+      generation_type:generation_type.generation_type,
       generation_number,
       roles,
       followId: obj._id,
@@ -237,7 +243,7 @@ const findAllFollow = async (id) => {
       _id,
       name,
       profile_url,
-      generation_type,
+      generation_type:generation_type.generation_type,
       generation_number,
       roles,
       followId: obj._id,
