@@ -33,7 +33,7 @@ const userValidation = {
             email: Joi.string().email().forbidden().empty(''),
     		    name: Joi.string().min(1).max(30),
             password: Joi.string().min(1).max(30),
-            generation_type: Joi.string().valid(...tracks),
+            generation_type: Joi.string(),
             generation_number: Joi.number(),
             profile_url: Joi.string().allow(""),
             roles: Joi.string().valid(...userRoles),
