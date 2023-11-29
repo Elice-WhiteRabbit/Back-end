@@ -203,72 +203,109 @@ const addFollow = async (data) => {
   return Follow.create({ from, to });
 };
 
-const findAllFollow = async (id) => {
+const findAllFollow = async (id, myId) => {
   const followingList = await Follow.find({ from: id }).populate({
     path: 'to',
     populate: {
-      path: 'generation_type'
+      path: 'generation'
     },
-    select: 'name profile_url generation_type generation_number roles',
+    select: '_id name profile_url generation roles',
   });
   const followerList = await Follow.find({ to: id }).populate({
     path: 'from',
     populate: {
-      path: 'generation_type'
+      path: 'generation'
     },
-    select: 'name profile_url generation_type generation_number roles',
+    select: '_id name profile_url generation roles',
   });
 
   const followingUserList = [];
   const followerUserList = [];
 
-  followingList.forEach((obj) => {
+  for(const obj of followingList){
     if (!obj.to) {
-      return;
+      continue;
+    }
+    let is_follow = false
+    if(myId){
+      const check = await Follow.findOne({ from:myId, to:obj.to._id })
+      if(check){
+        is_follow = true
+      }
     }
     const {
       _id,
       name,
       profile_url,
-      generation_type,
-      generation_number,
+      generation,
       roles,
     } = obj.to;
     const newObj = {
       _id,
       name,
       profile_url,
-      generation_type:generation_type.generation_type,
-      generation_number,
+      generation_type: generation.type,
+      generation_number: generation.number,
       roles,
       followId: obj._id,
+      is_follow
     };
     followingUserList.push(newObj);
-  });
+  }
 
-  followerList.forEach((obj) => {
+  for(const obj of followerList){
     if (!obj.from) {
-      return;
+      continue;
+    }
+    let is_follow = false
+    if(myId){
+      const check = await Follow.findOne({ from:myId, to:obj.from._id })
+      if(check){
+        is_follow = true
+      }
     }
     const {
       _id,
       name,
       profile_url,
-      generation_type,
-      generation_number,
+      generation,
       roles,
     } = obj.from;
     const newObj = {
       _id,
       name,
       profile_url,
-      generation_type:generation_type.generation_type,
-      generation_number,
+      generation_type: generation.type,
+      generation_number: generation.number,
       roles,
       followId: obj._id,
+      is_follow
     };
     followerUserList.push(newObj);
-  });
+  }
+  
+  // followerList.forEach((obj) => {
+  //   if (!obj.from) {
+  //     return;
+  //   }
+  //   const {
+  //     _id,
+  //     name,
+  //     profile_url,
+  //     generation,
+  //     roles,
+  //   } = obj.from;
+  //   const newObj = {
+  //     _id,
+  //     name,
+  //     profile_url,
+  //     generation_type: generation.type,
+  //     generation_number: generation.number,
+  //     roles,
+  //     followId: obj._id,
+  //   };
+  //   followerUserList.push(newObj);
+  // });
 
   return {
     followingUserList,
