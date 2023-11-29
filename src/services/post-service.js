@@ -9,7 +9,7 @@ const paginatePosts = async (array, options) => {
     const query = ids.length > 0 ? { _id: { $in: ids } } : {};
     const result = await Post.paginate(query, options);
     return result;
-  };  
+};  
 
 const addPost = async (data) => {
   return Post.create(data);
