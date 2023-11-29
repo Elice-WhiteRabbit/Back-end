@@ -2,11 +2,11 @@ const { User } = require('../db');
 const { Generation } = require('../db');
 
 const addGeneration = async (data) => {
-  const { name, max_generation } = data;
+  const { type, number } = data;
 
   return Generation.create({
-    generation_type: name,
-    max_generation
+    type,
+    number
   });
 }
 
@@ -15,13 +15,13 @@ const findAllGeneration = async () => {
 }
 
 const modifyGeneration = async (data) => {
-  const { id, name, max_generation } = data;
+  const { id, type, number } = data;
 
   return Generation.findByIdAndUpdate(
     id,
     {
-      generation_type: name,
-      max_generation
+      type,
+      number
     },
     { new: true }
   );

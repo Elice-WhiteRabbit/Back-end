@@ -1,17 +1,15 @@
 const Joi = require('joi'); 
 const asyncHandler = require('../utils/async-handler');
 
-const tracks = ['SW 엔지니어 트랙', '풀스택 AI 트랙'];
 const userRoles = ['USER','COACH','ADMIN'];
 
 const userValidation = { 
-	signup : asyncHandler( async (req, res, next) => { 
+	  signup : asyncHandler( async (req, res, next) => { 
     	const schema = Joi.object().keys({ 
     		    name: Joi.string().min(1).max(30).required(),
         	  email: Joi.string().email().required(),
             password: Joi.string().min(1).max(30).required(),
-            generation_type: Joi.string().required(),
-            generation_number: Joi.number().required(),
+            generation: Joi.string().required(),
         }); 
 
         await schema.validateAsync(req.body); 
@@ -33,8 +31,7 @@ const userValidation = {
             email: Joi.string().email().forbidden().empty(''),
     		    name: Joi.string().min(1).max(30),
             password: Joi.string().min(1).max(30),
-            generation_type: Joi.string(),
-            generation_number: Joi.number(),
+            generation: Joi.string(),
             profile_url: Joi.string().allow(""),
             roles: Joi.string().valid(...userRoles),
             links: Joi.string().forbidden().empty(''),

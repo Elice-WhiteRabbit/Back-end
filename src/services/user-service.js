@@ -24,18 +24,18 @@ const addUser = async (userData) => {
 };
 
 const findAllUser = async () => {
-  return User.find({});
+  return User.find({}).populate('generation');
 };
 
 const findUserById = async (id) => {
-  const user = await User.findById(id).populate('skills').populate('generation_type');
+  const user = await User.findById(id).populate('skills').populate('generation');
   return {
     _id: user._id,
     name: user.name,
     email: user.email,
     profile_url: user.profile_url,
-    generation_type: user.generation_type.generation_type,
-    generation_number: user.generation_number,
+    generation_type: user.generation.type,
+    generation_number: user.generation.number,
     roles: user.roles,
     is_coach: user.is_coach,
     links: user.links,
@@ -44,13 +44,13 @@ const findUserById = async (id) => {
 };
 
 const findPublicUserInfoById = async (id) => {
-  const user = await User.findById(id).populate('skills').populate('generation_type');
+  const user = await User.findById(id).populate('skills').populate('generation');
   return {
     name: user.name,
     email: user.email,
     profile_url: user.profile_url,
-    generation_type: user.generation_type.generation_type,
-    generation_number: user.generation_number,
+    generation_type: user.generation.type,
+    generation_number: user.generation.number,
     roles: user.roles,
     links: user.links,
     skills: user.skills,

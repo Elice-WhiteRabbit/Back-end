@@ -1,12 +1,12 @@
 const { Schema } = require("mongoose");
 
 const GenerationSchema = new Schema({
-  generation_type: {
+  type: {
     type: String,
     required: true,
   },
 
-  max_generation: {
+  number: {
     type: Number,
     required: true,
   },

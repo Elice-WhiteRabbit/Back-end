@@ -19,13 +19,9 @@ const UserSchema = new Schema({
     type: String,
     default: '',
   },
-  generation_type: {
+  generation: {
     type: Schema.Types.ObjectId,
     ref: 'Generation',
-    required: true,
-  },
-  generation_number: {
-    type: Number,
     required: true,
   },
   roles: {

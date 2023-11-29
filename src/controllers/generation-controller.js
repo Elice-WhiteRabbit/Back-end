@@ -18,10 +18,10 @@ const {
 const generationService = require('../services/generation-service');
 
 exports.addGeneration = async (req, res, next) => {
-  const { name, max_generation } = req.body;
+  const { type, number } = req.body;
   const createdGeneration = await generationService.addGeneration({
-    name,
-    max_generation
+    type,
+    number
   });
 
   res.status(201).json({
@@ -41,12 +41,12 @@ exports.findAllGeneration = async (req, res, next) => {
 
 exports.modifyGeneration = async (req, res, next) => {
   const { id } = req.params;
-  const { name, max_generation } = req.body;
+  const { type, number } = req.body;
 
   const newGeneration = await generationService.modifyGeneration({
     id,
-    name,
-    max_generation
+    type,
+    number
   });
 
   res.status(200).json({
