@@ -1,4 +1,4 @@
-const { User } = require('../db');
+const { User, Generation } = require('../db');
 const { Follow } = require('../db');
 const bcrypt = require('bcrypt');
 const { createToken } = require('../utils/jwt');
@@ -20,7 +20,18 @@ const addUser = async (userData) => {
   const hashedPassword = await bcrypt.hash(userData.password, 10);
   userData.password = hashedPassword;
 
-  return User.create(userData);
+  const generation = await Generation.findOne({
+    type: userData.generation_type,
+    number: userData.generation_number
+  })
+
+  return User.create({
+    name: userData.name,
+    email: userData.email,
+    password: userData.password,
+    roles: userData.roles,
+    generation: generation._id
+  });
 };
 
 const findAllUser = async () => {
@@ -58,7 +69,7 @@ const findPublicUserInfoById = async (id) => {
 };
 
 const modifyUser = async (id, userData) => {
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate('generation');
 
   if (userData.profile_url && user.profile_url) {
     await deleteImage(user.profile_url);
@@ -69,7 +80,15 @@ const modifyUser = async (id, userData) => {
     userData.password = hashedPassword;
   }
 
-  return User.findByIdAndUpdate(id, userData, { new: true });
+  const generation = await Generation.findOne({
+    type: userData.generation_type || user.generation.type,
+    number: userData.generation_number || user.generation.number
+  })
+
+  const { generation_number, generation_type, ...rest } = userData;
+  const data = { ...rest, generation:generation._id };
+
+  return User.findByIdAndUpdate(id, data, { new: true });
 };
 
 const removeUser = async (id) => {

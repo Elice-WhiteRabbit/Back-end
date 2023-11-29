@@ -22,7 +22,19 @@ const updateUserSkills = async ({ userId, skills }) => {
   user.skills = skills;
   await user.save();
 
-  return await User.findById(userId).populate('skills', 'skill');
+  const newUser = await User.findById(userId).populate('skills', 'skill').populate('generation');
+  return {
+    _id: newUser._id,
+    name: newUser.name,
+    email: newUser.email,
+    profile_url: newUser.profile_url,
+    roles: newUser.roles,
+    is_coach: newUser.is_coach,
+    skills: newUser.skills,
+    links: newUser.links,
+    generation_type: newUser.generation.type,
+    generation_number: newUser.generation.number
+  }
 };
 
 //관계 문서 수정은 필요 없을 것 같음. (추가 or 삭제 뿐이니까..)

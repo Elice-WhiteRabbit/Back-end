@@ -1,13 +1,15 @@
 const userService = require('../services/user-service');
 
 const addUser = async (req, res, next) => {
-    const { name, email, password, generation } = req.body;
+    const { name, email, password, generation_type, generation_number, roles } = req.body;
 
     const createdUser = await userService.addUser({
         name,
         email,
         password,
-        generation
+        generation_type,
+        generation_number,
+        roles
     });
 
     return res.status(201).json({
