@@ -28,16 +28,28 @@ const findAllUser = async () => {
 };
 
 const findUserById = async (id) => {
-  return User.findById(id).populate('skills');
+  const user = await User.findById(id).populate('skills').populate('generation_type');
+  return {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    profile_url: user.profile_url,
+    generation_type: user.generation_type.generation_type,
+    generation_number: user.generation_number,
+    roles: user.roles,
+    is_coach: user.is_coach,
+    links: user.links,
+    skills: user.skills,
+  }
 };
 
 const findPublicUserInfoById = async (id) => {
-  const user = await User.findById(id).populate('skills');
+  const user = await User.findById(id).populate('skills').populate('generation_type');
   return {
     name: user.name,
     email: user.email,
     profile_url: user.profile_url,
-    generation_type: user.generation_type,
+    generation_type: user.generation_type.generation_type,
     generation_number: user.generation_number,
     roles: user.roles,
     links: user.links,
