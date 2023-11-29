@@ -38,7 +38,8 @@ const userValidation = {
             profile_url: Joi.string().allow(""),
             roles: Joi.string().valid(...userRoles),
             links: Joi.string().forbidden().empty(''),
-            skills: Joi.string().email().forbidden().empty('')
+            skills: Joi.string().email().forbidden().empty(''),
+            is_coach:Joi.boolean()
         })
 
         await schema.validateAsync(req.body);
