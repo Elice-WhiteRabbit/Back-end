@@ -3,7 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/user-controller');
 const userSkillController = require('../controllers/user-skill-controller');
 const asyncHandler = require('../utils/async-handler');
-const { auth, checkAdmin } = require('../middlewares/verify-token');
+const { auth, checkAdmin, setToken } = require('../middlewares/verify-token');
 const { userValidation } = require('../middlewares/validation');
 
 const linkController = require('../controllers/link-controller');
@@ -63,7 +63,7 @@ router.post(
 );
 
 // 팔로우 관련
-router.get('/followings/:id', asyncHandler(userController.findAllFollowList));
+router.get('/followings/:id', setToken, asyncHandler(userController.findAllFollowList));
 router.post('/followings/:id', auth, asyncHandler(userController.addFollow));
 router.delete('/followings/:id', asyncHandler(userController.removeFollower));
 router.get(

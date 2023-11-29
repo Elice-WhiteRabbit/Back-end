@@ -178,8 +178,10 @@ const addFollow = async (req, res, next) => {
 
 const findAllFollowList = async (req, res, next) => {
     const { id } = req.params;
+    
+    let myId = req.tokenData && req.tokenData.id || null;
 
-    const { followingUserList, followerUserList } = await userService.findAllFollow(id);
+    const { followingUserList, followerUserList } = await userService.findAllFollow(id, myId);
 
     return res.status(200).json({
         message: "전체 팔로우 목록 조회입니다",
