@@ -10,7 +10,23 @@ const postType = {
     PROJECT: "PROJECT",
     REVIEW: "REVIEW"
 };
-  
+
+const expandPost = async (post, currentUserId) => {
+    const postDocument = await Post.findById(post._id).populate('author', '_id name profile_url roles');
+    const commentCount = await CommentService.getCommentCount(postDocument._id);
+    const isFollowing = await Follow.findOne({ from: currentUserId, to: postDocument.author });
+    const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, postDocument._id) !== null;
+
+    return {
+        ...postDocument._doc,
+        isPopular: true,
+        commentCount,
+        isFollowing: isFollowing ? true : false,
+        followList: isFollowing,
+        isLiked: isLiked ? true : false,
+    };
+};
+
 const getPaginationInfo = (result, page, pageSize) => {
     return {
         page: page ? parseInt(page) : result.page,
@@ -46,7 +62,7 @@ const addPost = async (req, res, next) => {
 };
 
 const findAllPost = async (req, res, next) => {
-    let { page, pageSize, keyword } = req.query;
+    const { page, pageSize, keyword } = req.query;
     const currentUserId = req.tokenData.id;
 
     let result;
@@ -56,35 +72,25 @@ const findAllPost = async (req, res, next) => {
         
         // 페이지네이션
         if (page && pageSize) {
-            result = await postService.paginatePosts(searchResult, { page, limit: pageSize, sort: { createdAt: -1 } });
-            result = result.docs;
+            const paginatedResult = await postService.paginatePosts(searchResult, { page, limit: pageSize, sort: { createdAt: -1 } });
+            result = paginatedResult.docs;
         } else {
             result = searchResult;
         }
     } else {
         if (page && pageSize) {
-            result = await postService.paginatePosts({}, { page, limit: pageSize, sort: { createdAt: -1 } });
-            result = result.docs;
+            result = await postService.findAll();
+            const paginatedResult = await postService.paginatePosts(result, { page, limit: pageSize, sort: { createdAt: -1 } });
+            result = paginatedResult.docs;
+            
         } else {
             result = await postService.findAll();
         }
     }
-
+    
     const postsWithCommentCount = await Promise.all(
         result.map(async (post) => {
-            post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
-            const commentCount = await CommentService.getCommentCount(post._id);
-            const isPopular = post.like_count >= 5;
-            const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
-            const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
-            return {
-                ...post._doc,
-                isPopular,
-                commentCount,
-                isFollowing: isFollowing ? true : false,
-                followList: isFollowing,
-                isLiked: isLiked ? true : false,
-            };
+            return await expandPost(post, currentUserId);
         })
     );
 
@@ -123,41 +129,22 @@ const findPostByCategory = async (req, res, next) => {
 
     const postsWithCommentCount = await Promise.all(
         result.map(async (post) => {
-            post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
-            const commentCount = await CommentService.getCommentCount(post._id);
-            const isPopular = post.like_count >= 5;
-            const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
-            const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
-            return {
-                ...post._doc,
-                isPopular,
-                commentCount,
-                isFollowing: isFollowing ? true : false,
-                followList: isFollowing,
-                isLiked: isLiked ? true : false,
-            };
+            return await expandPost(post, currentUserId);
         })
     );
 
-    let sortedPostsWithCommentCount;
+    let sortedPostsWithCommentCount = postsWithCommentCount;
 
-    if (sortBy === 'new') {
-        sortedPostsWithCommentCount = postsWithCommentCount;
-    } else if (sortBy === 'comment') {
+    if (sortBy === 'comment') {
         sortedPostsWithCommentCount = postsWithCommentCount.sort((a, b) => b.commentCount - a.commentCount);
-    }else{
-        sortedPostsWithCommentCount = postsWithCommentCount;
     }
 
-    let paginatedResult;
-    if (page && pageSize) {
+    result = sortedPostsWithCommentCount;
 
+    if (page && pageSize) {
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + parseInt(pageSize, 10);
-        paginatedResult = sortedPostsWithCommentCount.slice(startIndex, endIndex);
-        result = paginatedResult;
-    } else {
-        result = sortedPostsWithCommentCount;
+        result = sortedPostsWithCommentCount.slice(startIndex, endIndex);
     }
 
     res.status(200).json({
@@ -177,27 +164,14 @@ const getPopularPosts = async (req, res, next) => {
     let popularPosts = await postService.getPopularPosts(weekAgo);
     const postsWithCommentCount = await Promise.all(
         popularPosts.map(async (post) => {
-            post = await Post.findById(post._id).populate('author', '_id name profile_url roles');
-            const commentCount = await CommentService.getCommentCount(post._id);
-            const isFollowing = await Follow.findOne({ from: currentUserId, to: post.author });
-            const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, post._id) !== null;
-            return { 
-                ...post._doc,
-                isPopular: true, 
-                commentCount, 
-                isFollowing: isFollowing? true : false,
-                followList: isFollowing,
-                isLiked: isLiked? true : false,
-            };
+            return await expandPost(post, currentUserId);
         })
     );
-
-    popularPosts = postsWithCommentCount;
 
     res.status(200).json({
         message: "인기 게시글 목록",
         data: {
-            posts: popularPosts,
+            posts: postsWithCommentCount,
         },
     });
 };
@@ -225,11 +199,9 @@ const findPostByAuthor = async (req, res, next) => {
         })
     );
 
-    post = postsWithCommentCount;
-
     res.status(200).json({
         message: `${author}가 작성한 글 목록`,
-        data: post
+        data: postsWithCommentCount
     });
 };
 
