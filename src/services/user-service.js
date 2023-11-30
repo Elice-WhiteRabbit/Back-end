@@ -342,6 +342,15 @@ const removeFollower = async (from, to) => {
   return Follow.deleteMany({ from, to });
 };
 
+const checkEmailAvailable = async (email) => {
+  const check = await User.findOne({ email });
+  if(check){
+    return false;
+  }else{
+    return true;
+  }
+}
+
 module.exports = {
   addUser,
   findAllUser,
@@ -362,4 +371,5 @@ module.exports = {
   findFollowerList,
   removeFollower,
   removeFollowerById,
+  checkEmailAvailable
 };

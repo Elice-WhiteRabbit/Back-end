@@ -62,6 +62,11 @@ router.post(
   asyncHandler(userController.resetPassword)
 );
 
+router.post(
+  '/email',
+  asyncHandler(userController.checkEmailAvailable)
+);
+
 // 팔로우 관련
 router.get('/followings/:id', setToken, asyncHandler(userController.findAllFollowList));
 router.post('/followings/:id', auth, asyncHandler(userController.addFollow));

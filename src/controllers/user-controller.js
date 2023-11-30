@@ -223,6 +223,23 @@ const removeFollowerByUserId = async (req, res, next) => {
     })
 }
 
+const checkEmailAvailable = async (req, res, next) => {
+    const { email } = req.body;
+    const check = await userService.checkEmailAvailable(email);
+
+    if(check){
+        res.status(200).json({
+            message: "사용가능한 이메일입니다",
+            isAvailable: true
+        })
+    } else {
+        res.status(200).json({
+            message: "이미 존재하는 이메일입니다",
+            isAvailable: false
+        })
+    }
+}
+
 module.exports = {
     addUser,
     findUserById,
@@ -241,4 +258,5 @@ module.exports = {
     findAllFollowNumber,
     removeFollower,
     removeFollowerByUserId,
+    checkEmailAvailable
 };
