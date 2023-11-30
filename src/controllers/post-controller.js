@@ -13,13 +13,14 @@ const postType = {
 
 const expandPost = async (post, currentUserId) => {
     const postDocument = await Post.findById(post._id).populate('author', '_id name profile_url roles');
+    const isPopular = post.like_count >= 5;
     const commentCount = await CommentService.getCommentCount(postDocument._id);
     const isFollowing = await Follow.findOne({ from: currentUserId, to: postDocument.author });
     const isLiked = await LikeService.findLikeByUserAndPost(currentUserId, postDocument._id) !== null;
 
     return {
         ...postDocument._doc,
-        isPopular: true,
+        isPopular,
         commentCount,
         isFollowing: isFollowing ? true : false,
         followList: isFollowing,
