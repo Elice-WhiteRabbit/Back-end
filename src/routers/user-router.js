@@ -21,11 +21,19 @@ router.patch('/skills/:id', asyncHandler(userSkillController.update));
 router.put('/links/:id', auth, asyncHandler(linkController.updateLinks)); // 링크 수정
 router.delete('/links/:id', auth, asyncHandler(linkController.deleteLink)); // 링크 삭제
 router.get('/links/:id', auth, asyncHandler(linkController.getLinks)); // 특정 사용자의 모든 링크 조회
-router.post('/links/:id', auth, asyncHandler(linkController.addLink)); // 링크 추가
-
+router.post(
+  '/links/:id',
+  userValidation.addLink,
+  asyncHandler(linkController.addLink)
+); // 링크 추가
 router.post('/', userValidation.signup, asyncHandler(userController.addUser));
 router.get('/', auth, asyncHandler(userController.findUserByToken));
-router.patch('/', userValidation.patchUser, auth, asyncHandler(userController.modifyUser));
+router.patch(
+  '/',
+  userValidation.patchUser,
+  auth,
+  asyncHandler(userController.modifyUser)
+);
 
 router.get(
   '/admin/userlist',
@@ -63,10 +71,18 @@ router.post(
 );
 
 // 팔로우 관련
-router.get('/followings/:id', setToken, asyncHandler(userController.findAllFollowList));
+router.get(
+  '/followings/:id',
+  setToken,
+  asyncHandler(userController.findAllFollowList)
+);
 router.post('/followings/:id', auth, asyncHandler(userController.addFollow));
 router.delete('/followings/:id', asyncHandler(userController.removeFollower));
-router.delete('/followings/id/:id', auth, asyncHandler(userController.removeFollowerByUserId));
+router.delete(
+  '/followings/id/:id',
+  auth,
+  asyncHandler(userController.removeFollowerByUserId)
+);
 router.get(
   '/followings/number/:id',
   asyncHandler(userController.findAllFollowNumber)
@@ -83,7 +99,11 @@ router.patch('/skill/remove/:id', asyncHandler(userSkillController.delete));
 router.get('/skill/:id', asyncHandler(userSkillController.getUsersBySkill));
 
 //트랙+기수 같이
-router.post('/:id/generation', generationController.setGenerationInfo); // generation_type과 generation_number 설정
+router.post(
+  '/:id/generation',
+  userValidation.setGenerationInfo,
+  generationController.setGenerationInfo
+); // generation_type과 generation_number 설정
 router.delete('/:id/generation', generationController.removeGenerationInfo); // generation_type과 generation_number 삭제
 router.get('/users/generation', generationController.getAllGenerationInfo); // 전체 사용자의 generation_type과 generation_number 조회
 
