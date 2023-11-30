@@ -52,8 +52,9 @@ const findUserById = async (req, res, next) => {
 
 const findPublicUserInfoById = async (req, res, next) => {
     const { id } = req.params;
+    let myId = req.tokenData && req.tokenData.id || null;
 
-    const user = await userService.findPublicUserInfoById(id);
+    const user = await userService.findPublicUserInfoById(id, myId);
     const userFollow = await userService.findAllFollowNumber(id);
 
     return res.status(200).json({

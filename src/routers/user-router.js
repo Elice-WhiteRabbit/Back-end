@@ -35,7 +35,7 @@ router.get(
 );
 
 router.get('/:id', auth, asyncHandler(userController.findUserById));
-router.get('/:id/public', asyncHandler(userController.findPublicUserInfoById));
+router.get('/:id/public', setToken, asyncHandler(userController.findPublicUserInfoById));
 router.patch(
   '/:id',
   userValidation.patchUser,
