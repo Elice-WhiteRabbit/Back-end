@@ -200,6 +200,18 @@ const resetPassword = async (data) => {
 
 const addFollow = async (data) => {
   const { from, to } = data;
+  if(from === to){
+    throw {
+      message: "본인을 팔로우할 수 없습니다"
+    }
+  }
+  const check = await Follow.findOne({from, to});
+  if(check){
+    throw {
+      message: "이미 팔로우중인 유저입니다"
+    }
+  }
+
   return Follow.create({ from, to });
 };
 
