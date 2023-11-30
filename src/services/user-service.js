@@ -231,6 +231,8 @@ const findAllFollow = async (id, myId) => {
     select: '_id name profile_url generation roles',
   });
 
+  const followList = await Follow.find({});
+
   const followingUserList = [];
   const followerUserList = [];
 
@@ -238,13 +240,17 @@ const findAllFollow = async (id, myId) => {
     if (!obj.to) {
       continue;
     }
-    let is_follow = false
+    let is_following = false;
+    let is_follower = false;
     if(myId){
-      const check = await Follow.findOne({ from:myId, to:obj.to._id })
-      if(check){
-        is_follow = true
-      }
+      is_following = followList.some(
+        flist => (flist.from+"" === myId) && (flist.to+"" === obj.to._id+"")
+      )
+      is_follower = followList.some(
+        flist => (flist.from+"" === obj.to._id+"") && (flist.to+"" === myId)
+      )
     }
+
     const {
       _id,
       name,
@@ -260,7 +266,8 @@ const findAllFollow = async (id, myId) => {
       generation_number: generation.number,
       roles,
       followId: obj._id,
-      is_follow
+      is_following,
+      is_follower
     };
     followingUserList.push(newObj);
   }
@@ -269,12 +276,15 @@ const findAllFollow = async (id, myId) => {
     if (!obj.from) {
       continue;
     }
-    let is_follow = false
+    let is_following = false;
+    let is_follower = false;
     if(myId){
-      const check = await Follow.findOne({ from:myId, to:obj.from._id })
-      if(check){
-        is_follow = true
-      }
+      is_following = followList.some(
+        flist => (flist.from+"" === myId) && (flist.to+"" === obj.from._id+"")
+      )
+      is_follower = followList.some(
+        flist => (flist.from+"" === obj.from._id+"") && (flist.to+"" === myId)
+      )
     }
     const {
       _id,
@@ -291,7 +301,8 @@ const findAllFollow = async (id, myId) => {
       generation_number: generation.number,
       roles,
       followId: obj._id,
-      is_follow
+      is_following,
+      is_follower
     };
     followerUserList.push(newObj);
   }
