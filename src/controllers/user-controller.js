@@ -211,6 +211,17 @@ const removeFollower = async (req, res, next) => {
     });
 }
 
+const removeFollowerByUserId = async (req, res, next) => {
+    const myId = req.tokenData.id;
+    const { id } = req.params;
+
+    await userService.removeFollower(myId, id);
+
+    return res.status(200).json({
+        message: "팔로우가 삭제되었습니다"
+    })
+}
+
 module.exports = {
     addUser,
     findUserById,
@@ -228,4 +239,5 @@ module.exports = {
     findAllFollowList,
     findAllFollowNumber,
     removeFollower,
+    removeFollowerByUserId,
 };

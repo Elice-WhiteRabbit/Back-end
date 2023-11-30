@@ -200,6 +200,18 @@ const resetPassword = async (data) => {
 
 const addFollow = async (data) => {
   const { from, to } = data;
+  if(from === to){
+    throw {
+      message: "본인을 팔로우할 수 없습니다"
+    }
+  }
+  const check = await Follow.findOne({from, to});
+  if(check){
+    throw {
+      message: "이미 팔로우중인 유저입니다"
+    }
+  }
+
   return Follow.create({ from, to });
 };
 
@@ -283,29 +295,6 @@ const findAllFollow = async (id, myId) => {
     };
     followerUserList.push(newObj);
   }
-  
-  // followerList.forEach((obj) => {
-  //   if (!obj.from) {
-  //     return;
-  //   }
-  //   const {
-  //     _id,
-  //     name,
-  //     profile_url,
-  //     generation,
-  //     roles,
-  //   } = obj.from;
-  //   const newObj = {
-  //     _id,
-  //     name,
-  //     profile_url,
-  //     generation_type: generation.type,
-  //     generation_number: generation.number,
-  //     roles,
-  //     followId: obj._id,
-  //   };
-  //   followerUserList.push(newObj);
-  // });
 
   return {
     followingUserList,
@@ -343,7 +332,7 @@ const removeFollowerById = async (id) => {
 };
 
 const removeFollower = async (from, to) => {
-  return Follow.findOneAndDelete({ from, to });
+  return Follow.deleteMany({ from, to });
 };
 
 module.exports = {

@@ -66,6 +66,7 @@ router.post(
 router.get('/followings/:id', setToken, asyncHandler(userController.findAllFollowList));
 router.post('/followings/:id', auth, asyncHandler(userController.addFollow));
 router.delete('/followings/:id', asyncHandler(userController.removeFollower));
+router.delete('/followings/id/:id', auth, asyncHandler(userController.removeFollowerByUserId));
 router.get(
   '/followings/number/:id',
   asyncHandler(userController.findAllFollowNumber)
