@@ -283,29 +283,6 @@ const findAllFollow = async (id, myId) => {
     };
     followerUserList.push(newObj);
   }
-  
-  // followerList.forEach((obj) => {
-  //   if (!obj.from) {
-  //     return;
-  //   }
-  //   const {
-  //     _id,
-  //     name,
-  //     profile_url,
-  //     generation,
-  //     roles,
-  //   } = obj.from;
-  //   const newObj = {
-  //     _id,
-  //     name,
-  //     profile_url,
-  //     generation_type: generation.type,
-  //     generation_number: generation.number,
-  //     roles,
-  //     followId: obj._id,
-  //   };
-  //   followerUserList.push(newObj);
-  // });
 
   return {
     followingUserList,
@@ -343,7 +320,7 @@ const removeFollowerById = async (id) => {
 };
 
 const removeFollower = async (from, to) => {
-  return Follow.findOneAndDelete({ from, to });
+  return Follow.deleteMany({ from, to });
 };
 
 module.exports = {
