@@ -161,6 +161,7 @@ const getPopularPosts = async (req, res, next) => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7); // 일주일 기준
     const currentUserId = req.tokenData.id;
+    const { page, pageSize } = req.query;
 
     let popularPosts = await postService.getPopularPosts(weekAgo);
     const postsWithCommentCount = await Promise.all(
@@ -169,10 +170,21 @@ const getPopularPosts = async (req, res, next) => {
         })
     );
 
+    let paginatedPosts;
+
+    if (page && pageSize) {
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + parseInt(pageSize, 10);
+        paginatedPosts = postsWithCommentCount.slice(startIndex, endIndex);
+    } else {
+        paginatedPosts = postsWithCommentCount;
+    }
+
     res.status(200).json({
         message: "인기 게시글 목록",
         data: {
-            posts: postsWithCommentCount,
+            posts: paginatedPosts,
+            pageInfo: getPaginationInfo(paginatedPosts, page, pageSize),
         },
     });
 };
