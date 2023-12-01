@@ -81,8 +81,8 @@ const userValidation = {
 const postValidation = {
   addPost: asyncHandler(async (req, res, next) => {
     const schema = Joi.object().keys({
-      title: Joi.string().required(),
-      content: Joi.string().required(),
+      title: Joi.string().min(1).max(60).required(),
+      content: Joi.string().min(1).max(2000).required(),
       category: Joi.string().valid('BOARD', 'QNA', 'STUDY', 'PROJECT', 'REVIEW').required(),
       image_url: Joi.string().allow(""),
     });
@@ -93,8 +93,8 @@ const postValidation = {
 
   modifyPost: asyncHandler(async (req, res, next) => {
     const schema = Joi.object().keys({
-      title: Joi.string(),
-      content: Joi.string(),
+      title: Joi.string().min(1).max(60),
+      content: Joi.string().min(1).max(2000),
       category: Joi.string().valid('BOARD', 'QNA', 'STUDY', 'PROJECT', 'REVIEW'),
       image_url: Joi.string().allow(""),
     });
