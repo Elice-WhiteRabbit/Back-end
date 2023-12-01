@@ -35,7 +35,7 @@ const userValidation = {
         const schema = Joi.object().keys({
             email: Joi.string().email().forbidden().empty(''),
     		    name: Joi.string().min(1).max(30),
-            password: Joi.string().required(),
+            password: Joi.string(),
             // .min(8)
             // .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
             // .required(),
