@@ -217,6 +217,13 @@ const addFollow = async (data) => {
     }
   }
 
+  const check2 = await User.findById(to);
+  if(!check2){
+    throw{
+      message: "존재하지않는 유저ID입니다"
+    }
+  }
+
   return Follow.create({ from, to });
 };
 
