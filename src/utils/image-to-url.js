@@ -27,7 +27,7 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-const upload = multer({ storage, fileFilter, limits: { fileSize: 3 * 1024 * 1024 }, });
+const upload = multer({ storage, fileFilter, limits: { fileSize: 30 * 1024 * 1024 }, });
 
 function imageToURL(req, res, next) {
   const uploadDir = './public/images';
