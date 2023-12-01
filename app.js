@@ -46,7 +46,7 @@ app.use(function (err, req, res, next) {
 
 // 미사용 이미지파일 정리 스케줄러. *은 순서대로 초/분/시/일/월/요일
 // e.g.) 10 30 * * * * : 매일 매시각 30분 10초마다 실행
-cron.schedule('0 30 * * * *', async () => {
+cron.schedule('0 30 5 * 2', async () => {
     console.log('==============================');
     console.log('매 시각 30분마다 이미지폴더 정리')
     await imageScheduler();
