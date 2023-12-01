@@ -285,6 +285,13 @@ const removePost = async (req, res, next) => {
             message: "게시글 삭제 권한이 없습니다",
         });
     }
+
+    // 해당 게시물의 모든 댓글 삭제
+    const comments = await CommentService.findCommentsByPost(id);
+    await Promise.all(comments.map(async (comment) => {
+        await CommentService.removeComment(comment._id);
+    }));
+
     await postService.removePost(id);
     res.status(200).json({
         message: "게시글을 삭제했습니다"
