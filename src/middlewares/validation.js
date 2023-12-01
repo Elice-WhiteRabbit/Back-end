@@ -8,10 +8,10 @@ const userValidation = {
     	const schema = Joi.object().keys({ 
     		    name: Joi.string().min(1).max(30).required(),
         	  email: Joi.string().email().required(),
-            password: Joi.string()
-            .min(8)
-            .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
-            .required(),
+            password: Joi.string().required(),
+            // .min(8)
+            // .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+            // .required(),
             generation_type: Joi.string().required(),
             generation_number: Joi.number().required(),
             roles: Joi.string().valid(...userRoles),
@@ -35,10 +35,10 @@ const userValidation = {
         const schema = Joi.object().keys({
             email: Joi.string().email().forbidden().empty(''),
     		    name: Joi.string().min(1).max(30),
-            password: Joi.string()
-            .min(8)
-            .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
-            .required(),
+            password: Joi.string().required(),
+            // .min(8)
+            // .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+            // .required(),
             generation_type: Joi.string(),
             generation_number: Joi.number(),
             profile_url: Joi.string().allow(""),
@@ -76,10 +76,10 @@ const userValidation = {
         const schema = Joi.object().keys({
             email: Joi.string().email().required(),
             code: Joi.string().length(6).required(),
-            password: Joi.string()
-            .min(8)
-            .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
-            .required(),
+            password: Joi.string().required(),
+            // .min(8)
+            // .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+            // .required(),
         })
 
         await schema.validateAsync(req.body);
