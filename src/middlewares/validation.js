@@ -10,7 +10,7 @@ const userValidation = {
         	  email: Joi.string().email().required(),
             password: Joi.string().required(),
             // .min(8)
-            // .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+            // .regex(/^(?=.[a-zA-Z])(?=.[!@#$%^+=-])(?=.[0-9]).{8,25}$/)
             // .required(),
             generation_type: Joi.string().required(),
             generation_number: Joi.number().required(),
@@ -37,7 +37,7 @@ const userValidation = {
     		    name: Joi.string().min(1).max(30),
             password: Joi.string(),
             // .min(8)
-            // .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+            // .regex(/^(?=.[a-zA-Z])(?=.[!@#$%^+=-])(?=.[0-9]).{8,25}$/)
             // .required(),
             generation_type: Joi.string(),
             generation_number: Joi.number(),
@@ -78,7 +78,7 @@ const userValidation = {
             code: Joi.string().length(6).required(),
             password: Joi.string().required(),
             // .min(8)
-            // .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+            // .regex(/^(?=.[a-zA-Z])(?=.[!@#$%^+=-])(?=.[0-9]).{8,25}$/)
             // .required(),
         })
 
