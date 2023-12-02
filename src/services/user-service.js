@@ -54,8 +54,12 @@ const findUserById = async (id) => {
   }
 };
 
-const findPublicUserInfoById = async (id) => {
+const findPublicUserInfoById = async (id, myId) => {
   const user = await User.findById(id).populate('skills').populate('generation');
+  let is_follow = false;
+  if(myId){
+    is_follow = await Follow.exists({from:myId, to:id}) ? true : false;
+  }
   return {
     name: user.name,
     email: user.email,
@@ -65,6 +69,7 @@ const findPublicUserInfoById = async (id) => {
     roles: user.roles,
     links: user.links,
     skills: user.skills,
+    is_follow
   };
 };
 
@@ -212,6 +217,13 @@ const addFollow = async (data) => {
     }
   }
 
+  const check2 = await User.findById(to);
+  if(!check2){
+    throw{
+      message: "존재하지않는 유저ID입니다"
+    }
+  }
+
   return Follow.create({ from, to });
 };
 
@@ -240,14 +252,10 @@ const findAllFollow = async (id, myId) => {
     if (!obj.to) {
       continue;
     }
-    let is_following = false;
-    let is_follower = false;
+    let is_follow = false;
     if(myId){
-      is_following = followList.some(
+      is_follow = followList.some(
         flist => (flist.from+"" === myId) && (flist.to+"" === obj.to._id+"")
-      )
-      is_follower = followList.some(
-        flist => (flist.from+"" === obj.to._id+"") && (flist.to+"" === myId)
       )
     }
 
@@ -266,8 +274,7 @@ const findAllFollow = async (id, myId) => {
       generation_number: generation.number,
       roles,
       followId: obj._id,
-      is_following,
-      is_follower
+      is_follow
     };
     followingUserList.push(newObj);
   }
@@ -276,14 +283,11 @@ const findAllFollow = async (id, myId) => {
     if (!obj.from) {
       continue;
     }
-    let is_following = false;
-    let is_follower = false;
+    let is_follow = false;
+
     if(myId){
-      is_following = followList.some(
+      is_follow = followList.some(
         flist => (flist.from+"" === myId) && (flist.to+"" === obj.from._id+"")
-      )
-      is_follower = followList.some(
-        flist => (flist.from+"" === obj.from._id+"") && (flist.to+"" === myId)
       )
     }
     const {
@@ -301,8 +305,7 @@ const findAllFollow = async (id, myId) => {
       generation_number: generation.number,
       roles,
       followId: obj._id,
-      is_following,
-      is_follower
+      is_follow
     };
     followerUserList.push(newObj);
   }
@@ -346,6 +349,15 @@ const removeFollower = async (from, to) => {
   return Follow.deleteMany({ from, to });
 };
 
+const checkEmailAvailable = async (email) => {
+  const check = await User.findOne({ email });
+  if(check){
+    return false;
+  }else{
+    return true;
+  }
+}
+
 module.exports = {
   addUser,
   findAllUser,
@@ -366,4 +378,5 @@ module.exports = {
   findFollowerList,
   removeFollower,
   removeFollowerById,
+  checkEmailAvailable
 };

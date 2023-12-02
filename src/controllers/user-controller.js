@@ -52,8 +52,9 @@ const findUserById = async (req, res, next) => {
 
 const findPublicUserInfoById = async (req, res, next) => {
     const { id } = req.params;
+    let myId = req.tokenData && req.tokenData.id || null;
 
-    const user = await userService.findPublicUserInfoById(id);
+    const user = await userService.findPublicUserInfoById(id, myId);
     const userFollow = await userService.findAllFollowNumber(id);
 
     return res.status(200).json({
@@ -222,6 +223,23 @@ const removeFollowerByUserId = async (req, res, next) => {
     })
 }
 
+const checkEmailAvailable = async (req, res, next) => {
+    const { email } = req.body;
+    const check = await userService.checkEmailAvailable(email);
+
+    if(check){
+        res.status(200).json({
+            message: "사용가능한 이메일입니다",
+            isAvailable: true
+        })
+    } else {
+        res.status(200).json({
+            message: "이미 존재하는 이메일입니다",
+            isAvailable: false
+        })
+    }
+}
+
 module.exports = {
     addUser,
     findUserById,
@@ -240,4 +258,5 @@ module.exports = {
     findAllFollowNumber,
     removeFollower,
     removeFollowerByUserId,
+    checkEmailAvailable
 };
