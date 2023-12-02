@@ -1,7 +1,3 @@
-[README 초안]
-
-아래와 같은 형식으로 작성하시면 됩니다!
-
 # 🐰 White Rabbit 🐰
 
 신입 개발자가 되고싶은 레이서들의 커뮤니티, White Rabbit입니다 
@@ -21,25 +17,21 @@
 ## ✨ 프로젝트 핵심 기능
 
 #### 💬 레이서들간의 커뮤니티 공간
-인기 게시판, 자유 게시판, 취업 후기 게시판
+- 인기 게시판, 자유 게시판, 취업 후기 게시판
   - 여러 게시판과 댓글을 통해 사용자들이 정보를 공유하고 소통할 수 있는 다양한 공간을 제공합니다
 
-팔로우 기능
-- 사용자들끼리 팔로잉 할 수 있는 기능을 제공합니다
+- 팔로우 기능
+  - 사용자들끼리 팔로잉 할 수 있는 기능을 제공합니다
 
 
 #### 🔎 Q&A 세션
- Q&N 게시판을 통해 코치님들께 직접 질문하고, 답변을 받을 수 있습니다
-<br>
+- Q&N 게시판을 통해 코치님들께 직접 질문하고, 답변을 받을 수 있습니다
 
 #### 🙌 프로젝트/스터디 모집 게시판
-프로젝트나 스터디를 함께 할 팀원을 찾거나 프로젝트 아이디어를 공유할 수 있는 공간을 제공합니다
-<br>
+- 프로젝트나 스터디를 함께 할 팀원을 찾거나 프로젝트 아이디어를 공유할 수 있는 공간을 제공합니다
 
 ####  ⚔ 프로필 관리 
-사용자의 기술 스택, 경력, 교육 배경 등을 관리할 수 있는 개인 프로필 기능을 제공합니다
-<br>
-<br>
+- 사용자의 기술 스택, 경력, 교육 배경 등을 관리할 수 있는 개인 프로필 기능을 제공합니다
 
 ## 🎵 서비스 화면
 
@@ -79,35 +71,38 @@
 
   
 | FRONTEND | BACKEND |
- | ----  | --------|
- | 이준영, 최윤지, 하지원  | 김보경, 유수빈, 장보근 |
+| ----  | -------- |
+| 이준영, 최윤지, 하지원 | 김보경, 유수빈, 장보근 |
 
   
-
 ## 🔨 주요 기술
 
+**Programming Language**
 
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+    
 **Frontend**
 
-<img src="https://img.shields.io/badge/REACT-61DAFB?style=flat-square&logo=REACT&logoColor=black"/> 
-<br/>
-
+<div>
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">
+  <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">
+</div>
 **Backend**
+<div>
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white">
+  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white">
+  <img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white">
+  <img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white">
+</div>
+<div>
+  <img src="https://img.shields.io/badge/jwt-000000?style=for-the-badge&logo=jwt&logoColor=white">
+  <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PM2-2B037A?style=for-the-badge&logo=pm2&logoColor=white"/>
+  <img src="https://img.shields.io/badge/GCP-4285F4?style=flat-square&logo=googlecloud&logoColor=white">
+</div>
 
-<img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/> 
-<img src="https://img.shields.io/badge/express-000000?style=flat-square&logo=express&logoColor=white"/> 
-<img src="https://img.shields.io/badge/mongoDB-47A248?style=flat-square&logo=MongoDB&logoColor=white">
-
-<br/>
-<br/>
-<br/>
-<img src="https://img.shields.io/badge/javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
-<img src="https://img.shields.io/badge/NginX-009639?style=flat-square&logo=nginx&logoColor=white">
-<img src="https://img.shields.io/badge/PM2-2B037A?style=flat-square&logo=PM2&logoColor=white">
-<img src="https://img.shields.io/badge/GCP-4285F4?style=flat-square&logo=googlecloud&logoColor=white">
-
-<br/>
-<br/>
+-----
 
 **Frontend - React 18.2.0**
 - 동적인 사용자 인터페이스를 위해 React를 사용.
@@ -125,8 +120,11 @@
 
 ## 💄 디자인 시안
 
+![image](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/10e96455-2efc-4ae2-8c25-8724f2f0a3f4)
+
 ## 🔒 ERD
-![image](/uploads/24880ca549c0cc152da834bbc566c9f9/image.png)
+
+![image](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/f285f3e0-e4ec-4236-9bec-44b3ee13f79e)
 
 ## 📄 아키텍처 구성도
 
@@ -138,91 +136,32 @@
 
 **Front-end**
 
-
-
+```bash
+├─api
+├─public
+    ├─assets
+└─src
+    ├─components
+    ├─fonts
+    ├─pages
+    ├─router
+    ├─styles
+    └─utils
+```
 
 **Back-end**
-<details> <summary>📁</summary>
 
-
-
-```
-.
-│  .gitignore
-│  app.js
-│  gitmessage.txt
-│  package-lock.json
-│  package.json
-│  readme.md
-│
+```bash
 ├─public
 │  ├─images      
-│  └─stylesheets
-│          style.css
-│
 └─src
     ├─controllers
-    │      comment-controller.js
-    │      generation-controller.js
-    │      like-controller.js
-    │      link-controller.js
-    │      post-controller.js
-    │      skill-controller.js
-    │      user-controller.js
-    │      user-skill-controller.js
-    │
     ├─db
-    │  │  db-connection.js
-    │  │  index.js
-    │  │
-    │  └─schemas
-    │          comment.js
-    │          follow.js
-    │          generation.js
-    │          like.js
-    │          link.js
-    │          post.js
-    │          skill.js
-    │          user-skill.js
-    │          User.js
-    │
     ├─middlewares
-    │      validation.js
-    │      verify-token.js
-    │
     ├─routers
-    │      comment-router.js
-    │      generation-router.js
-    │      index.js
-    │      post-router.js
-    │      skill-router.js
-    │      user-router.js
-    │
     ├─services
-    │      comment-service.js
-    │      generation-service.js
-    │      like-service.js
-    │      link-service.js
-    │      post-service.js
-    │      skill-service.js
-    │      user-service.js
-    │      user-skill-service.js
-    │
     └─utils
-            async-handler.js
-            code-creater.js
-            date-to-string.js
-            image-scheduler.js
-            image-to-url.js
-            jwt.js
-            mailer.js
-            node-cache.js
 ```
-</details>
-
-
-
-
 
 ## 🗣 협업 환경
 
