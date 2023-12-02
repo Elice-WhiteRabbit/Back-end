@@ -27,15 +27,21 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-const upload = multer({ storage, fileFilter, limits: { fileSize: 3 * 1024 * 1024 }, });
+const upload = multer({ storage, fileFilter, limits: { fileSize: 30 * 1024 * 1024 }, });
 
 function imageToURL(req, res, next) {
+  const uploadDir = './public/images';
+
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+  }
+
   upload.single('image')(req, res, (err) => {
     if (err) {
       throw err;
     }
 
-    const imagePath = `/image/${req.file.filename}`;
+    const imagePath = `/images/${req.file.filename}`;
     res.status(200).json({
         message: "이미지 url 생성",
         data: imagePath
@@ -47,16 +53,13 @@ const deleteImage = async (imageURL) => {
   try{
       const path = 'public/images' + imageURL.split('images')[1];
 
-      await fs.unlink(path, (err) => {
-          if(err.code === 'ENOENT'){
-              console.log("파일이 이미 존재하지 않음");
-              return;
-          }else if(err){
-              throw err;
-          }
-      });
+      await fs.promises.unlink(path);
   } catch(err) {
-      throw err;
+      if(err.code === 'ENOENT'){
+        console.log("파일이 이미 존재하지 않음");
+      }else{
+        throw err;
+      }
   }
 }
 

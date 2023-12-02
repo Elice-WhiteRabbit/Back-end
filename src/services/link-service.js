@@ -8,10 +8,10 @@ const updateUserLinks = async (userId, linkId, title, url) => {
   );
 };
 
-const deleteUserLink = async (userId, linkToDelete) => {
+const deleteUserLink = async (userId, linkTitle, linkUrl) => {
   return await User.findByIdAndUpdate(
     userId,
-    { $pull: { links: linkToDelete } },
+    { $pull: { links: { title: linkTitle, url: linkUrl } } },
     { new: true }
   );
 };

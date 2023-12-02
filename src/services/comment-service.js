@@ -17,8 +17,8 @@ const findCommentsByUser = async (userId) => {
     return Comment.find({ author: userId }).sort({ createdAt: -1 });
 };
 
-const findCommentById = async (commentId) => {
-    return Comment.findById(commentId);
+const findCommentById = async (id) => {
+    return Comment.findById(id);
 };
 
 const modifyComment = async (data) => {
@@ -32,7 +32,7 @@ const modifyComment = async (data) => {
 };
 
 const removeComment = async (id) => {
-    await Comment.findOneAndDelete(id);
+    await Comment.findByIdAndDelete(id);
     return;
 };
 

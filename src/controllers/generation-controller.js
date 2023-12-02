@@ -15,6 +15,56 @@ const {
   removeGenerationType,
 } = require('../services/generation-service');
 
+const generationService = require('../services/generation-service');
+
+exports.addGeneration = async (req, res, next) => {
+  const { type, number } = req.body;
+  const createdGeneration = await generationService.addGeneration({
+    type,
+    number
+  });
+
+  res.status(201).json({
+    message: "새 트랙이 생성되었습니다",
+    data: createdGeneration
+  });
+}
+
+exports.findAllGeneration = async (req, res, next) => {
+  const list = await generationService.findAllGeneration();
+
+  res.status(200).json({
+    message: "트랙 목록 조회",
+    data: list
+  });
+}
+
+exports.modifyGeneration = async (req, res, next) => {
+  const { id } = req.params;
+  const { type, number } = req.body;
+
+  const newGeneration = await generationService.modifyGeneration({
+    id,
+    type,
+    number
+  });
+
+  res.status(200).json({
+    message: "트랙 수정",
+    data: newGeneration
+  });
+}
+
+exports.removeGeneration = async (req, res, next) => {
+  const { id } = req.params;
+
+  await generationService.removeGeneration(id);
+
+  res.status(200).json({
+    message: "트랙 삭제"
+  });
+}
+
 //관리자 트랙 삭제
 exports.deleteGeneration = async (req, res) => {
   try {
