@@ -9,7 +9,13 @@ const imageScheduler = require('./src/utils/image-scheduler');
 
 const DBConnection = require('./src/db/db-connection');
 const router = require('./src/routers');
-require('dotenv').config();
+
+const dotenv = require('dotenv');
+const dotenvPath = path.join(__dirname, 'submodule', '.env');
+const result = dotenv.config({ path: dotenvPath });
+if (result.error) {
+  console.error('Error loading .env file: ', result.error);
+}
 
 const app = express();
 
@@ -24,10 +30,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // CORS 설정
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 // 라우팅 설정
 app.use(router);
@@ -47,14 +55,14 @@ app.use(function (err, req, res, next) {
 // 미사용 이미지파일 정리 스케줄러. *은 순서대로 초/분/시/일/월/요일
 // e.g.) 10 30 * * * * : 매일 매시각 30분 10초마다 실행
 cron.schedule('0 30 5 * * 2 ', async () => {
-    console.log('==============================');
-    console.log('매 시각 30분마다 이미지폴더 정리')
-    await imageScheduler();
-    console.log('==============================');
+  console.log('==============================');
+  console.log('매 시각 30분마다 이미지폴더 정리');
+  await imageScheduler();
+  console.log('==============================');
 });
 
 app
-  .listen(5000, () => {
+  .listen(5001, () => {
     console.log('server start');
   })
   .on('error', (err) => {
