@@ -141,6 +141,8 @@
 
 ## 📄 아키텍처 구성도
 
+![image](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/2b851569-dfaf-4268-8b5c-cc1cb6bfefb6)
+
 ## 📄 컴포넌트 명세서
 
 [➡️ 컴포넌트 명세서 pdf](https://github.com/Elice-WhiteRabbit/Back-end/files/13536378/21bbcc83fa604f6e8901002a3c444d0b.pdf)
