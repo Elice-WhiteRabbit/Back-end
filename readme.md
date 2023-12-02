@@ -143,9 +143,11 @@
 
 ## 📄 컴포넌트 명세서
 
+[➡️ 컴포넌트 명세서 pdf](https://github.com/Elice-WhiteRabbit/Back-end/files/13536378/21bbcc83fa604f6e8901002a3c444d0b.pdf)
 
 ## 📄 API 명세서
 
+[➡️ API 명세서 링크](https://www.postman.com/lively-satellite-446209/workspace/elice-project-2-team-7/collection/31167550-8f75e739-9c7e-4565-b1f7-5f9fc79cc871?action=share&creator=31167550)
 
 
 ## ⚙️ 프로젝트 파일 구조
