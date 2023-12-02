@@ -1,10 +1,24 @@
 # 🐰 White Rabbit 🐰
 
+![white-rabbit](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/2da60753-fc26-4930-8812-6ce3f112ec0c)
+
 신입 개발자가 되고싶은 레이서들의 커뮤니티, White Rabbit입니다 
+
+<br>
+
+## 👩🏻‍💻 팀원 소개
+  
+| FRONTEND | BACKEND |
+| ----  | -------- |
+| 이준영, 최윤지, 하지원 | 김보경, 유수빈, 장보근 |
+
+<br>
 
 ## 📅 프로젝트 기간
 
 2023년 11월 13일 월요일 - 2023년 12월 1일 금요일 (총 기간 : 3주)
+
+<br>
 
 ## 🌟 프로젝트 개요
 
@@ -13,6 +27,8 @@
 - 코치들과의 Q&A 세션을 통해 직접적인 질문과 답변이 가능하며, 커리어리처럼 다양한 사용자들의 의견을 들을 수 있는 공간입니다
 - 개인 프로필 생성 기능을 통해 팔로잉, 팔로워 기능과 기술 스택을 공유할 수 있습니다
 - 프로젝트 카테고리를 통해 팀원을 구하고 프로젝트 아이디어를 공유할 수 있는 공간을 제공합니다
+
+<br>
 
 ## ✨ 프로젝트 핵심 기능
 
@@ -33,48 +49,40 @@
 ####  ⚔ 프로필 관리 
 - 사용자의 기술 스택, 경력, 교육 배경 등을 관리할 수 있는 개인 프로필 기능을 제공합니다
 
+<br>
+
 ## 🎵 서비스 화면
 
-### 🎺 페이지
+### 🎺 로그인, 회원가입 페이지
 
-<img src="">
+![회원가입](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/32336ec8-9002-4e4e-a33d-1babb4321d5a)
 
-### 🎸 페이지
+### 🎸 메인 페이지
 
-<img src="">
+![커뮤니티 게시판](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/94049482-99d0-4387-ade8-16060ddccc17)
 
-### 💿 페이지
+### 💿 Q&A, 모집 페이지
 
-<img src="">
+![QNA-Recruit](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/9d1ec6ac-567c-405c-896d-158aab4fbedf)
 
-### 💾 페이지
+### 💾 마이 프로필 페이지
 
-<img src="">
+![마이 프로필](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/cbc20ba5-afce-4c35-a334-2e6fe16849e9)
 
-### 🎧 페이지
+### 🎧 게시물 상세, 수정 페이지(+ 댓글 기능)
 
-<img src="">
+![게시물 상세, 댓글](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/b4d364b2-89b1-421c-a6ee-5b695c3e22f6)
 
-### 💬 댓글
+### 💬 게시물 작성 페이지
 
-<img src="">
+![게시물 작성](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/b75fb110-20ec-4f5f-9003-ec9996f6fe80)
 
-### 🎹 페이지
+### 🎹 관리자 페이지
 
-<img src="">
+![관리자페이지](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/1e9cff73-72c7-4ace-99ee-706cf948fd7d)
 
-### 💽 페이지
+<br>
 
-<img src="">
-
-## 👩🏻‍💻 팀 구성
-
-  
-| FRONTEND | BACKEND |
-| ----  | -------- |
-| 이준영, 최윤지, 하지원 | 김보경, 유수빈, 장보근 |
-
-  
 ## 🔨 주요 기술
 
 **Programming Language**
@@ -88,6 +96,7 @@
   <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">
   <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">
 </div>
+
 **Backend**
 <div>
   <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white">
@@ -102,7 +111,7 @@
   <img src="https://img.shields.io/badge/GCP-4285F4?style=flat-square&logo=googlecloud&logoColor=white">
 </div>
 
------
+<br>
 
 **Frontend - React 18.2.0**
 - 동적인 사용자 인터페이스를 위해 React를 사용.
@@ -116,7 +125,11 @@
 **Validation - Joi**
 - 데이터 유효성 검사를 위해 Joi 라이브러리 사용.
 
-## 📝 요구사항정의서
+<br>
+
+## 📝 기획
+
+![image](https://github.com/Elice-WhiteRabbit/Back-end/assets/39878215/f3bb3447-cfdd-4709-8f85-675e0c8c913e)
 
 ## 💄 디자인 시안
 
@@ -128,9 +141,12 @@
 
 ## 📄 아키텍처 구성도
 
-## 📄 시퀀스다이어그램
-
 ## 📄 컴포넌트 명세서
+
+
+## 📄 API 명세서
+
+
 
 ## ⚙️ 프로젝트 파일 구조
 
