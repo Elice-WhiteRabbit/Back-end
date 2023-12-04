@@ -149,7 +149,7 @@
 
 ## 📄 API 명세서
 
-[➡️ API 명세서 링크](https://www.postman.com/lively-satellite-446209/workspace/elice-project-2-team-7/collection/31167550-8f75e739-9c7e-4565-b1f7-5f9fc79cc871?action=share&creator=31167550)
+[➡️ API 명세서 Postman 링크](https://www.postman.com/lively-satellite-446209/workspace/elice-project-2-team-7/collection/31167550-8f75e739-9c7e-4565-b1f7-5f9fc79cc871?action=share&creator=31167550)
 
 
 ## ⚙️ 프로젝트 파일 구조
