@@ -159,7 +159,7 @@
 ```bash
 ├─api
 ├─public
-    ├─assets
+│   ├─assets
 └─src
     ├─components
     ├─fonts
